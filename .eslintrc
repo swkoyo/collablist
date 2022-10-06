@@ -31,6 +31,7 @@
 		"no-param-reassign": "off",
 		"react/jsx-props-no-spreading": "off",
 		"import/no-named-as-default": 0,
+		"jsx-a11y/anchor-is-valid": "off",
 		"jsx-a11y/label-has-associated-control": [ "error", {
 			"required": {
 			  "some": [ "nesting", "id"  ]

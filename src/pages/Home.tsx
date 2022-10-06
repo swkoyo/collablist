@@ -1,3 +1,5 @@
+import NavBar from '../layouts/NavBar';
+
 export default function Home() {
-    return <div>Hello</div>;
+    return <NavBar />;
 }

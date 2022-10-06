@@ -1,7 +1,6 @@
 import { Route, Routes } from 'react-router-dom';
 import { useEffectOnce } from 'usehooks-ts';
 import { useLazyCheckTokenQuery } from './api/auth';
-import './App.css';
 import { setCredentials } from './features/auth/authSlice';
 import { useAppDispatch } from './hooks/redux';
 import Home from './pages/Home';
