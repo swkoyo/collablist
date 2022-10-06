@@ -1,0 +1,24 @@
+import { Action, AnyAction, combineReducers, configureStore, Reducer, ThunkAction } from '@reduxjs/toolkit';
+import authReducer from '../features/auth/authSlice';
+import api from './rtk';
+
+const appReducer = combineReducers({
+    auth: authReducer,
+    [api.reducerPath]: api.reducer
+});
+
+export type RootState = ReturnType<typeof appReducer>;
+
+const rootReducer: Reducer = (state: RootState, action: AnyAction) => {
+    if (action.type === 'auth/resetAuth') {
+        state = {} as RootState;
+    }
+    return appReducer(state, action);
+};
+
+export const store = configureStore({
+    reducer: rootReducer
+});
+
+export type AppDispatch = typeof store.dispatch;
+export type AppThunk<ReturnType = void> = ThunkAction<ReturnType, RootState, unknown, Action<string>>;
