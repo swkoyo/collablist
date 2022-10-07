@@ -1,4 +1,4 @@
-import { Container } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 import { ReactNode } from 'react';
 import NavBar from './NavBar';
 
@@ -6,7 +6,7 @@ export default function MainContainer({ children }: { children: ReactNode }) {
     return (
         <>
             <NavBar />
-            <Container>{children}</Container>
+            <Box pt={24}>{children}</Box>
         </>
     );
 }
