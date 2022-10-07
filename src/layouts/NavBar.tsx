@@ -5,16 +5,19 @@ import {
     Button,
     Center,
     Flex,
+    Icon,
     Menu,
     MenuButton,
     MenuDivider,
     MenuItem,
     MenuList,
     Stack,
+    Text,
     useColorMode,
     useColorModeValue,
     useToast
 } from '@chakra-ui/react';
+import { FaThList } from 'react-icons/fa';
 import { resetAuth } from '../features/auth/authSlice';
 import { ModalTypes, showModal } from '../features/modal/modalSlice';
 import { useAppDispatch } from '../hooks/redux';
@@ -39,7 +42,16 @@ export default function NavBar() {
     return (
         <Box bg={useColorModeValue('gray.100', 'gray.900')} px={4} position='fixed' top={0} width='100%'>
             <Flex h={16} alignItems='center' justifyContent='space-between'>
-                <Box>Collablist</Box>
+                <Flex alignItems='center' gap={2}>
+                    <Center>
+                        <Icon w={6} h={6} as={FaThList} />
+                    </Center>
+                    <Center>
+                        <Text fontSize='2xl' fontWeight='bold'>
+                            Collablist
+                        </Text>
+                    </Center>
+                </Flex>
                 <Flex alignItems='center'>
                     <Stack direction='row' spacing={4}>
                         <Button onClick={toggleColorMode}>{colorMode === 'light' ? <MoonIcon /> : <SunIcon />}</Button>
