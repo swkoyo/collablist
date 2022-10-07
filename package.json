@@ -16,6 +16,7 @@
 		"@hookform/resolvers": "^2.9.8",
 		"@reduxjs/toolkit": "^1.8.5",
 		"framer-motion": "^7.5.2",
+		"lodash": "^4.17.21",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
 		"react-hook-form": "^7.37.0",
@@ -26,6 +27,7 @@
 		"zod": "^3.19.1"
 	},
 	"devDependencies": {
+		"@types/lodash": "^4.14.186",
 		"@types/react": "^18.0.17",
 		"@types/react-dom": "^18.0.6",
 		"@typescript-eslint/eslint-plugin": "^5.39.0",

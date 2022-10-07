@@ -1,13 +1,24 @@
-import { Button, FormControl, FormErrorMessage, Input, InputGroup, InputRightElement, Stack } from '@chakra-ui/react';
+import {
+    Button,
+    FormControl,
+    FormErrorMessage,
+    Input,
+    InputGroup,
+    InputRightElement,
+    Stack,
+    useToast
+} from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSignupMutation } from '../../../api/auth';
+import { getErrorMessage } from '../../../api/helpers';
 import { SignupSchema, signupSchema } from './schema';
 
 export default function SignupForm({ handleTabChange }: { handleTabChange: (index: number) => void }) {
     const [showPassword, setShowPassword] = useState(false);
     const [postSignup] = useSignupMutation();
+    const toast = useToast();
     const {
         handleSubmit,
         register,
@@ -20,8 +31,20 @@ export default function SignupForm({ handleTabChange }: { handleTabChange: (inde
         try {
             await postSignup(data).unwrap();
             handleTabChange(0);
+            toast({
+                title: 'Signup successful!',
+                status: 'success',
+                duration: 9000,
+                isClosable: true
+            });
         } catch (err) {
-            console.log(err);
+            toast({
+                title: 'Failed to signup',
+                description: getErrorMessage(err),
+                status: 'error',
+                duration: 9000,
+                isClosable: true
+            });
         }
     };
 

@@ -1,8 +1,18 @@
-import { Button, FormControl, FormErrorMessage, Input, InputGroup, InputRightElement, Stack } from '@chakra-ui/react';
+import {
+    Button,
+    FormControl,
+    FormErrorMessage,
+    Input,
+    InputGroup,
+    InputRightElement,
+    Stack,
+    useToast
+} from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useLoginMutation } from '../../../api/auth';
+import { getErrorMessage } from '../../../api/helpers';
 import { useAppDispatch } from '../../../hooks/redux';
 import { hideModal } from '../../modal/modalSlice';
 import { setCredentials } from '../authSlice';
@@ -12,6 +22,7 @@ export default function LoginForm() {
     const [showPassword, setShowPassword] = useState(false);
     const dispatch = useAppDispatch();
     const [postLogin] = useLoginMutation();
+    const toast = useToast();
     const {
         handleSubmit,
         register,
@@ -26,8 +37,20 @@ export default function LoginForm() {
             localStorage.setItem('token', token);
             dispatch(setCredentials({ user, token }));
             dispatch(hideModal());
+            toast({
+                title: `Welcome back ${user.first_name}!`,
+                status: 'success',
+                duration: 9000,
+                isClosable: true
+            });
         } catch (err) {
-            console.log(err);
+            toast({
+                title: 'Failed to login',
+                description: getErrorMessage(err),
+                status: 'error',
+                duration: 9000,
+                isClosable: true
+            });
         }
     };
 
