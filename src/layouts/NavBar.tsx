@@ -12,7 +12,8 @@ import {
     MenuList,
     Stack,
     useColorMode,
-    useColorModeValue
+    useColorModeValue,
+    useToast
 } from '@chakra-ui/react';
 import { resetAuth } from '../features/auth/authSlice';
 import { ModalTypes, showModal } from '../features/modal/modalSlice';
@@ -23,6 +24,17 @@ export default function NavBar() {
     const { colorMode, toggleColorMode } = useColorMode();
     const dispatch = useAppDispatch();
     const auth = useAuth();
+    const toast = useToast();
+
+    const handleLogout = () => {
+        dispatch(resetAuth());
+        toast({
+            title: 'Logout successful',
+            status: 'success',
+            duration: 9000,
+            isClosable: true
+        });
+    };
 
     return (
         <Box bg={useColorModeValue('gray.100', 'gray.900')} px={4}>
@@ -52,7 +64,7 @@ export default function NavBar() {
                                     <br />
                                     <MenuDivider />
                                     <MenuItem>Account Settings</MenuItem>
-                                    <MenuItem onClick={() => dispatch(resetAuth())}>Logout</MenuItem>
+                                    <MenuItem onClick={() => handleLogout()}>Logout</MenuItem>
                                 </MenuList>
                             </Menu>
                         ) : (
