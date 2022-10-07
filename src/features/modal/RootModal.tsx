@@ -9,8 +9,9 @@ export default function RootModal() {
 
     const getModalBody = () => {
         switch (type) {
-            case 'AUTH':
-                return <AuthForm />;
+            case 'AUTH_SIGNUP':
+            case 'AUTH_LOGIN':
+                return <AuthForm tab={type === 'AUTH_LOGIN' ? 0 : 1} />;
             default:
                 return null;
         }
@@ -20,7 +21,7 @@ export default function RootModal() {
         <Modal isOpen={is_visible && !!type} onClose={() => dispatch(hideModal())}>
             <ModalOverlay />
             <ModalContent>
-                <ModalHeader>Modal Title</ModalHeader>
+                <ModalHeader />
                 <ModalCloseButton />
                 <ModalBody>{getModalBody()}</ModalBody>
             </ModalContent>

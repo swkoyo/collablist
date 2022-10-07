@@ -1,5 +1,5 @@
 import api from '../redux/rtk';
-import type { User } from '../types';
+import { SuccessResponse, User } from '../types';
 
 interface PostLoginBody {
     email: string;
@@ -11,11 +11,24 @@ interface PostLoginResponse {
     user: User;
 }
 
+interface PostSignupBody extends PostLoginBody {
+    password_confirmation: string;
+    first_name: string;
+    last_name: string;
+}
+
 export const authApi = api.injectEndpoints({
     endpoints: (builder) => ({
         login: builder.mutation<PostLoginResponse, PostLoginBody>({
             query: (body) => ({
                 url: '/login',
+                method: 'POST',
+                body
+            })
+        }),
+        signup: builder.mutation<SuccessResponse, PostSignupBody>({
+            query: (body) => ({
+                url: '/signup',
                 method: 'POST',
                 body
             })
@@ -32,4 +45,4 @@ export const authApi = api.injectEndpoints({
     })
 });
 
-export const { useLoginMutation, useLazyCheckTokenQuery } = authApi;
+export const { useLoginMutation, useLazyCheckTokenQuery, useSignupMutation } = authApi;

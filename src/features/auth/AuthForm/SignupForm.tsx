@@ -1,11 +1,13 @@
-import { Button, FormControl, FormErrorMessage, Input, InputGroup, InputRightElement } from '@chakra-ui/react';
+import { Button, FormControl, FormErrorMessage, Input, InputGroup, InputRightElement, Stack } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useSignupMutation } from '../../../api/auth';
 import { SignupSchema, signupSchema } from './schema';
 
-export default function SignupForm() {
+export default function SignupForm({ handleTabChange }: { handleTabChange: (index: number) => void }) {
     const [showPassword, setShowPassword] = useState(false);
+    const [postSignup] = useSignupMutation();
     const {
         handleSubmit,
         register,
@@ -14,9 +16,13 @@ export default function SignupForm() {
         resolver: zodResolver(signupSchema)
     });
 
-    const onSubmit = (values: any) => {
-        console.log(errors);
-        console.log(values);
+    const onSubmit = async (data: SignupSchema) => {
+        try {
+            await postSignup(data).unwrap();
+            handleTabChange(0);
+        } catch (err) {
+            console.log(err);
+        }
     };
 
     const handleShowPassword = () => setShowPassword(!showPassword);
@@ -32,69 +38,71 @@ export default function SignupForm() {
                     !!errors.last_name
                 }
             >
-                <Input
-                    id='email'
-                    isInvalid={!!errors.email}
-                    placeholder='Email'
-                    {...register('email', {
-                        required: true
-                    })}
-                />
-                <FormErrorMessage>{errors.email?.message as string}</FormErrorMessage>
-                <Input
-                    id='first_name'
-                    isInvalid={!!errors.first_name}
-                    placeholder='First Name'
-                    {...register('first_name', {
-                        required: true
-                    })}
-                />
-                <FormErrorMessage>{errors.first_name?.message as string}</FormErrorMessage>
-                <Input
-                    id='last_name'
-                    isInvalid={!!errors.last_name}
-                    placeholder='Last name'
-                    {...register('last_name', {
-                        required: true
-                    })}
-                />
-                <FormErrorMessage>{errors.last_name?.message as string}</FormErrorMessage>
-                <InputGroup>
+                <Stack spacing={4}>
                     <Input
-                        id='password'
-                        isInvalid={!!errors.password}
-                        placeholder='password'
-                        type={showPassword ? 'text' : 'password'}
-                        {...register('password', {
+                        id='signup-email'
+                        isInvalid={!!errors.email}
+                        placeholder='Email'
+                        {...register('email', {
                             required: true
                         })}
                     />
-                    <InputRightElement>
-                        <Button type='button' onClick={handleShowPassword}>
-                            {showPassword ? 'Hide' : 'Show'}
-                        </Button>
-                    </InputRightElement>
-                </InputGroup>
-                <FormErrorMessage>{errors.password?.message as string}</FormErrorMessage>
-                <InputGroup>
+                    <FormErrorMessage>{errors.email?.message as string}</FormErrorMessage>
                     <Input
-                        id='password_confirmation'
-                        isInvalid={!!errors.password_confirmation}
-                        placeholder='Confirm Password'
-                        type={showPassword ? 'text' : 'password'}
-                        {...register('password_confirmation', {
+                        id='first_name'
+                        isInvalid={!!errors.first_name}
+                        placeholder='First Name'
+                        {...register('first_name', {
                             required: true
                         })}
                     />
-                    <InputRightElement>
-                        <Button type='button' onClick={handleShowPassword}>
-                            {showPassword ? 'Hide' : 'Show'}
-                        </Button>
-                    </InputRightElement>
-                </InputGroup>
-                <FormErrorMessage>{errors.password_confirmation?.message as string}</FormErrorMessage>
+                    <FormErrorMessage>{errors.first_name?.message as string}</FormErrorMessage>
+                    <Input
+                        id='last_name'
+                        isInvalid={!!errors.last_name}
+                        placeholder='Last name'
+                        {...register('last_name', {
+                            required: true
+                        })}
+                    />
+                    <FormErrorMessage>{errors.last_name?.message as string}</FormErrorMessage>
+                    <InputGroup>
+                        <Input
+                            id='signup-password'
+                            isInvalid={!!errors.password}
+                            placeholder='Password'
+                            type={showPassword ? 'text' : 'password'}
+                            {...register('password', {
+                                required: true
+                            })}
+                        />
+                        <InputRightElement width='4.5rem'>
+                            <Button h='1.75rem' size='sm' type='button' onClick={handleShowPassword}>
+                                {showPassword ? 'Hide' : 'Show'}
+                            </Button>
+                        </InputRightElement>
+                    </InputGroup>
+                    <FormErrorMessage>{errors.password?.message as string}</FormErrorMessage>
+                    <InputGroup>
+                        <Input
+                            id='password_confirmation'
+                            isInvalid={!!errors.password_confirmation}
+                            placeholder='Confirm Password'
+                            type={showPassword ? 'text' : 'password'}
+                            {...register('password_confirmation', {
+                                required: true
+                            })}
+                        />
+                        <InputRightElement width='4.5rem'>
+                            <Button h='1.75rem' size='sm' type='button' onClick={handleShowPassword}>
+                                {showPassword ? 'Hide' : 'Show'}
+                            </Button>
+                        </InputRightElement>
+                    </InputGroup>
+                    <FormErrorMessage>{errors.password_confirmation?.message as string}</FormErrorMessage>
+                </Stack>
             </FormControl>
-            <Button type='submit' mt={4} isLoading={isSubmitting}>
+            <Button w='full' type='submit' mt={6} isLoading={isSubmitting}>
                 Signup
             </Button>
         </form>

@@ -1,5 +1,9 @@
-import NavBar from '../layouts/NavBar';
+import MainContainer from '../layouts/MainContainer';
 
 export default function Home() {
-    return <NavBar />;
+    return (
+        <MainContainer>
+            <p>Hello</p>
+        </MainContainer>
+    );
 }

@@ -1,8 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type { RootState } from '../../redux/store';
 
-enum ModalTypes {
-    AUTH = 'AUTH'
+export enum ModalTypes {
+    AUTH_LOGIN = 'AUTH_LOGIN',
+    AUTH_SIGNUP = 'AUTH_SIGNUP'
 }
 
 type ModalState = {

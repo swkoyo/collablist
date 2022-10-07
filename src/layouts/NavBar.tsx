@@ -5,7 +5,6 @@ import {
     Button,
     Center,
     Flex,
-    Link,
     Menu,
     MenuButton,
     MenuDivider,
@@ -13,60 +12,54 @@ import {
     MenuList,
     Stack,
     useColorMode,
-    useColorModeValue,
-    useDisclosure
+    useColorModeValue
 } from '@chakra-ui/react';
-import { ReactNode } from 'react';
-
-function NavLink({ children }: { children: ReactNode }) {
-    return (
-        <Link
-            px={2}
-            py={1}
-            rounded='md'
-            _hover={{
-                textDecoration: 'none',
-                bg: useColorModeValue('gray.200', 'gray.700')
-            }}
-            href='#'
-        >
-            {children}
-        </Link>
-    );
-}
+import { resetAuth } from '../features/auth/authSlice';
+import { ModalTypes, showModal } from '../features/modal/modalSlice';
+import { useAppDispatch } from '../hooks/redux';
+import useAuth from '../hooks/useAuth';
 
 export default function NavBar() {
     const { colorMode, toggleColorMode } = useColorMode();
-    const { isOpen, onOpen, onClose } = useDisclosure();
+    const dispatch = useAppDispatch();
+    const auth = useAuth();
+
     return (
         <Box bg={useColorModeValue('gray.100', 'gray.900')} px={4}>
             <Flex h={16} alignItems='center' justifyContent='space-between'>
-                <Box>Logo</Box>
-
+                <Box>Collablist</Box>
                 <Flex alignItems='center'>
-                    <Stack direction='row' spacing={7}>
+                    <Stack direction='row' spacing={4}>
                         <Button onClick={toggleColorMode}>{colorMode === 'light' ? <MoonIcon /> : <SunIcon />}</Button>
-
-                        <Menu>
-                            <MenuButton as={Button} rounded='full' variant='link' cursor='pointer' minW={0}>
-                                <Avatar size='sm' src='https://avatars.dicebear.com/api/male/username.svg' />
-                            </MenuButton>
-                            <MenuList alignItems='center'>
-                                <br />
-                                <Center>
-                                    <Avatar size='2xl' src='https://avatars.dicebear.com/api/male/username.svg' />
-                                </Center>
-                                <br />
-                                <Center>
-                                    <p>Username</p>
-                                </Center>
-                                <br />
-                                <MenuDivider />
-                                <MenuItem>Your Servers</MenuItem>
-                                <MenuItem>Account Settings</MenuItem>
-                                <MenuItem>Logout</MenuItem>
-                            </MenuList>
-                        </Menu>
+                        {auth ? (
+                            <Menu>
+                                <MenuButton as={Button} rounded='full' variant='link' cursor='pointer' minW={0}>
+                                    <Avatar size='sm' bg='blue.300' name={`${auth.first_name} ${auth.last_name}`} />
+                                </MenuButton>
+                                <MenuList alignItems='center'>
+                                    <br />
+                                    <Center>
+                                        <Avatar
+                                            size='2xl'
+                                            bg='blue.300'
+                                            name={`${auth.first_name} ${auth.last_name}`}
+                                        />
+                                    </Center>
+                                    <br />
+                                    <Center>
+                                        <p>{auth.username}</p>
+                                    </Center>
+                                    <br />
+                                    <MenuDivider />
+                                    <MenuItem>Account Settings</MenuItem>
+                                    <MenuItem onClick={() => dispatch(resetAuth())}>Logout</MenuItem>
+                                </MenuList>
+                            </Menu>
+                        ) : (
+                            <Button type='button' onClick={() => dispatch(showModal(ModalTypes.AUTH_LOGIN))}>
+                                Login
+                            </Button>
+                        )}
                     </Stack>
                 </Flex>
             </Flex>
