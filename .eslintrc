@@ -27,6 +27,7 @@
 	"rules": {
 		"prettier/prettier": "error",
 		"react/require-default-props": "off",
+		"@typescript-eslint/naming-convention": "off",
 		"react/react-in-jsx-scope": "off",
 		"no-param-reassign": "off",
 		"react/jsx-props-no-spreading": "off",

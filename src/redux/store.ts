@@ -1,9 +1,11 @@
 import { Action, AnyAction, combineReducers, configureStore, Reducer, ThunkAction } from '@reduxjs/toolkit';
 import authReducer from '../features/auth/authSlice';
+import modalReducer from '../features/modal/modalSlice';
 import api from './rtk';
 
 const appReducer = combineReducers({
     auth: authReducer,
+    modal: modalReducer,
     [api.reducerPath]: api.reducer
 });
 
