@@ -6,6 +6,7 @@ import {
     Center,
     Flex,
     Icon,
+    IconButton,
     Menu,
     MenuButton,
     MenuDivider,
@@ -54,7 +55,11 @@ export default function NavBar() {
                 </Flex>
                 <Flex alignItems='center'>
                     <Stack direction='row' spacing={4}>
-                        <Button onClick={toggleColorMode}>{colorMode === 'light' ? <MoonIcon /> : <SunIcon />}</Button>
+                        <IconButton
+                            aria-label='change theme'
+                            onClick={toggleColorMode}
+                            icon={colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
+                        />
                         {auth ? (
                             <Menu>
                                 <MenuButton as={Button} rounded='full' variant='link' cursor='pointer' minW={0}>
