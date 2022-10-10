@@ -42,6 +42,7 @@ export default function ListTable() {
                 <Thead>
                     <Tr>
                         <Th>Title</Th>
+                        <Th>Items</Th>
                         <Th>Progress</Th>
                         <Th>Members</Th>
                         <Th>Created At</Th>
