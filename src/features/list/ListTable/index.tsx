@@ -49,7 +49,7 @@ export default function ListTable() {
                 </Thead>
                 <Tbody>
                     {data.data.map((d) => (
-                        <ListTableRow list={d} />
+                        <ListTableRow key={d.id} list={d} />
                     ))}
                 </Tbody>
             </Table>

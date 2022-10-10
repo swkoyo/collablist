@@ -3,7 +3,8 @@ import type { RootState } from '../../redux/store';
 
 export enum ModalTypes {
     AUTH_LOGIN = 'AUTH_LOGIN',
-    AUTH_SIGNUP = 'AUTH_SIGNUP'
+    AUTH_SIGNUP = 'AUTH_SIGNUP',
+    LIST_CREATE = 'LIST_CREATE'
 }
 
 type ModalState = {

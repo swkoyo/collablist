@@ -1,6 +1,7 @@
 import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay } from '@chakra-ui/react';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import AuthForm from '../auth/AuthForm';
+import ListCreateForm from '../list/ListCreateForm';
 import { getModalState, hideModal } from './modalSlice';
 
 export default function RootModal() {
@@ -12,6 +13,8 @@ export default function RootModal() {
             case 'AUTH_SIGNUP':
             case 'AUTH_LOGIN':
                 return <AuthForm tab={type === 'AUTH_LOGIN' ? 0 : 1} />;
+            case 'LIST_CREATE':
+                return <ListCreateForm />;
             default:
                 return null;
         }
@@ -23,7 +26,7 @@ export default function RootModal() {
             <ModalContent>
                 <ModalHeader />
                 <ModalCloseButton />
-                <ModalBody>{getModalBody()}</ModalBody>
+                <ModalBody pb={10}>{getModalBody()}</ModalBody>
             </ModalContent>
         </Modal>
     );

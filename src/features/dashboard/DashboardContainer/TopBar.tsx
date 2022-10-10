@@ -1,4 +1,4 @@
-import { MoonIcon, SunIcon } from '@chakra-ui/icons';
+import { AddIcon, MoonIcon, SunIcon } from '@chakra-ui/icons';
 import {
     Avatar,
     Box,
@@ -26,6 +26,7 @@ import { useAppDispatch } from '../../../hooks/redux';
 import useAuth from '../../../hooks/useAuth';
 import { User } from '../../../types';
 import { resetAuth } from '../../auth/authSlice';
+import { ModalTypes, showModal } from '../../modal/modalSlice';
 
 interface TopBarProps extends FlexProps {
     onOpen: () => void;
@@ -77,6 +78,12 @@ export default function TopBar({ onOpen, ...rest }: TopBarProps) {
                 </Center>
             </Flex>
             <HStack spacing={{ base: '0', md: '6' }}>
+                <IconButton
+                    size='lg'
+                    aria-label='Create New List'
+                    onClick={() => dispatch(showModal(ModalTypes.LIST_CREATE))}
+                    icon={<AddIcon />}
+                />
                 <IconButton
                     size='lg'
                     variant='ghost'
