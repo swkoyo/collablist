@@ -1,9 +1,11 @@
 import { Avatar, AvatarGroup, HStack, Progress, Td, Text, Tr } from '@chakra-ui/react';
+import { List } from '../../../types';
+import { formatDate } from '../../../utils/dayjs';
 
-export default function ListTableRow() {
+export default function ListTableRow({ list }: { list: List }) {
     return (
         <Tr>
-            <Td>List 1</Td>
+            <Td>{list.title}</Td>
             <Td>
                 <HStack>
                     <Progress hasStripe value={80} width='80%' />
@@ -19,7 +21,7 @@ export default function ListTableRow() {
                     <Avatar name='hi there' />
                 </AvatarGroup>
             </Td>
-            <Td>Dec 2024</Td>
+            <Td>{formatDate(list.created_at)}</Td>
         </Tr>
     );
 }

@@ -1,13 +1,43 @@
-import { Table, TableContainer, Tbody, Th, Thead, Tr } from '@chakra-ui/react';
+import { Center, CircularProgress, Table, TableContainer, Tbody, Text, Th, Thead, Tr } from '@chakra-ui/react';
+import { useEffectOnce } from 'usehooks-ts';
+import { useLazyGetListsQuery } from '../../../api/list';
 import useAuth from '../../../hooks/useAuth';
 import { User } from '../../../types';
 import ListTableRow from './ListTableRow';
 
 export default function ListTable() {
     const auth = useAuth() as User;
+    const [trigger, { data, isLoading, isFetching, isError }] = useLazyGetListsQuery();
 
-    return (
-        <TableContainer>
+    useEffectOnce(() => {
+        (async () => {
+            trigger({});
+        })();
+    });
+
+    const getTableData = () => {
+        if (!data || isLoading || isFetching) {
+            return (
+                <Center>
+                    <CircularProgress />
+                </Center>
+            );
+        }
+        if (data.count === 0) {
+            return (
+                <Center>
+                    <Text>No Data found</Text>
+                </Center>
+            );
+        }
+        if (isError) {
+            return (
+                <Center>
+                    <Text>Error</Text>
+                </Center>
+            );
+        }
+        return (
             <Table size='sm'>
                 <Thead>
                     <Tr>
@@ -18,9 +48,13 @@ export default function ListTable() {
                     </Tr>
                 </Thead>
                 <Tbody>
-                    <ListTableRow />
+                    {data.data.map((d) => (
+                        <ListTableRow list={d} />
+                    ))}
                 </Tbody>
             </Table>
-        </TableContainer>
-    );
+        );
+    };
+
+    return <TableContainer>{getTableData()}</TableContainer>;
 }
