@@ -1,13 +1,13 @@
 import api from '../redux/rtk';
-import { List, PaginationRequestParams, PaginationResponseData } from '../types';
+import { IList, PaginationRequestParams, PaginationResponseData } from '../types';
 
 type GetListsParams = PaginationRequestParams;
 
-type GetListsResponse = PaginationResponseData<List>;
+type GetListsResponse = PaginationResponseData<IList>;
 
-type PostListBody = Pick<List, 'title' | 'description'>;
+type PostListBody = Pick<IList, 'title' | 'description'>;
 
-type PostListResponse = List;
+type PostListResponse = IList;
 
 export const listsApi = api.injectEndpoints({
     endpoints: (builder) => ({
@@ -26,8 +26,15 @@ export const listsApi = api.injectEndpoints({
                 body
             }),
             invalidatesTags: ['List']
+        }),
+        getList: builder.query<IList, number>({
+            query: (listId) => ({
+                url: `/lists/${listId}`
+            }),
+            providesTags: (result, error, arg) =>
+                result ? [{ type: 'List' as const, id: result.id }, 'List'] : ['List']
         })
     })
 });
 
-export const { useLazyGetListsQuery, usePostListMutation } = listsApi;
+export const { useLazyGetListsQuery, usePostListMutation, useLazyGetListQuery } = listsApi;

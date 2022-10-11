@@ -2,11 +2,11 @@ import { Center, CircularProgress, Table, TableContainer, Tbody, Text, Th, Thead
 import { useEffectOnce } from 'usehooks-ts';
 import { useLazyGetListsQuery } from '../../../api/list';
 import useAuth from '../../../hooks/useAuth';
-import { User } from '../../../types';
+import { IUser } from '../../../types';
 import ListTableRow from './ListTableRow';
 
 export default function ListTable() {
-    const auth = useAuth() as User;
+    const auth = useAuth() as IUser;
     const [trigger, { data, isLoading, isFetching, isError }] = useLazyGetListsQuery();
 
     useEffectOnce(() => {

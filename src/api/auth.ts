@@ -1,5 +1,5 @@
 import api from '../redux/rtk';
-import { SuccessResponse, User } from '../types';
+import { IUser, SuccessResponse } from '../types';
 
 interface PostLoginBody {
     email: string;
@@ -8,7 +8,7 @@ interface PostLoginBody {
 
 interface PostLoginResponse {
     token: string;
-    user: User;
+    user: IUser;
 }
 
 interface PostSignupBody extends PostLoginBody {
@@ -33,7 +33,7 @@ export const authApi = api.injectEndpoints({
                 body
             })
         }),
-        checkToken: builder.query<User, string>({
+        checkToken: builder.query<IUser, string>({
             query: (token) => ({
                 url: '/check-token',
                 method: 'GET',

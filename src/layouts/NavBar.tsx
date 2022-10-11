@@ -85,7 +85,7 @@ export default function NavBar() {
                                 </MenuList>
                             </Menu>
                         ) : (
-                            <Button type='button' onClick={() => dispatch(showModal(ModalTypes.AUTH_LOGIN))}>
+                            <Button type='button' onClick={() => dispatch(showModal({ type: ModalTypes.AUTH_LOGIN }))}>
                                 Login
                             </Button>
                         )}

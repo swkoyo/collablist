@@ -1,10 +1,24 @@
 import { MinusIcon } from '@chakra-ui/icons';
-import { Avatar, AvatarGroup, HStack, Progress, Td, Text, Tr } from '@chakra-ui/react';
+import {
+    Avatar,
+    AvatarGroup,
+    HStack,
+    LinkBox,
+    LinkOverlay,
+    Progress,
+    Td,
+    Text,
+    Tr,
+    useColorModeValue
+} from '@chakra-ui/react';
 import { round } from 'lodash';
-import { List } from '../../../types';
+import { useAppDispatch } from '../../../hooks/redux';
+import { IList } from '../../../types';
 import { formatDate } from '../../../utils/dayjs';
+import { ModalTypes, showModal } from '../../modal/modalSlice';
 
-export default function ListTableRow({ list }: { list: List }) {
+export default function ListTableRow({ list }: { list: IList }) {
+    const dispatch = useAppDispatch();
     let progress = null;
 
     if (list.items.length > 0) {
@@ -13,8 +27,22 @@ export default function ListTableRow({ list }: { list: List }) {
     }
 
     return (
-        <Tr>
-            <Td>{list.title}</Td>
+        <LinkBox
+            as={Tr}
+            _hover={{
+                background: useColorModeValue('blackAlpha.300', 'whiteAlpha.300'),
+                cursor: 'pointer'
+            }}
+        >
+            <Td>
+                <LinkOverlay
+                    onClick={() =>
+                        dispatch(showModal({ type: ModalTypes.LIST_VIEW, meta: { list_id: list.id }, size: '3xl' }))
+                    }
+                >
+                    {list.title}
+                </LinkOverlay>
+            </Td>
             <Td>{list.items.length}</Td>
             <Td>
                 {progress ? (
@@ -36,6 +64,6 @@ export default function ListTableRow({ list }: { list: List }) {
                 </AvatarGroup>
             </Td>
             <Td>{formatDate(list.created_at)}</Td>
-        </Tr>
+        </LinkBox>
     );
 }

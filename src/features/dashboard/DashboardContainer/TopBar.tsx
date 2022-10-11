@@ -24,7 +24,7 @@ import { FaThList } from 'react-icons/fa';
 import { FiChevronDown, FiMenu } from 'react-icons/fi';
 import { useAppDispatch } from '../../../hooks/redux';
 import useAuth from '../../../hooks/useAuth';
-import { User } from '../../../types';
+import { IUser } from '../../../types';
 import { resetAuth } from '../../auth/authSlice';
 import { ModalTypes, showModal } from '../../modal/modalSlice';
 
@@ -34,7 +34,7 @@ interface TopBarProps extends FlexProps {
 
 export default function TopBar({ onOpen, ...rest }: TopBarProps) {
     const { colorMode, toggleColorMode } = useColorMode();
-    const auth = useAuth() as User;
+    const auth = useAuth() as IUser;
     const dispatch = useAppDispatch();
     const toast = useToast();
 
@@ -81,7 +81,7 @@ export default function TopBar({ onOpen, ...rest }: TopBarProps) {
                 <IconButton
                     size='lg'
                     aria-label='Create New List'
-                    onClick={() => dispatch(showModal(ModalTypes.LIST_CREATE))}
+                    onClick={() => dispatch(showModal({ type: ModalTypes.LIST_CREATE }))}
                     icon={<AddIcon />}
                 />
                 <IconButton
