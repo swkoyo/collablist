@@ -57,7 +57,9 @@ export default function ListTableRow({ list }: { list: IList }) {
             <Td>
                 <AvatarGroup size='sm' spacing={-1} max={2}>
                     {list.members.length > 0 ? (
-                        list.members.map((m) => <Avatar name={`${m.first_name} ${m.last_name}`} />)
+                        list.members.map((m) => (
+                            <Avatar key={m.user.id} name={`${m.user.first_name} ${m.user.last_name}`} />
+                        ))
                     ) : (
                         <Avatar icon={<MinusIcon />} />
                     )}
