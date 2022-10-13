@@ -1,3 +1,4 @@
+import { CheckCircleIcon, EditIcon } from '@chakra-ui/icons';
 import {
     Accordion,
     AccordionButton,
@@ -12,6 +13,10 @@ import {
     HStack,
     Icon,
     IconButton,
+    Menu,
+    MenuButton,
+    MenuItem,
+    MenuList,
     SkeletonText,
     Stack,
     StackDivider,
@@ -21,6 +26,7 @@ import {
 } from '@chakra-ui/react';
 import { useEffect } from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
+import { BiTrash } from 'react-icons/bi';
 import { BsTextLeft } from 'react-icons/bs';
 import { useLazyGetListQuery } from '../../../api/list';
 import { formatDate } from '../../../utils/dayjs';
@@ -51,10 +57,15 @@ export default function ListDetail({ listId }: { listId: number }) {
             <>
                 <Stack gap={0.5}>
                     <HStack>
-                        <Checkbox />
                         <Text fontWeight='bold' fontSize='2xl'>
                             {data.title}
                         </Text>
+                        <Menu>
+                            <MenuButton as={IconButton} aria-label='Options' icon={<EditIcon />} variant='ghost' />
+                            <MenuList>
+                                <MenuItem icon={<CheckCircleIcon />}>Mark all items as complete</MenuItem>
+                            </MenuList>
+                        </Menu>
                     </HStack>
                     <HStack alignItems='center' pl={7}>
                         <Icon as={BsTextLeft} />
@@ -149,11 +160,24 @@ export default function ListDetail({ listId }: { listId: number }) {
                             }}
                         />
                     </HStack>
-                    <VStack>
+                    <VStack w='full'>
                         {data.members.map((m) => (
-                            <Text fontSize='xs' key={m.user.id}>
-                                {m.user.first_name} {m.user.last_name}
-                            </Text>
+                            <HStack width='full'>
+                                <Text fontSize='xs' key={m.user.id}>
+                                    {m.user.first_name} {m.user.last_name}
+                                </Text>
+                                <Box flex='1' />
+                                <IconButton
+                                    aria-label='Remove member'
+                                    type='button'
+                                    size='2xs'
+                                    variant='link'
+                                    as={BiTrash}
+                                    _hover={{
+                                        cursor: 'pointer'
+                                    }}
+                                />
+                            </HStack>
                         ))}
                     </VStack>
                 </VStack>
