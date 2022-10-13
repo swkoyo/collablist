@@ -1,9 +1,8 @@
 import {
-    Box,
     Button,
+    ButtonGroup,
     FormControl,
     FormErrorMessage,
-    HStack,
     Input,
     useDisclosure,
     useOutsideClick,
@@ -77,15 +76,14 @@ export default function AddItemForm({ list }: { list: IList }) {
                     />
                     <FormErrorMessage fontSize='xs'>{errors.title?.message as string}</FormErrorMessage>
                 </FormControl>
-                <HStack mt={2}>
-                    <Box flex='1' />
+                <ButtonGroup justifyContent='end' width='full'>
                     <Button size='sm' type='button' onClick={() => handleCancel()}>
                         Cancel
                     </Button>
                     <Button size='sm' type='submit' isLoading={isSubmitting} disabled={!isValid}>
                         Add item
                     </Button>
-                </HStack>
+                </ButtonGroup>
             </form>
         );
     }

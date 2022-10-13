@@ -5,3 +5,7 @@ export const createListItemSchema = z.object({
 });
 
 export type CreateListItemSchema = z.infer<typeof createListItemSchema>;
+
+export const editListItemSchema = createListItemSchema;
+
+export type EditListItemSchema = CreateListItemSchema;

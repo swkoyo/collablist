@@ -35,7 +35,7 @@ export default function ListItemAccordion({ list }: { list: IList }) {
                 <AccordionPanel ml='3' pr={0}>
                     <Stack spacing={2} divider={<StackDivider />} align='stretch' width='100%'>
                         {list.items.map((i) => (
-                            <ListItemRow key={i.id} item={i} />
+                            <ListItemRow key={i.id} listId={list.id} item={i} />
                         ))}
                         <AddItemForm list={list} />
                     </Stack>
