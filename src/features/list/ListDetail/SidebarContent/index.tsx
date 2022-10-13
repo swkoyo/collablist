@@ -1,4 +1,4 @@
-import { Box, HStack, IconButton, StackDivider, Text, useColorModeValue, VStack } from '@chakra-ui/react';
+import { Box, HStack, IconButton, StackDivider, Text, VStack } from '@chakra-ui/react';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { BiTrash } from 'react-icons/bi';
 import { IList } from '../../../../types';
@@ -28,21 +28,11 @@ export default function SidebarContent({ list }: { list: IList }) {
                             Members ({list.members.length})
                         </Text>
                         <Box flex='1' />
-                        <IconButton
-                            aria-label='Add member'
-                            size='2xs'
-                            type='button'
-                            as={AiOutlinePlus}
-                            _hover={{
-                                cursor: 'pointer',
-                                // eslint-disable-next-line
-                                background: useColorModeValue('blackAlpha.300', 'whiteAlpha.300')
-                            }}
-                        />
+                        <IconButton aria-label='Add member' size='2xs' type='button' icon={<AiOutlinePlus />} />
                     </HStack>
                     <VStack w='full'>
                         {list.members.map((m) => (
-                            <HStack width='full'>
+                            <HStack key={m.user.id} width='full'>
                                 <Text fontSize='xs' key={m.user.id}>
                                     {m.user.first_name} {m.user.last_name}
                                 </Text>
@@ -52,10 +42,7 @@ export default function SidebarContent({ list }: { list: IList }) {
                                     type='button'
                                     size='2xs'
                                     variant='link'
-                                    as={BiTrash}
-                                    _hover={{
-                                        cursor: 'pointer'
-                                    }}
+                                    icon={<BiTrash />}
                                 />
                             </HStack>
                         ))}
