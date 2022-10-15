@@ -1,6 +1,6 @@
 import { Optional } from 'utility-types';
 import api from '../redux/rtk';
-import { IList, IListItem, PaginationRequestParams, PaginationResponseData } from '../types';
+import { IList, IListItem, IUser, PaginationRequestParams, PaginationResponseData } from '../types';
 
 type GetListsParams = PaginationRequestParams;
 
@@ -14,12 +14,13 @@ type PostListItemBody = Pick<IListItem, 'title'> & {
     list_id: number;
 };
 
-type PutListItemBody = Optional<Pick<IListItem, 'id' | 'title' | 'status'>, 'title' | 'status'> & {
+type PutListItemBody = Optional<Pick<IListItem, 'title' | 'status'>, 'title' | 'status'> & {
+    list_item_id: number;
     list_id: number;
 };
 
 type DeleteListItemBody = {
-    id: number;
+    list_item_id: number;
     list_id: number;
 };
 
@@ -28,9 +29,13 @@ type PutListBody = Optional<Pick<IList, 'id' | 'title' | 'description'>, 'title'
 type PostListMembersResponse = IList['members'];
 
 type PostListMemberBody = {
-    id: number;
+    list_id: number;
     user_ids: number[];
 };
+
+type DeleteListMemberResponse = { user: IUser };
+
+type DeleteListMemberBody = { list_id: number; list_member_id: number };
 
 export const listsApi = api.injectEndpoints({
     endpoints: (builder) => ({
@@ -112,17 +117,17 @@ export const listsApi = api.injectEndpoints({
             }
         }),
         putListItem: builder.mutation<IListItem, PutListItemBody>({
-            query: ({ list_id, id, ...body }) => ({
-                url: `/lists/${list_id}/items/${id}`,
+            query: ({ list_id, list_item_id, ...body }) => ({
+                url: `/lists/${list_id}/items/${list_item_id}`,
                 method: 'PUT',
                 body
             }),
-            async onQueryStarted({ list_id, id }, { dispatch, queryFulfilled }) {
+            async onQueryStarted({ list_id, list_item_id }, { dispatch, queryFulfilled }) {
                 try {
                     const { data } = await queryFulfilled;
                     dispatch(
                         listsApi.util.updateQueryData('getList', list_id, (draft) => {
-                            const index = draft.items.findIndex((i) => i.id === id);
+                            const index = draft.items.findIndex((i) => i.id === list_item_id);
                             if (index > -1) {
                                 Object.assign(draft.items[index], data);
                             }
@@ -132,7 +137,7 @@ export const listsApi = api.injectEndpoints({
                         listsApi.util.updateQueryData('getLists', {}, (draft) => {
                             const listIndex = draft.data.findIndex((d) => d.id === list_id);
                             if (listIndex > -1) {
-                                const itemIndex = draft.data[listIndex].items.findIndex((i) => i.id === id);
+                                const itemIndex = draft.data[listIndex].items.findIndex((i) => i.id === list_item_id);
                                 if (itemIndex > -1) {
                                     Object.assign(draft.data[listIndex].items[itemIndex], data);
                                 }
@@ -145,8 +150,8 @@ export const listsApi = api.injectEndpoints({
             }
         }),
         deleteListItem: builder.mutation<IListItem, DeleteListItemBody>({
-            query: ({ list_id, id }) => ({
-                url: `/lists/${list_id}/items/${id}`,
+            query: ({ list_id, list_item_id }) => ({
+                url: `/lists/${list_id}/items/${list_item_id}`,
                 method: 'DELETE'
             }),
             async onQueryStarted({ list_id }, { dispatch, queryFulfilled }) {
@@ -171,24 +176,52 @@ export const listsApi = api.injectEndpoints({
             }
         }),
         postListMembers: builder.mutation<PostListMembersResponse, PostListMemberBody>({
-            query: ({ id, user_ids }) => ({
-                url: `/lists/${id}/members`,
+            query: ({ list_id, user_ids }) => ({
+                url: `/lists/${list_id}/members`,
                 method: 'POST',
                 body: { user_ids }
             }),
-            async onQueryStarted({ id }, { dispatch, queryFulfilled }) {
+            async onQueryStarted({ list_id }, { dispatch, queryFulfilled }) {
                 try {
                     const { data } = await queryFulfilled;
                     dispatch(
-                        listsApi.util.updateQueryData('getList', id, (draft) => {
+                        listsApi.util.updateQueryData('getList', list_id, (draft) => {
                             draft.members.push(...data);
                         })
                     );
                     dispatch(
                         listsApi.util.updateQueryData('getLists', {}, (draft) => {
-                            const index = draft.data.findIndex((d) => d.id === id);
+                            const index = draft.data.findIndex((d) => d.id === list_id);
                             if (index > -1) {
                                 draft.data[index].members.push(...data);
+                            }
+                        })
+                    );
+                } catch {
+                    //
+                }
+            }
+        }),
+        deleteListMember: builder.mutation<DeleteListMemberResponse, DeleteListMemberBody>({
+            query: ({ list_id, list_member_id }) => ({
+                url: `/lists/${list_id}/members/${list_member_id}`,
+                method: 'DELETE'
+            }),
+            async onQueryStarted({ list_id }, { dispatch, queryFulfilled }) {
+                try {
+                    const { data } = await queryFulfilled;
+                    dispatch(
+                        listsApi.util.updateQueryData('getList', list_id, (draft) => {
+                            draft.members = draft.members.filter((i) => i.user.id !== data.user.id);
+                        })
+                    );
+                    dispatch(
+                        listsApi.util.updateQueryData('getLists', {}, (draft) => {
+                            const index = draft.data.findIndex((d) => d.id === list_id);
+                            if (index > -1) {
+                                draft.data[index].members = draft.data[index].members.filter(
+                                    (i) => i.user.id !== data.user.id
+                                );
                             }
                         })
                     );
@@ -208,5 +241,6 @@ export const {
     usePutListItemMutation,
     useDeleteListItemMutation,
     usePutListMutation,
-    usePostListMembersMutation
+    usePostListMembersMutation,
+    useDeleteListMemberMutation
 } = listsApi;

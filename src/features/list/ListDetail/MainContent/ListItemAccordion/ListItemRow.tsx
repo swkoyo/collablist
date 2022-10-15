@@ -45,7 +45,7 @@ export default function ListItemRow({ listId, item }: { listId: number; item: IL
 
     const handleStatusUpdate = async () => {
         try {
-            await putListItem({ list_id: listId, id: item.id, status: !item.status }).unwrap();
+            await putListItem({ list_id: listId, list_item_id: item.id, status: !item.status }).unwrap();
         } catch (err) {
             toast({
                 title: 'Failed to update status',
@@ -59,7 +59,7 @@ export default function ListItemRow({ listId, item }: { listId: number; item: IL
 
     const handleRemove = async () => {
         try {
-            await deleteListItem({ list_id: listId, id: item.id }).unwrap();
+            await deleteListItem({ list_id: listId, list_item_id: item.id }).unwrap();
         } catch (err) {
             toast({
                 title: 'Failed to remove item',
@@ -73,7 +73,7 @@ export default function ListItemRow({ listId, item }: { listId: number; item: IL
 
     const onSubmit = async (data: EditListItemSchema) => {
         try {
-            await putListItem({ list_id: listId, id: item.id, ...data }).unwrap();
+            await putListItem({ list_id: listId, list_item_id: item.id, ...data }).unwrap();
             reset({ title: data.title });
             onClose();
         } catch (err) {

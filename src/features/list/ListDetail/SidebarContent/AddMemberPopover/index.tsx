@@ -50,7 +50,7 @@ export default function AddMemberPopover({ listId, members }: { listId: number; 
     }, [debouncedSearch, trigger, members]);
 
     const handleAddMember = async (id: number) => {
-        await postListMembers({ id: listId, user_ids: [id] }).unwrap();
+        await postListMembers({ list_id: listId, user_ids: [id] }).unwrap();
         onClose();
     };
 

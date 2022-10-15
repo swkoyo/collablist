@@ -1,10 +1,17 @@
 import { Box, HStack, IconButton, StackDivider, Text, VStack } from '@chakra-ui/react';
 import { BiTrash } from 'react-icons/bi';
+import { useDeleteListMemberMutation } from '../../../../api/list';
 import { IList } from '../../../../types';
 import { formatDate } from '../../../../utils/dayjs';
 import AddMemberPopover from './AddMemberPopover';
 
 export default function SidebarContent({ list }: { list: IList }) {
+    const [deleteListMember] = useDeleteListMemberMutation();
+
+    const handleDeleteMember = async (id: number) => {
+        await deleteListMember({ list_id: list.id, list_member_id: id }).unwrap();
+    };
+
     return (
         <Box flex='1' p={2}>
             <VStack divider={<StackDivider />} align='start'>
@@ -43,6 +50,7 @@ export default function SidebarContent({ list }: { list: IList }) {
                                     size='2xs'
                                     variant='ghost'
                                     icon={<BiTrash />}
+                                    onClick={() => handleDeleteMember(m.user.id)}
                                 />
                             </HStack>
                         ))}
