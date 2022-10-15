@@ -11,7 +11,7 @@ import {
     Tr,
     useColorModeValue
 } from '@chakra-ui/react';
-import { round } from 'lodash';
+import { isNumber, round } from 'lodash';
 import { useAppDispatch } from '../../../hooks/redux';
 import { IList } from '../../../types';
 import { formatDate } from '../../../utils/dayjs';
@@ -23,7 +23,7 @@ export default function ListTableRow({ list }: { list: IList }) {
 
     if (list.items.length > 0) {
         const completeItems = list.items.filter((i) => i.status).length;
-        progress = round(completeItems / list.items.length, 0);
+        progress = round((completeItems / list.items.length) * 100, 0);
     }
 
     return (
@@ -45,13 +45,13 @@ export default function ListTableRow({ list }: { list: IList }) {
             </Td>
             <Td>{list.items.length}</Td>
             <Td>
-                {progress ? (
+                {isNumber(progress) ? (
                     <HStack>
                         <Progress hasStripe value={progress} width='80%' />
                         <Text>{progress}%</Text>
                     </HStack>
                 ) : (
-                    <Text>Add items to update progress</Text>
+                    <Text fontSize='sm'>-</Text>
                 )}
             </Td>
             <Td>
