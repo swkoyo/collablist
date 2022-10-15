@@ -16,7 +16,7 @@ import {
     useToast
 } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useRef } from 'react';
+import { KeyboardEvent, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { BiTrash } from 'react-icons/bi';
 import { getErrorMessage } from '../../../../../api/helpers';
@@ -74,6 +74,7 @@ export default function ListItemRow({ listId, item }: { listId: number; item: IL
     const onSubmit = async (data: EditListItemSchema) => {
         try {
             await putListItem({ list_id: listId, id: item.id, ...data }).unwrap();
+            reset({ title: data.title });
             onClose();
         } catch (err) {
             toast({
@@ -97,17 +98,30 @@ export default function ListItemRow({ listId, item }: { listId: number; item: IL
         handler: () => handleCancel()
     });
 
+    const handleFormEscape = (e: KeyboardEvent<HTMLFormElement>) => {
+        if (e.key === 'Escape' && isOpen) {
+            e.preventDefault();
+            handleCancel();
+        }
+    };
+
     return (
         <Flex verticalAlign='center' gap={1} px={1} py={0}>
             <Checkbox isChecked={item.status} onChange={() => handleStatusUpdate()} />
             {isOpen ? (
-                <form ref={ref} onSubmit={handleSubmit(onSubmit)} style={{ width: '100%' }}>
+                <form
+                    ref={ref}
+                    onSubmit={handleSubmit(onSubmit)}
+                    style={{ width: '100%' }}
+                    onKeyDown={handleFormEscape}
+                >
                     <FormControl isInvalid={!isValid}>
                         <InputGroup size='sm'>
                             <Input
                                 id={`${item.id}-edit-value`}
                                 isInvalid={!isValid}
                                 placeholder='Item title'
+                                autoFocus
                                 {...register('title', { required: true })}
                             />
                             <InputRightElement width='4.5rem'>
@@ -147,6 +161,7 @@ export default function ListItemRow({ listId, item }: { listId: number; item: IL
                             type='button'
                             onClick={() => onOpen()}
                             icon={<EditIcon />}
+                            disabled={item.status}
                         />
                         <IconButton
                             aria-label={`${item.id}-item-delete`}

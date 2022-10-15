@@ -9,7 +9,7 @@ import {
     useToast
 } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useRef } from 'react';
+import { KeyboardEvent, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { getErrorMessage } from '../../../../../api/helpers';
@@ -63,9 +63,16 @@ export default function AddItemForm({ list }: { list: IList }) {
         handler: () => handleCancel()
     });
 
+    const handleFormEscape = (e: KeyboardEvent<HTMLFormElement>) => {
+        if (e.key === 'Escape' && isOpen) {
+            e.preventDefault();
+            handleCancel();
+        }
+    };
+
     if (isOpen) {
         return (
-            <form ref={ref} onSubmit={handleSubmit(onSubmit)}>
+            <form ref={ref} onSubmit={handleSubmit(onSubmit)} onKeyDown={handleFormEscape}>
                 <FormControl isInvalid={!isValid}>
                     <Input
                         id={`${list.id}-create-list-item-title`}
