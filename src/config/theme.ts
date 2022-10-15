@@ -6,7 +6,18 @@ const config: ThemeConfig = {
 };
 
 const theme = extendTheme({
-    config
+    config,
+    components: {
+        Checkbox: {
+            baseStyle: {
+                control: {
+                    _focus: {
+                        boxShadow: 'none'
+                    }
+                }
+            }
+        }
+    }
 });
 
 export default theme;

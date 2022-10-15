@@ -107,7 +107,12 @@ export default function ListItemRow({ listId, item }: { listId: number; item: IL
 
     return (
         <Flex verticalAlign='center' gap={1} px={1} py={0}>
-            <Checkbox isChecked={item.status} onChange={() => handleStatusUpdate()} />
+            <Checkbox
+                isFocusable={false}
+                isChecked={item.status}
+                onChange={() => handleStatusUpdate()}
+                autoFocus={false}
+            />
             {isOpen ? (
                 <form
                     ref={ref}
