@@ -16,7 +16,7 @@ import ListItemRow from './ListItemRow';
 
 export default function ListItemAccordion({ list }: { list: IList }) {
     return (
-        <Accordion mt={5} allowToggle>
+        <Accordion mt={5} allowToggle defaultIndex={0}>
             <AccordionItem border='none'>
                 <AccordionButton p='0' _hover={{ brightness: '100%' }}>
                     <AccordionIcon mr='2' />
