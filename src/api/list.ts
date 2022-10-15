@@ -23,6 +23,8 @@ type DeleteListItemBody = {
     list_id: number;
 };
 
+type PutListBody = Optional<Pick<IList, 'id' | 'title' | 'description'>, 'title' | 'description'>;
+
 export const listsApi = api.injectEndpoints({
     endpoints: (builder) => ({
         getLists: builder.query<GetListsResponse, GetListsParams>({
@@ -40,6 +42,33 @@ export const listsApi = api.injectEndpoints({
                 body
             }),
             invalidatesTags: ['List']
+        }),
+        putList: builder.mutation<IList, PutListBody>({
+            query: ({ id, ...body }) => ({
+                url: `/lists/${id}`,
+                method: 'PUT',
+                body
+            }),
+            async onQueryStarted({ id }, { dispatch, queryFulfilled }) {
+                try {
+                    const { data } = await queryFulfilled;
+                    dispatch(
+                        listsApi.util.updateQueryData('getList', id, (draft) => {
+                            Object.assign(draft, data);
+                        })
+                    );
+                    dispatch(
+                        listsApi.util.updateQueryData('getLists', {}, (draft) => {
+                            const index = draft.data.findIndex((d) => d.id === id);
+                            if (index > -1) {
+                                Object.assign(draft.data[index], data);
+                            }
+                        })
+                    );
+                } catch {
+                    //
+                }
+            }
         }),
         getList: builder.query<IList, number>({
             query: (listId) => ({
@@ -64,9 +93,9 @@ export const listsApi = api.injectEndpoints({
                     );
                     dispatch(
                         listsApi.util.updateQueryData('getLists', {}, (draft) => {
-                            const list = draft.data.find((d) => d.id === list_id);
-                            if (list) {
-                                list.items.push(data);
+                            const index = draft.data.findIndex((d) => d.id === list_id);
+                            if (index > -1) {
+                                draft.data[index].items.push(data);
                             }
                         })
                     );
@@ -86,19 +115,19 @@ export const listsApi = api.injectEndpoints({
                     const { data } = await queryFulfilled;
                     dispatch(
                         listsApi.util.updateQueryData('getList', list_id, (draft) => {
-                            const item = draft.items.find((i) => i.id === id);
-                            if (item) {
-                                Object.assign(item, data);
+                            const index = draft.items.findIndex((i) => i.id === id);
+                            if (index > -1) {
+                                Object.assign(draft.items[index], data);
                             }
                         })
                     );
                     dispatch(
                         listsApi.util.updateQueryData('getLists', {}, (draft) => {
-                            const list = draft.data.find((d) => d.id === list_id);
-                            if (list) {
-                                const item = list.items.find((i) => i.id === id);
-                                if (item) {
-                                    Object.assign(item, data);
+                            const listIndex = draft.data.findIndex((d) => d.id === list_id);
+                            if (listIndex > -1) {
+                                const itemIndex = draft.data[listIndex].items.findIndex((i) => i.id === id);
+                                if (itemIndex > -1) {
+                                    Object.assign(draft.data[listIndex].items[itemIndex], data);
                                 }
                             }
                         })
@@ -123,9 +152,9 @@ export const listsApi = api.injectEndpoints({
                     );
                     dispatch(
                         listsApi.util.updateQueryData('getLists', {}, (draft) => {
-                            const list = draft.data.find((d) => d.id === list_id);
-                            if (list) {
-                                list.items = list.items.filter((i) => i.id !== data.id);
+                            const index = draft.data.findIndex((d) => d.id === list_id);
+                            if (index > -1) {
+                                draft.data[index].items = draft.data[index].items.filter((i) => i.id !== data.id);
                             }
                         })
                     );
@@ -143,5 +172,6 @@ export const {
     useLazyGetListQuery,
     usePostListItemMutation,
     usePutListItemMutation,
-    useDeleteListItemMutation
+    useDeleteListItemMutation,
+    usePutListMutation
 } = listsApi;
