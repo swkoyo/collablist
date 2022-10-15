@@ -7,8 +7,8 @@ export interface IList {
     created_at: Date;
     updated_at: Date;
     items: IListItem[];
-    user: Omit<IUser, 'created_at' | 'updated_at'>;
-    members: { user: Omit<IUser, 'created_at' | 'updated_at'> }[];
+    user: IUser;
+    members: { user: IUser }[];
 }
 
 export interface IListItem {

@@ -27,7 +27,7 @@ export default function RootModal() {
     };
 
     return (
-        <Modal isOpen={is_visible && !!type} onClose={() => dispatch(hideModal())} size={size}>
+        <Modal isOpen={is_visible && !!type} onClose={() => dispatch(hideModal())} size={size} closeOnEsc={false}>
             <ModalOverlay backdropFilter='blur(2px)' />
             <ModalContent>
                 <ModalHeader />

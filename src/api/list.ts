@@ -25,6 +25,13 @@ type DeleteListItemBody = {
 
 type PutListBody = Optional<Pick<IList, 'id' | 'title' | 'description'>, 'title' | 'description'>;
 
+type PostListMembersResponse = IList['members'];
+
+type PostListMemberBody = {
+    id: number;
+    user_ids: number[];
+};
+
 export const listsApi = api.injectEndpoints({
     endpoints: (builder) => ({
         getLists: builder.query<GetListsResponse, GetListsParams>({
@@ -162,6 +169,33 @@ export const listsApi = api.injectEndpoints({
                     //
                 }
             }
+        }),
+        postListMembers: builder.mutation<PostListMembersResponse, PostListMemberBody>({
+            query: ({ id, user_ids }) => ({
+                url: `/lists/${id}/members`,
+                method: 'POST',
+                body: { user_ids }
+            }),
+            async onQueryStarted({ id }, { dispatch, queryFulfilled }) {
+                try {
+                    const { data } = await queryFulfilled;
+                    dispatch(
+                        listsApi.util.updateQueryData('getList', id, (draft) => {
+                            draft.members.push(...data);
+                        })
+                    );
+                    dispatch(
+                        listsApi.util.updateQueryData('getLists', {}, (draft) => {
+                            const index = draft.data.findIndex((d) => d.id === id);
+                            if (index > -1) {
+                                draft.data[index].members.push(...data);
+                            }
+                        })
+                    );
+                } catch {
+                    //
+                }
+            }
         })
     })
 });
@@ -173,5 +207,6 @@ export const {
     usePostListItemMutation,
     usePutListItemMutation,
     useDeleteListItemMutation,
-    usePutListMutation
+    usePutListMutation,
+    usePostListMembersMutation
 } = listsApi;

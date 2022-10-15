@@ -1,8 +1,8 @@
 import { Box, HStack, IconButton, StackDivider, Text, VStack } from '@chakra-ui/react';
-import { AiOutlinePlus } from 'react-icons/ai';
 import { BiTrash } from 'react-icons/bi';
 import { IList } from '../../../../types';
 import { formatDate } from '../../../../utils/dayjs';
+import AddMemberPopover from './AddMemberPopover';
 
 export default function SidebarContent({ list }: { list: IList }) {
     return (
@@ -28,7 +28,7 @@ export default function SidebarContent({ list }: { list: IList }) {
                             Members ({list.members.length})
                         </Text>
                         <Box flex='1' />
-                        <IconButton aria-label='Add member' size='2xs' type='button' icon={<AiOutlinePlus />} />
+                        <AddMemberPopover members={list.members} listId={list.id} />
                     </HStack>
                     <VStack w='full'>
                         {list.members.map((m) => (
@@ -41,7 +41,7 @@ export default function SidebarContent({ list }: { list: IList }) {
                                     aria-label='Remove member'
                                     type='button'
                                     size='2xs'
-                                    variant='link'
+                                    variant='ghost'
                                     icon={<BiTrash />}
                                 />
                             </HStack>
