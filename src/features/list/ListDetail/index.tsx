@@ -10,7 +10,7 @@ export default function ListDetail({ listId }: { listId: number }) {
 
     useEffect(() => {
         (async () => {
-            trigger(listId);
+            await trigger(listId);
         })();
     }, [trigger, listId]);
 

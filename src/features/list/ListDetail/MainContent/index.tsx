@@ -20,6 +20,7 @@ import { getErrorMessage } from '../../../../api/helpers';
 import { usePutListMutation } from '../../../../api/list';
 import useAuth from '../../../../hooks/useAuth';
 import { IList, IUser } from '../../../../types';
+import DeleteListButton from './DeleteListButton';
 import ListItemAccordion from './ListItemAccordion';
 import { editListSchema, EditListSchema } from './ListItemAccordion/schema';
 import MarkAsCompleteButton from './MarkAsCompleteButton';
@@ -103,7 +104,10 @@ export default function MainContent({ list }: { list: IList }) {
                             {...register('title', { required: true })}
                         />
                         {list.user.id === auth.id && !list.is_complete && !isOpen ? (
-                            <MarkAsCompleteButton list={list} />
+                            <>
+                                <MarkAsCompleteButton list={list} />
+                                <DeleteListButton list={list} />
+                            </>
                         ) : null}
                     </HStack>
                     <InputGroup pl={4} variant='unstyled' alignItems='center' gap={2} size='md'>

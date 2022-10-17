@@ -1,4 +1,3 @@
-import { CheckIcon } from '@chakra-ui/icons';
 import {
     Button,
     ButtonGroup,
@@ -11,27 +10,30 @@ import {
     PopoverFooter,
     PopoverHeader,
     PopoverTrigger,
-    Tooltip,
     useDisclosure,
     useToast
 } from '@chakra-ui/react';
+import { BiTrash } from 'react-icons/bi';
 import { getErrorMessage } from '../../../../api/helpers';
-import { usePutListMutation } from '../../../../api/list';
+import { useDeleteListMutation } from '../../../../api/list';
 import { useAppDispatch } from '../../../../hooks/redux';
 import { IList } from '../../../../types';
-import { hideModal } from '../../../modal/modalSlice';
+import { hideModal, updateModalMeta } from '../../../modal/modalSlice';
 
-export default function MarkAsCompleteButton({ list }: { list: IList }) {
+export default function DeleteListButton({ list }: { list: IList }) {
     const { isOpen, onToggle, onClose } = useDisclosure();
     const toast = useToast();
-    const [putList] = usePutListMutation();
+    const [deleteList] = useDeleteListMutation({
+        fixedCacheKey: `delete-list-${list.id}`
+    });
     const dispatch = useAppDispatch();
 
     const handleApply = async () => {
         try {
-            await putList({ id: list.id, is_complete: true }).unwrap();
+            await dispatch(updateModalMeta({ meta: {} }));
+            await deleteList(list.id);
             toast({
-                title: 'List marked as complete',
+                title: 'List deleted',
                 status: 'success',
                 duration: 9000,
                 isClosable: true
@@ -40,7 +42,7 @@ export default function MarkAsCompleteButton({ list }: { list: IList }) {
             dispatch(hideModal());
         } catch (err) {
             toast({
-                title: 'Failed to edit list',
+                title: 'Failed to delete list',
                 description: getErrorMessage(err),
                 status: 'error',
                 duration: 9000,
@@ -53,22 +55,20 @@ export default function MarkAsCompleteButton({ list }: { list: IList }) {
     return (
         <Popover returnFocusOnClose={false} isOpen={isOpen} onClose={onClose} placement='auto'>
             <PopoverTrigger>
-                <Tooltip label='Mark as complete'>
-                    <IconButton aria-label='Mark list as complete' size='sm' onClick={onToggle} icon={<CheckIcon />} />
-                </Tooltip>
+                <IconButton aria-label='Delete list' size='sm' onClick={onToggle} icon={<BiTrash />} />
             </PopoverTrigger>
             <PopoverContent>
                 <PopoverHeader fontWeight='semibold'>Confirmation</PopoverHeader>
                 <PopoverArrow />
                 <PopoverCloseButton />
-                <PopoverBody>Are you sure you want to mark this list as complete? This cannot be undone.</PopoverBody>
+                <PopoverBody>Are you sure you want to delete this list?</PopoverBody>
                 <PopoverFooter display='flex' justifyContent='flex-end'>
                     <ButtonGroup size='sm'>
                         <Button variant='outline' onClick={onClose}>
                             Cancel
                         </Button>
                         <Button colorScheme='red' onClick={() => handleApply()}>
-                            Apply
+                            Delete
                         </Button>
                     </ButtonGroup>
                 </PopoverFooter>

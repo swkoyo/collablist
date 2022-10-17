@@ -15,7 +15,6 @@ type ModalState = {
     size?: ResponsiveValue<
         (string & object) | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | 'full' | 'xs' | '3xl' | '4xl' | '5xl' | '6xl'
     >;
-
     meta?: {
         list_id?: number;
     };
@@ -39,11 +38,14 @@ export const modalSlice = createSlice({
         hideModal: (state) => {
             state.is_visible = false;
             state.type = null;
+        },
+        updateModalMeta: (state, action: PayloadAction<Pick<ModalState, 'meta'>>) => {
+            state.meta = action.payload.meta;
         }
     }
 });
 
-export const { showModal, hideModal } = modalSlice.actions;
+export const { showModal, hideModal, updateModalMeta } = modalSlice.actions;
 
 export const getModalState = (state: RootState) => state.modal;
 

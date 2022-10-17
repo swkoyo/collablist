@@ -69,18 +69,7 @@ export const listsApi = api.injectEndpoints({
                 method: 'POST',
                 body
             }),
-            async onQueryStarted(args, { dispatch, queryFulfilled }) {
-                try {
-                    const { data } = await queryFulfilled;
-                    dispatch(
-                        listsApi.util.updateQueryData('getLists', undefined, (draft) => {
-                            draft.push(data);
-                        })
-                    );
-                } catch {
-                    //
-                }
-            }
+            invalidatesTags: ['List']
         }),
         putList: builder.mutation<IList, PutListBody>({
             query: ({ id, ...body }) => ({
@@ -147,6 +136,13 @@ export const listsApi = api.injectEndpoints({
                 }
             }
         }),
+        deleteList: builder.mutation<IList, IList['id']>({
+            query: (id) => ({
+                url: `/lists/${id}`,
+                method: 'DELETE'
+            }),
+            invalidatesTags: (result, error, arg) => (result ? [{ type: 'List', id: result.id }] : [])
+        }),
         putListItem: builder.mutation<IListItem, PutListItemBody>({
             query: ({ list_id, list_item_id, ...body }) => ({
                 url: `/lists/${list_id}/items/${list_item_id}`,
@@ -178,8 +174,7 @@ export const listsApi = api.injectEndpoints({
                 } catch {
                     //
                 }
-            },
-            invalidatesTags: (result, error, arg) => [{ type: 'ListHistory', id: arg.list_id }]
+            }
         }),
         deleteListItem: builder.mutation<IListItem, DeleteListItemBody>({
             query: ({ list_id, list_item_id }) => ({
@@ -205,8 +200,7 @@ export const listsApi = api.injectEndpoints({
                 } catch {
                     //
                 }
-            },
-            invalidatesTags: (result, error, arg) => [{ type: 'ListHistory', id: arg.list_id }]
+            }
         }),
         postListMembers: builder.mutation<PostListMembersResponse, PostListMemberBody>({
             query: ({ list_id, user_ids }) => ({
@@ -275,6 +269,7 @@ export const {
     usePutListMutation,
     usePostListMembersMutation,
     useDeleteListMemberMutation,
+    useDeleteListMutation,
     endpoints: {
         getLists: { useQueryState: useGetListsQueryState }
     }
