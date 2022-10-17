@@ -1,17 +1,19 @@
-import { Center, CircularProgress, Table, TableContainer, Tbody, Text, Th, Thead, Tr } from '@chakra-ui/react';
+import { Center, Spinner, Table, TableContainer, Tbody, Text, Th, Thead, Tr } from '@chakra-ui/react';
+import { useLocation } from 'react-router-dom';
 import { useEffectOnce } from 'usehooks-ts';
 import { useLazyGetListsQuery } from '../../../api/list';
 import useAuth from '../../../hooks/useAuth';
-import { IUser } from '../../../types';
+import { IList, IUser } from '../../../types';
 import ListTableRow from './ListTableRow';
 
-export default function ListTable() {
+export default function ListCurrentTable() {
     const auth = useAuth() as IUser;
     const [trigger, { data, isLoading, isFetching, isError }] = useLazyGetListsQuery();
+    const { hash } = useLocation();
 
     useEffectOnce(() => {
         (async () => {
-            trigger({});
+            await trigger();
         })();
     });
 
@@ -19,11 +21,11 @@ export default function ListTable() {
         if (!data || isLoading || isFetching) {
             return (
                 <Center>
-                    <CircularProgress />
+                    <Spinner />
                 </Center>
             );
         }
-        if (data.count === 0) {
+        if (data.length === 0) {
             return (
                 <Center>
                     <Text>No Data found</Text>
@@ -37,6 +39,29 @@ export default function ListTable() {
                 </Center>
             );
         }
+
+        let results: IList[];
+
+        switch (hash) {
+            case '#owned':
+                results = data.filter((d) => d.user.id === auth.id);
+                break;
+            case '#member':
+                results = data.filter((d) => d.members.some((m) => m.user.id === auth.id));
+                break;
+            default:
+                results = data;
+                break;
+        }
+
+        if (results.length === 0) {
+            return (
+                <Center>
+                    <Text>No Data found</Text>
+                </Center>
+            );
+        }
+
         return (
             <Table size='sm'>
                 <Thead>
@@ -49,7 +74,7 @@ export default function ListTable() {
                     </Tr>
                 </Thead>
                 <Tbody>
-                    {data.data.map((d) => (
+                    {results.map((d) => (
                         <ListTableRow key={d.id} list={d} />
                     ))}
                 </Tbody>

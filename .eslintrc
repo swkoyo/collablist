@@ -25,6 +25,7 @@
 		"@typescript-eslint"
 	],
 	"rules": {
+		"react/no-array-index-key": "off",
 		"prettier/prettier": "error",
 		"react/require-default-props": "off",
 		"@typescript-eslint/naming-convention": "off",

@@ -2,11 +2,15 @@ import { Optional } from 'utility-types';
 import api from '../redux/rtk';
 import { IList, IListItem, IUser, PaginationRequestParams, PaginationResponseData } from '../types';
 
-type GetListsParams = PaginationRequestParams;
+type GetListsResponse = IList[];
 
-type GetListsResponse = PaginationResponseData<IList>;
+interface PostListBody extends Pick<IList, 'title' | 'description'> {
+    items: { title: string }[];
+}
 
-type PostListBody = Pick<IList, 'title' | 'description'>;
+type GetListsHistoryParams = PaginationRequestParams;
+
+type GetListsHistoryResponse = PaginationResponseData<IList>;
 
 type PostListResponse = IList;
 
@@ -39,13 +43,22 @@ type DeleteListMemberBody = { list_id: number; list_member_id: number };
 
 export const listsApi = api.injectEndpoints({
     endpoints: (builder) => ({
-        getLists: builder.query<GetListsResponse, GetListsParams>({
+        getLists: builder.query<GetListsResponse, void>({
+            query: () => ({
+                url: '/lists'
+            }),
+            providesTags: (result, error, arg) =>
+                result ? [...result.map(({ id }) => ({ type: 'List' as const, id })), 'List'] : ['List']
+        }),
+        getListsHistory: builder.query<GetListsHistoryResponse, GetListsHistoryParams>({
             query: (params) => ({
-                url: '/lists',
+                url: '/lists/history',
                 params
             }),
             providesTags: (result, error, arg) =>
-                result ? [...result.data.map(({ id }) => ({ type: 'List' as const, id })), 'List'] : ['List']
+                result
+                    ? [...result.data.map(({ id }) => ({ type: 'ListHistory' as const, id })), 'ListHistory']
+                    : ['ListHistory']
         }),
         postList: builder.mutation<PostListResponse, PostListBody>({
             query: (body) => ({
@@ -53,7 +66,18 @@ export const listsApi = api.injectEndpoints({
                 method: 'POST',
                 body
             }),
-            invalidatesTags: ['List']
+            async onQueryStarted(args, { dispatch, queryFulfilled }) {
+                try {
+                    const { data } = await queryFulfilled;
+                    dispatch(
+                        listsApi.util.updateQueryData('getLists', undefined, (draft) => {
+                            draft.push(data);
+                        })
+                    );
+                } catch {
+                    //
+                }
+            }
         }),
         putList: builder.mutation<IList, PutListBody>({
             query: ({ id, ...body }) => ({
@@ -70,10 +94,10 @@ export const listsApi = api.injectEndpoints({
                         })
                     );
                     dispatch(
-                        listsApi.util.updateQueryData('getLists', {}, (draft) => {
-                            const index = draft.data.findIndex((d) => d.id === id);
+                        listsApi.util.updateQueryData('getLists', undefined, (draft) => {
+                            const index = draft.findIndex((d) => d.id === id);
                             if (index > -1) {
-                                Object.assign(draft.data[index], data);
+                                Object.assign(draft[index], data);
                             }
                         })
                     );
@@ -104,10 +128,10 @@ export const listsApi = api.injectEndpoints({
                         })
                     );
                     dispatch(
-                        listsApi.util.updateQueryData('getLists', {}, (draft) => {
-                            const index = draft.data.findIndex((d) => d.id === list_id);
+                        listsApi.util.updateQueryData('getLists', undefined, (draft) => {
+                            const index = draft.findIndex((d) => d.id === list_id);
                             if (index > -1) {
-                                draft.data[index].items.push(data);
+                                draft[index].items.push(data);
                             }
                         })
                     );
@@ -134,12 +158,12 @@ export const listsApi = api.injectEndpoints({
                         })
                     );
                     dispatch(
-                        listsApi.util.updateQueryData('getLists', {}, (draft) => {
-                            const listIndex = draft.data.findIndex((d) => d.id === list_id);
+                        listsApi.util.updateQueryData('getLists', undefined, (draft) => {
+                            const listIndex = draft.findIndex((d) => d.id === list_id);
                             if (listIndex > -1) {
-                                const itemIndex = draft.data[listIndex].items.findIndex((i) => i.id === list_item_id);
+                                const itemIndex = draft[listIndex].items.findIndex((i) => i.id === list_item_id);
                                 if (itemIndex > -1) {
-                                    Object.assign(draft.data[listIndex].items[itemIndex], data);
+                                    Object.assign(draft[listIndex].items[itemIndex], data);
                                 }
                             }
                         })
@@ -147,7 +171,8 @@ export const listsApi = api.injectEndpoints({
                 } catch {
                     //
                 }
-            }
+            },
+            invalidatesTags: (result, error, arg) => [{ type: 'ListHistory', id: arg.list_id }]
         }),
         deleteListItem: builder.mutation<IListItem, DeleteListItemBody>({
             query: ({ list_id, list_item_id }) => ({
@@ -163,17 +188,18 @@ export const listsApi = api.injectEndpoints({
                         })
                     );
                     dispatch(
-                        listsApi.util.updateQueryData('getLists', {}, (draft) => {
-                            const index = draft.data.findIndex((d) => d.id === list_id);
+                        listsApi.util.updateQueryData('getLists', undefined, (draft) => {
+                            const index = draft.findIndex((d) => d.id === list_id);
                             if (index > -1) {
-                                draft.data[index].items = draft.data[index].items.filter((i) => i.id !== data.id);
+                                draft[index].items = draft[index].items.filter((i) => i.id !== data.id);
                             }
                         })
                     );
                 } catch {
                     //
                 }
-            }
+            },
+            invalidatesTags: (result, error, arg) => [{ type: 'ListHistory', id: arg.list_id }]
         }),
         postListMembers: builder.mutation<PostListMembersResponse, PostListMemberBody>({
             query: ({ list_id, user_ids }) => ({
@@ -190,10 +216,10 @@ export const listsApi = api.injectEndpoints({
                         })
                     );
                     dispatch(
-                        listsApi.util.updateQueryData('getLists', {}, (draft) => {
-                            const index = draft.data.findIndex((d) => d.id === list_id);
+                        listsApi.util.updateQueryData('getLists', undefined, (draft) => {
+                            const index = draft.findIndex((d) => d.id === list_id);
                             if (index > -1) {
-                                draft.data[index].members.push(...data);
+                                draft[index].members.push(...data);
                             }
                         })
                     );
@@ -216,12 +242,10 @@ export const listsApi = api.injectEndpoints({
                         })
                     );
                     dispatch(
-                        listsApi.util.updateQueryData('getLists', {}, (draft) => {
-                            const index = draft.data.findIndex((d) => d.id === list_id);
+                        listsApi.util.updateQueryData('getLists', undefined, (draft) => {
+                            const index = draft.findIndex((d) => d.id === list_id);
                             if (index > -1) {
-                                draft.data[index].members = draft.data[index].members.filter(
-                                    (i) => i.user.id !== data.user.id
-                                );
+                                draft[index].members = draft[index].members.filter((i) => i.user.id !== data.user.id);
                             }
                         })
                     );
@@ -234,6 +258,7 @@ export const listsApi = api.injectEndpoints({
 });
 
 export const {
+    useLazyGetListsHistoryQuery,
     useLazyGetListsQuery,
     usePostListMutation,
     useLazyGetListQuery,

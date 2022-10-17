@@ -1,24 +1,20 @@
-import { Box, BoxProps, Center, CloseButton, Flex, Icon, Link, Text, useColorModeValue } from '@chakra-ui/react';
-import { IconType } from 'react-icons';
+import {
+    Box,
+    BoxProps,
+    Center,
+    CloseButton,
+    Flex,
+    Icon,
+    Link,
+    Text,
+    useColorModeValue,
+    VStack
+} from '@chakra-ui/react';
 import { FaThList } from 'react-icons/fa';
-import { FiCompass, FiHome, FiSettings, FiStar, FiTrendingUp } from 'react-icons/fi';
 
 interface SidebarProps extends BoxProps {
     onClose: () => void;
 }
-
-interface LinkItemProps {
-    name: string;
-    icon: IconType;
-}
-
-const LinkItems: Array<LinkItemProps> = [
-    { name: 'Home', icon: FiHome },
-    { name: 'Trending', icon: FiTrendingUp },
-    { name: 'Explore', icon: FiCompass },
-    { name: 'Favourites', icon: FiStar },
-    { name: 'Settings', icon: FiSettings }
-];
 
 export default function SidebarContent({ onClose, ...rest }: SidebarProps) {
     return (
@@ -45,11 +41,26 @@ export default function SidebarContent({ onClose, ...rest }: SidebarProps) {
                 </Flex>
                 <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
             </Flex>
-            {LinkItems.map(({ name, icon }) => (
-                <Link key={name} href='#' style={{ textDecoration: 'none' }} _focus={{ boxShadow: 'none' }}>
+            <Link href='#' textDecoration='none' _focus={{ boxShadow: 'none' }}>
+                <Flex
+                    align='center'
+                    p='4'
+                    mx='4'
+                    borderRadius='lg'
+                    role='group'
+                    cursor='pointer'
+                    _hover={{
+                        bg: 'cyan.400',
+                        color: 'white'
+                    }}
+                >
+                    <Text fontSize='2xl'>Lists</Text>
+                </Flex>
+            </Link>
+            <VStack align='start' pl={8}>
+                <Link href='#owned' textDecoration='none' _focus={{ boxShadow: 'none' }}>
                     <Flex
                         align='center'
-                        p='4'
                         mx='4'
                         borderRadius='lg'
                         role='group'
@@ -58,22 +69,42 @@ export default function SidebarContent({ onClose, ...rest }: SidebarProps) {
                             bg: 'cyan.400',
                             color: 'white'
                         }}
-                        {...rest}
                     >
-                        {icon && (
-                            <Icon
-                                mr='4'
-                                fontSize='16'
-                                _groupHover={{
-                                    color: 'white'
-                                }}
-                                as={icon}
-                            />
-                        )}
-                        {name}
+                        <Text fontSize='sm'>Owned</Text>
                     </Flex>
                 </Link>
-            ))}
+                <Link href='#member' textDecoration='none' _focus={{ boxShadow: 'none' }}>
+                    <Flex
+                        align='center'
+                        mx='4'
+                        borderRadius='lg'
+                        role='group'
+                        cursor='pointer'
+                        _hover={{
+                            bg: 'cyan.400',
+                            color: 'white'
+                        }}
+                    >
+                        <Text fontSize='sm'>Member</Text>
+                    </Flex>
+                </Link>
+            </VStack>
+            <Link href='#history' textDecoration='none' _focus={{ boxShadow: 'none' }}>
+                <Flex
+                    align='center'
+                    p='4'
+                    mx='4'
+                    borderRadius='lg'
+                    role='group'
+                    cursor='pointer'
+                    _hover={{
+                        bg: 'cyan.400',
+                        color: 'white'
+                    }}
+                >
+                    <Text fontSize='2xl'>History</Text>
+                </Flex>
+            </Link>
         </Box>
     );
 }

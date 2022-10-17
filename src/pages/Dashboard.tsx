@@ -1,10 +1,10 @@
+import { useLocation } from 'react-router-dom';
 import DashboardContainer from '../features/dashboard/DashboardContainer';
-import ListTable from '../features/list/ListTable';
+import ListCurrentTable from '../features/list/ListView/ListCurrentTable';
+import ListHistoryTable from '../features/list/ListView/ListHistoryTable';
 
 export default function Dashboard() {
-    return (
-        <DashboardContainer>
-            <ListTable />
-        </DashboardContainer>
-    );
+    const { hash } = useLocation();
+
+    return <DashboardContainer>{hash === '#history' ? <ListHistoryTable /> : <ListCurrentTable />}</DashboardContainer>;
 }
