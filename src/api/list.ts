@@ -28,7 +28,10 @@ type DeleteListItemBody = {
     list_id: number;
 };
 
-type PutListBody = Optional<Pick<IList, 'id' | 'title' | 'description'>, 'title' | 'description'>;
+type PutListBody = Optional<
+    Pick<IList, 'id' | 'title' | 'description' | 'is_complete'>,
+    'title' | 'description' | 'is_complete'
+>;
 
 type PostListMembersResponse = IList['members'];
 
@@ -88,23 +91,27 @@ export const listsApi = api.injectEndpoints({
             async onQueryStarted({ id }, { dispatch, queryFulfilled }) {
                 try {
                     const { data } = await queryFulfilled;
-                    dispatch(
-                        listsApi.util.updateQueryData('getList', id, (draft) => {
-                            Object.assign(draft, data);
-                        })
-                    );
-                    dispatch(
-                        listsApi.util.updateQueryData('getLists', undefined, (draft) => {
-                            const index = draft.findIndex((d) => d.id === id);
-                            if (index > -1) {
-                                Object.assign(draft[index], data);
-                            }
-                        })
-                    );
+                    if (!data.is_complete) {
+                        dispatch(
+                            listsApi.util.updateQueryData('getList', id, (draft) => {
+                                Object.assign(draft, data);
+                            })
+                        );
+                        dispatch(
+                            listsApi.util.updateQueryData('getLists', undefined, (draft) => {
+                                const index = draft.findIndex((d) => d.id === id);
+                                if (index > -1) {
+                                    Object.assign(draft[index], data);
+                                }
+                            })
+                        );
+                    }
                 } catch {
                     //
                 }
-            }
+            },
+            invalidatesTags: (result, error, arg) =>
+                result?.is_complete ? ['ListHistory', { type: 'List', id: result.id }] : []
         }),
         getList: builder.query<IList, number>({
             query: (listId) => ({

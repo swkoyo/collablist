@@ -102,6 +102,7 @@ export default function AddItemForm({ list }: { list: IList }) {
             type='button'
             variant='ghost'
             size='sm'
+            disabled={list.is_complete}
             leftIcon={<AiOutlinePlus />}
         >
             Add new item

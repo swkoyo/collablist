@@ -37,7 +37,7 @@ export default function ListItemAccordion({ list }: { list: IList }) {
                         {[...list.items]
                             .sort((x, y) => Number(x.status) - Number(y.status))
                             .map((i) => (
-                                <ListItemRow key={i.id} listId={list.id} item={i} />
+                                <ListItemRow key={i.id} list={list} item={i} />
                             ))}
                         <AddItemForm list={list} />
                     </Stack>

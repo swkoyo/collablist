@@ -2,6 +2,7 @@ import { CheckIcon, CloseIcon } from '@chakra-ui/icons';
 import {
     Box,
     ButtonGroup,
+    HStack,
     IconButton,
     Input,
     InputGroup,
@@ -20,6 +21,7 @@ import { usePutListMutation } from '../../../../api/list';
 import { IList } from '../../../../types';
 import ListItemAccordion from './ListItemAccordion';
 import { editListSchema, EditListSchema } from './ListItemAccordion/schema';
+import MarkAsCompleteButton from './MarkAsCompleteButton';
 
 export default function MainContent({ list }: { list: IList }) {
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -85,23 +87,30 @@ export default function MainContent({ list }: { list: IList }) {
                 onKeyDown={handleFormEscape}
             >
                 <Box as='form' onSubmit={handleSubmit(onSubmit)} width='full'>
-                    <Input
-                        fontWeight='bold'
-                        fontSize='2xl'
-                        variant='unstyled'
-                        isInvalid={!isDirty && !!errors.title}
-                        cursor='text'
-                        mb={4}
-                        onClick={() => (!isOpen ? onOpen() : null)}
-                        {...register('title', { required: true })}
-                    />
+                    <HStack alignItems='start'>
+                        <Input
+                            fontWeight='bold'
+                            fontSize='2xl'
+                            variant='unstyled'
+                            disabled={list.is_complete}
+                            _disabled={{ cursor: 'text' }}
+                            isInvalid={!isDirty && !!errors.title}
+                            cursor='text'
+                            mb={4}
+                            onClick={() => (!list.is_complete && !isOpen ? onOpen() : null)}
+                            {...register('title', { required: true })}
+                        />
+                        {!list.is_complete && !isOpen ? <MarkAsCompleteButton list={list} /> : null}
+                    </HStack>
                     <InputGroup pl={4} variant='unstyled' alignItems='center' gap={2} size='md'>
                         <InputLeftAddon pointerEvents='none'>
                             <BsTextLeft />
                         </InputLeftAddon>
                         <Input
-                            onClick={() => (!isOpen ? onOpen() : null)}
+                            onClick={() => (!list.is_complete && !isOpen ? onOpen() : null)}
                             isInvalid={!isDirty && !!errors.description}
+                            disabled={list.is_complete}
+                            _disabled={{ cursor: 'text' }}
                             {...register('description', { required: true })}
                             cursor='text'
                         />

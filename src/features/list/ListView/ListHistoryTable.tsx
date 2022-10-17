@@ -47,6 +47,7 @@ export default function ListHistoryTable() {
                         <Th>Progress</Th>
                         <Th>Members</Th>
                         <Th>Created At</Th>
+                        <Th>Completed At</Th>
                     </Tr>
                 </Thead>
                 <Tbody>

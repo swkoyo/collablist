@@ -66,6 +66,7 @@ export default function ListTableRow({ list }: { list: IList }) {
                 </AvatarGroup>
             </Td>
             <Td>{formatDate(list.created_at)}</Td>
+            {list.is_complete ? <Td>{formatDate(list.updated_at)}</Td> : null}
         </LinkBox>
     );
 }

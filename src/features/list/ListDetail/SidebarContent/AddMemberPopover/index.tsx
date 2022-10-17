@@ -33,7 +33,15 @@ const TextInput = forwardRef((props: InputProps, ref) => {
     return <Input ref={ref as unknown as any} {...props} />;
 });
 
-export default function AddMemberPopover({ listId, members }: { listId: number; members: IList['members'] }) {
+export default function AddMemberPopover({
+    listId,
+    members,
+    disabled
+}: {
+    listId: number;
+    members: IList['members'];
+    disabled: boolean;
+}) {
     const { onOpen, onClose, isOpen } = useDisclosure();
     const firstFieldRef = useRef(null);
     const [trigger, { data, isLoading, isFetching }] = useLazyGetUsersQuery();
@@ -108,7 +116,13 @@ export default function AddMemberPopover({ listId, members }: { listId: number; 
             closeOnEsc
         >
             <PopoverTrigger>
-                <IconButton aria-label='Add member' icon={<AiOutlinePlus />} variant='ghost' size='2xs' />
+                <IconButton
+                    disabled={disabled}
+                    aria-label='Add member'
+                    icon={<AiOutlinePlus />}
+                    variant='ghost'
+                    size='2xs'
+                />
             </PopoverTrigger>
             <PopoverContent py={2}>
                 <FocusLock returnFocus persistentFocus={false}>

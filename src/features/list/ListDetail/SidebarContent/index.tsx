@@ -29,13 +29,21 @@ export default function SidebarContent({ list }: { list: IList }) {
                     </Text>
                     <Text fontSize='xs'>{formatDate(list.created_at)}</Text>
                 </VStack>
+                {list.is_complete ? (
+                    <VStack align='start'>
+                        <Text fontSize='xs' fontWeight='bold'>
+                            Completed at
+                        </Text>
+                        <Text fontSize='xs'>{formatDate(list.updated_at)}</Text>
+                    </VStack>
+                ) : null}
                 <VStack align='start' width='100%'>
                     <HStack width='full'>
                         <Text fontSize='xs' fontWeight='bold'>
                             Members ({list.members.length})
                         </Text>
                         <Box flex='1' />
-                        <AddMemberPopover members={list.members} listId={list.id} />
+                        <AddMemberPopover members={list.members} listId={list.id} disabled={list.is_complete} />
                     </HStack>
                     <VStack w='full'>
                         {list.members.map((m) => (
@@ -45,6 +53,7 @@ export default function SidebarContent({ list }: { list: IList }) {
                                 </Text>
                                 <Box flex='1' />
                                 <IconButton
+                                    disabled={list.is_complete}
                                     aria-label='Remove member'
                                     type='button'
                                     size='2xs'

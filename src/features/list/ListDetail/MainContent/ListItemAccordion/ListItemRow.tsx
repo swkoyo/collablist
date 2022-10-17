@@ -21,10 +21,10 @@ import { useForm } from 'react-hook-form';
 import { BiTrash } from 'react-icons/bi';
 import { getErrorMessage } from '../../../../../api/helpers';
 import { useDeleteListItemMutation, usePutListItemMutation } from '../../../../../api/list';
-import { IListItem } from '../../../../../types';
+import { IList, IListItem } from '../../../../../types';
 import { editListItemSchema, EditListItemSchema } from './schema';
 
-export default function ListItemRow({ listId, item }: { listId: number; item: IListItem }) {
+export default function ListItemRow({ list, item }: { list: IList; item: IListItem }) {
     const [putListItem] = usePutListItemMutation();
     const [deleteListItem] = useDeleteListItemMutation();
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -45,7 +45,7 @@ export default function ListItemRow({ listId, item }: { listId: number; item: IL
 
     const handleStatusUpdate = async () => {
         try {
-            await putListItem({ list_id: listId, list_item_id: item.id, status: !item.status }).unwrap();
+            await putListItem({ list_id: list.id, list_item_id: item.id, status: !item.status }).unwrap();
         } catch (err) {
             toast({
                 title: 'Failed to update status',
@@ -59,7 +59,7 @@ export default function ListItemRow({ listId, item }: { listId: number; item: IL
 
     const handleRemove = async () => {
         try {
-            await deleteListItem({ list_id: listId, list_item_id: item.id }).unwrap();
+            await deleteListItem({ list_id: list.id, list_item_id: item.id }).unwrap();
         } catch (err) {
             toast({
                 title: 'Failed to remove item',
@@ -73,7 +73,7 @@ export default function ListItemRow({ listId, item }: { listId: number; item: IL
 
     const onSubmit = async (data: EditListItemSchema) => {
         try {
-            await putListItem({ list_id: listId, list_item_id: item.id, ...data }).unwrap();
+            await putListItem({ list_id: list.id, list_item_id: item.id, ...data }).unwrap();
             reset({ title: data.title });
             onClose();
         } catch (err) {
@@ -112,6 +112,7 @@ export default function ListItemRow({ listId, item }: { listId: number; item: IL
                 isChecked={item.status}
                 onChange={() => handleStatusUpdate()}
                 autoFocus={false}
+                disabled={list.is_complete}
             />
             {isOpen ? (
                 <form
@@ -166,13 +167,14 @@ export default function ListItemRow({ listId, item }: { listId: number; item: IL
                             type='button'
                             onClick={() => onOpen()}
                             icon={<EditIcon />}
-                            disabled={item.status}
+                            disabled={list.is_complete || item.status}
                         />
                         <IconButton
                             aria-label={`${item.id}-item-delete`}
                             size='2xs'
                             type='button'
                             icon={<BiTrash />}
+                            disabled={list.is_complete || list.items.length === 1}
                             onClick={() => handleRemove()}
                         />
                     </ButtonGroup>

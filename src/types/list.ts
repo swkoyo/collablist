@@ -7,6 +7,7 @@ export interface IList {
     created_at: Date;
     updated_at: Date;
     items: IListItem[];
+    is_complete: boolean;
     user: IUser;
     members: { user: IUser }[];
 }
