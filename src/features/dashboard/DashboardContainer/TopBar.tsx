@@ -10,16 +10,13 @@ import {
     IconButton,
     Menu,
     MenuButton,
-    MenuDivider,
     MenuItem,
     MenuList,
     Text,
     useColorMode,
     useColorModeValue,
-    useToast,
-    VStack
+    useToast
 } from '@chakra-ui/react';
-import { capitalize } from 'lodash';
 import { FaThList } from 'react-icons/fa';
 import { FiChevronDown, FiMenu } from 'react-icons/fi';
 import { useGetListsQueryState } from '../../../api/list';
@@ -102,18 +99,8 @@ export default function TopBar({ onOpen, ...rest }: TopBarProps) {
                     <Menu>
                         <MenuButton py={2} transition='all 0.3s' _focus={{ boxShadow: 'none' }}>
                             <HStack>
-                                <Avatar size='sm' bg='blue.300' name={`${auth.first_name} ${auth.last_name}`} />
-                                <VStack
-                                    display={{ base: 'none', md: 'flex' }}
-                                    alignItems='flex-start'
-                                    spacing='1px'
-                                    ml='2'
-                                >
-                                    <Text fontSize='sm'>{auth.username}</Text>
-                                    <Text fontSize='xs' color='gray.600'>
-                                        {capitalize(auth.role as unknown as string)}
-                                    </Text>
-                                </VStack>
+                                <Avatar size='sm' src={auth.avatar_url} name={`${auth.first_name} ${auth.last_name}`} />
+                                <Text fontSize='sm'>{auth.username}</Text>
                                 <Box display={{ base: 'none', md: 'flex' }}>
                                     <FiChevronDown />
                                 </Box>
@@ -123,10 +110,9 @@ export default function TopBar({ onOpen, ...rest }: TopBarProps) {
                             bg={useColorModeValue('white', 'gray.900')}
                             borderColor={useColorModeValue('gray.200', 'gray.700')}
                         >
-                            <MenuItem>Profile</MenuItem>
-                            <MenuItem>Settings</MenuItem>
-                            <MenuItem>Billing</MenuItem>
-                            <MenuDivider />
+                            <MenuItem onClick={() => dispatch(showModal({ type: ModalTypes.PROFILE_VIEW }))}>
+                                Profile
+                            </MenuItem>
                             <MenuItem onClick={() => handleLogout()}>Logout</MenuItem>
                         </MenuList>
                     </Menu>

@@ -6,7 +6,8 @@ export enum ModalTypes {
     AUTH_LOGIN = 'AUTH_LOGIN',
     AUTH_SIGNUP = 'AUTH_SIGNUP',
     LIST_CREATE = 'LIST_CREATE',
-    LIST_VIEW = 'LIST_VIEW'
+    LIST_VIEW = 'LIST_VIEW',
+    PROFILE_VIEW = 'PROFILE_VIEW'
 }
 
 type ModalState = {

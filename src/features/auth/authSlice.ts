@@ -21,9 +21,13 @@ export const authSlice = createSlice({
             state.user = null;
             state.token = null;
         },
-        setCredentials: (state, action: PayloadAction<AuthState>) => {
-            state.user = action.payload.user;
-            state.token = action.payload.token;
+        setCredentials: (state, action: PayloadAction<Partial<AuthState>>) => {
+            if (action.payload.user) {
+                state.user = action.payload.user;
+            }
+            if (action.payload.token) {
+                state.token = action.payload.token;
+            }
         }
     }
 });

@@ -1,6 +1,7 @@
 import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay } from '@chakra-ui/react';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import AuthForm from '../auth/AuthForm';
+import Profile from '../auth/Profile';
 import ListCreateForm from '../list/ListCreateForm';
 import ListDetail from '../list/ListDetail';
 import { getModalState, hideModal } from './modalSlice';
@@ -21,6 +22,8 @@ export default function RootModal() {
                     return <ListDetail listId={meta.list_id} />;
                 }
                 return null;
+            case 'PROFILE_VIEW':
+                return <Profile />;
             default:
                 return null;
         }

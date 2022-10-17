@@ -9,6 +9,7 @@ export interface IUser {
     username: string;
     first_name: string;
     last_name: string;
+    avatar_url?: string;
     role: UserRole;
     created_at: Date;
     updated_at: Date;
