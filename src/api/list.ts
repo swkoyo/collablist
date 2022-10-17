@@ -274,5 +274,8 @@ export const {
     useDeleteListItemMutation,
     usePutListMutation,
     usePostListMembersMutation,
-    useDeleteListMemberMutation
+    useDeleteListMemberMutation,
+    endpoints: {
+        getLists: { useQueryState: useGetListsQueryState }
+    }
 } = listsApi;

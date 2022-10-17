@@ -22,6 +22,7 @@ import {
 import { capitalize } from 'lodash';
 import { FaThList } from 'react-icons/fa';
 import { FiChevronDown, FiMenu } from 'react-icons/fi';
+import { useGetListsQueryState } from '../../../api/list';
 import { useAppDispatch } from '../../../hooks/redux';
 import useAuth from '../../../hooks/useAuth';
 import { IUser } from '../../../types';
@@ -37,6 +38,7 @@ export default function TopBar({ onOpen, ...rest }: TopBarProps) {
     const auth = useAuth() as IUser;
     const dispatch = useAppDispatch();
     const toast = useToast();
+    const { data, isLoading, isFetching } = useGetListsQueryState();
 
     const handleLogout = () => {
         dispatch(resetAuth());
@@ -46,6 +48,10 @@ export default function TopBar({ onOpen, ...rest }: TopBarProps) {
             duration: 9000,
             isClosable: true
         });
+    };
+
+    const canAddList = () => {
+        return data && !isLoading && !isFetching && data.length < 10;
     };
 
     return (
@@ -81,6 +87,7 @@ export default function TopBar({ onOpen, ...rest }: TopBarProps) {
                 <IconButton
                     size='lg'
                     aria-label='Create New List'
+                    disabled={!canAddList()}
                     onClick={() => dispatch(showModal({ type: ModalTypes.LIST_CREATE }))}
                     icon={<AddIcon />}
                 />
