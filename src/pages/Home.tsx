@@ -1,7 +1,15 @@
 import { Box, Stack, Text } from '@chakra-ui/react';
+import { Navigate } from 'react-router-dom';
+import useAuth from '../hooks/useAuth';
 import MainContainer from '../layouts/MainContainer';
 
 export default function Home() {
+    const auth = useAuth();
+
+    if (auth) {
+        return <Navigate to='/dashboard' />;
+    }
+
     return (
         <MainContainer>
             <Box

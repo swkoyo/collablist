@@ -1,3 +1,4 @@
+import { Center, Spinner } from '@chakra-ui/react';
 import { useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { useEffectOnce } from 'usehooks-ts';
@@ -11,7 +12,7 @@ import Home from './pages/Home';
 function App() {
     const dispatch = useAppDispatch();
     const [checkToken] = useLazyCheckTokenQuery();
-	const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffectOnce(() => {
         (async () => {
@@ -29,13 +30,17 @@ function App() {
                     localStorage.removeItem('token');
                 }
             }
-			setIsLoading(false);
+            setIsLoading(false);
         })();
     });
 
-	if (isLoading) {
-		return <></>
-	}
+    if (isLoading) {
+        return (
+            <Center h='100vh'>
+                <Spinner />
+            </Center>
+        );
+    }
 
     return (
         <>
