@@ -1,11 +1,13 @@
 import { Box, HStack, IconButton, StackDivider, Text, VStack } from '@chakra-ui/react';
 import { BiTrash } from 'react-icons/bi';
 import { useDeleteListMemberMutation } from '../../../../api/list';
-import { IList } from '../../../../types';
+import useAuth from '../../../../hooks/useAuth';
+import { IList, IUser } from '../../../../types';
 import { formatDate } from '../../../../utils/dayjs';
 import AddMemberPopover from './AddMemberPopover';
 
 export default function SidebarContent({ list }: { list: IList }) {
+    const auth = useAuth() as IUser;
     const [deleteListMember] = useDeleteListMemberMutation();
 
     const handleDeleteMember = async (id: number) => {
@@ -52,15 +54,17 @@ export default function SidebarContent({ list }: { list: IList }) {
                                     {m.user.first_name} {m.user.last_name}
                                 </Text>
                                 <Box flex='1' />
-                                <IconButton
-                                    disabled={list.is_complete}
-                                    aria-label='Remove member'
-                                    type='button'
-                                    size='2xs'
-                                    variant='ghost'
-                                    icon={<BiTrash />}
-                                    onClick={() => handleDeleteMember(m.user.id)}
-                                />
+                                {m.user.id === auth.id ||
+                                    (list.is_complete && (
+                                        <IconButton
+                                            aria-label='Remove member'
+                                            type='button'
+                                            size='2xs'
+                                            variant='ghost'
+                                            icon={<BiTrash />}
+                                            onClick={() => handleDeleteMember(m.user.id)}
+                                        />
+                                    ))}
                             </HStack>
                         ))}
                     </VStack>

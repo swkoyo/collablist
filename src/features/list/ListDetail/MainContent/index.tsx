@@ -18,12 +18,14 @@ import { useForm } from 'react-hook-form';
 import { BsTextLeft } from 'react-icons/bs';
 import { getErrorMessage } from '../../../../api/helpers';
 import { usePutListMutation } from '../../../../api/list';
-import { IList } from '../../../../types';
+import useAuth from '../../../../hooks/useAuth';
+import { IList, IUser } from '../../../../types';
 import ListItemAccordion from './ListItemAccordion';
 import { editListSchema, EditListSchema } from './ListItemAccordion/schema';
 import MarkAsCompleteButton from './MarkAsCompleteButton';
 
 export default function MainContent({ list }: { list: IList }) {
+    const auth = useAuth() as IUser;
     const { isOpen, onOpen, onClose } = useDisclosure();
     const ref = useRef<HTMLDivElement>(null);
     const [putList] = usePutListMutation();
@@ -92,24 +94,26 @@ export default function MainContent({ list }: { list: IList }) {
                             fontWeight='bold'
                             fontSize='2xl'
                             variant='unstyled'
-                            disabled={list.is_complete}
+                            disabled={list.user.id !== auth.id || list.is_complete}
                             _disabled={{ cursor: 'text' }}
                             isInvalid={!isDirty && !!errors.title}
                             cursor='text'
                             mb={4}
-                            onClick={() => (!list.is_complete && !isOpen ? onOpen() : null)}
+                            onClick={() => (list.user.id === auth.id && !list.is_complete && !isOpen ? onOpen() : null)}
                             {...register('title', { required: true })}
                         />
-                        {!list.is_complete && !isOpen ? <MarkAsCompleteButton list={list} /> : null}
+                        {list.user.id === auth.id && !list.is_complete && !isOpen ? (
+                            <MarkAsCompleteButton list={list} />
+                        ) : null}
                     </HStack>
                     <InputGroup pl={4} variant='unstyled' alignItems='center' gap={2} size='md'>
                         <InputLeftAddon pointerEvents='none'>
                             <BsTextLeft />
                         </InputLeftAddon>
                         <Input
-                            onClick={() => (!list.is_complete && !isOpen ? onOpen() : null)}
+                            onClick={() => (list.user.id === auth.id && !list.is_complete && !isOpen ? onOpen() : null)}
                             isInvalid={!isDirty && !!errors.description}
-                            disabled={list.is_complete}
+                            disabled={list.user.id !== auth.id || list.is_complete}
                             _disabled={{ cursor: 'text' }}
                             {...register('description', { required: true })}
                             cursor='text'
