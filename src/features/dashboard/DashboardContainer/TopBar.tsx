@@ -1,4 +1,4 @@
-import { AddIcon, MoonIcon, SunIcon } from '@chakra-ui/icons';
+import { MoonIcon, SunIcon } from '@chakra-ui/icons';
 import {
     Avatar,
     Box,
@@ -13,12 +13,14 @@ import {
     MenuItem,
     MenuList,
     Text,
+    Tooltip,
     useColorMode,
     useColorModeValue,
     useToast
 } from '@chakra-ui/react';
 import { FaThList } from 'react-icons/fa';
 import { FiChevronDown, FiMenu } from 'react-icons/fi';
+import { TiDocumentAdd } from 'react-icons/ti';
 import { useGetListsQueryState } from '../../../api/list';
 import { useAppDispatch } from '../../../hooks/redux';
 import useAuth from '../../../hooks/useAuth';
@@ -81,20 +83,25 @@ export default function TopBar({ onOpen, ...rest }: TopBarProps) {
                 </Center>
             </Flex>
             <HStack spacing={{ base: '0', md: '6' }}>
-                <IconButton
-                    size='lg'
-                    aria-label='Create New List'
-                    disabled={!canAddList()}
-                    onClick={() => dispatch(showModal({ type: ModalTypes.LIST_CREATE }))}
-                    icon={<AddIcon />}
-                />
-                <IconButton
-                    size='lg'
-                    variant='ghost'
-                    aria-label='change theme'
-                    onClick={toggleColorMode}
-                    icon={colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
-                />
+                <Tooltip label='Add list' hasArrow>
+                    <IconButton
+                        size='lg'
+                        aria-label='Create New List'
+                        colorScheme='green'
+                        disabled={!canAddList()}
+                        onClick={() => dispatch(showModal({ type: ModalTypes.LIST_CREATE }))}
+                        icon={<Icon h={10} w={10} as={TiDocumentAdd} />}
+                    />
+                </Tooltip>
+                <Tooltip label='Change theme' hasArrow>
+                    <IconButton
+                        size='lg'
+                        variant='ghost'
+                        aria-label='change theme'
+                        onClick={toggleColorMode}
+                        icon={colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
+                    />
+                </Tooltip>
                 <Flex alignItems='center'>
                     <Menu>
                         <MenuButton py={2} transition='all 0.3s' _focus={{ boxShadow: 'none' }}>
@@ -113,7 +120,14 @@ export default function TopBar({ onOpen, ...rest }: TopBarProps) {
                             <MenuItem onClick={() => dispatch(showModal({ type: ModalTypes.PROFILE_VIEW }))}>
                                 Profile
                             </MenuItem>
-                            <MenuItem onClick={() => handleLogout()}>Logout</MenuItem>
+                            <MenuItem
+                                _hover={{
+                                    backgroundColor: 'red.200'
+                                }}
+                                onClick={() => handleLogout()}
+                            >
+                                Logout
+                            </MenuItem>
                         </MenuList>
                     </Menu>
                 </Flex>

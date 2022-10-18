@@ -7,7 +7,7 @@ export default function DashboardContainer({ children }: { children: ReactNode }
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     return (
-        <Box minH='100vh' bg={useColorModeValue('gray.100', 'gray.900')}>
+        <Box minH='100vh' bg={useColorModeValue('gray.100', 'gray.800')}>
             <SidebarContent onClose={onClose} display={{ base: 'none', md: 'block' }} />
             <Drawer
                 autoFocus={false}
@@ -15,8 +15,9 @@ export default function DashboardContainer({ children }: { children: ReactNode }
                 placement='left'
                 onClose={onClose}
                 returnFocusOnClose={false}
+                closeOnOverlayClick
                 onOverlayClick={onClose}
-                size='full'
+                size='xs'
             >
                 <DrawerContent>
                     <SidebarContent onClose={onClose} />

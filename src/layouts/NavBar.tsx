@@ -42,7 +42,7 @@ export default function NavBar() {
     };
 
     return (
-        <Box bg={useColorModeValue('gray.200', 'gray.900')} px={4} position='fixed' top={0} width='100%'>
+        <Box bg={useColorModeValue('white', 'gray.900')} px={4} position='fixed' top={0} width='100%'>
             <Flex h={16} alignItems='center' justifyContent='space-between'>
                 <Flex alignItems='center' gap={2}>
                     <Center>
@@ -56,9 +56,10 @@ export default function NavBar() {
                 </Flex>
                 <Flex alignItems='center'>
                     <Stack direction='row' spacing={4}>
-                        <Tooltip label='Change Theme'>
+                        <Tooltip label='Change Theme' hasArrow>
                             <IconButton
                                 aria-label='change theme'
+                                variant='ghost'
                                 onClick={toggleColorMode}
                                 colorScheme='gray'
                                 icon={colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
