@@ -3,7 +3,7 @@ import { PASSWORD_REGEX } from '../../../constants';
 
 export const loginSchema = z.object({
     email: z.string().email(),
-    password: z.string().regex(PASSWORD_REGEX, 'Invalid password')
+    password: z.string().regex(PASSWORD_REGEX.FULL, 'Invalid password')
 });
 
 export type LoginSchema = z.infer<typeof loginSchema>;
@@ -11,8 +11,8 @@ export type LoginSchema = z.infer<typeof loginSchema>;
 export const signupSchema = z
     .object({
         email: z.string().email(),
-        password: z.string().regex(PASSWORD_REGEX, 'Invalid password'),
-        password_confirmation: z.string().regex(PASSWORD_REGEX, 'Invalid password'),
+        password: z.string().regex(PASSWORD_REGEX.FULL, 'Invalid password'),
+        password_confirmation: z.string(),
         first_name: z.string().min(2),
         last_name: z.string().min(2)
     })

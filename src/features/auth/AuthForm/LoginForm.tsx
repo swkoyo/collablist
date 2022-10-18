@@ -2,11 +2,12 @@ import {
     Button,
     FormControl,
     FormErrorMessage,
+    FormLabel,
     Input,
     InputGroup,
     InputRightElement,
-    Stack,
-    useToast
+    useToast,
+    VStack
 } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
@@ -57,40 +58,45 @@ export default function LoginForm() {
     const handleShowPassword = () => setShowPassword(!showPassword);
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)}>
-            <FormControl isInvalid={!!errors.email || !!errors.password}>
-                <Stack spacing={4}>
+        <VStack as='form' onSubmit={handleSubmit(onSubmit)} gap={2}>
+            <FormControl isInvalid={!!errors.email}>
+                <FormLabel fontSize='sm'>Email</FormLabel>
+                <Input
+                    id='login-email'
+                    isInvalid={!!errors.email}
+                    placeholder='Email'
+                    autoFocus
+                    variant='filled'
+                    {...register('email', {
+                        required: true
+                    })}
+                />
+                {errors.email ? <FormErrorMessage>{errors.email?.message as string}</FormErrorMessage> : null}
+            </FormControl>
+            <FormControl isInvalid={!!errors.password} pb={4}>
+                <FormLabel fontSize='sm'>Password</FormLabel>
+                <InputGroup>
                     <Input
-                        id='login-email'
-                        isInvalid={!!errors.email}
-                        placeholder='Email'
-                        {...register('email', {
+                        id='login-password'
+                        isInvalid={!!errors.password}
+                        placeholder='Password'
+                        variant='filled'
+                        type={showPassword ? 'text' : 'password'}
+                        {...register('password', {
                             required: true
                         })}
                     />
-                    <FormErrorMessage>{errors.email?.message as string}</FormErrorMessage>
-                    <InputGroup>
-                        <Input
-                            id='login-password'
-                            isInvalid={!!errors.password}
-                            placeholder='Password'
-                            type={showPassword ? 'text' : 'password'}
-                            {...register('password', {
-                                required: true
-                            })}
-                        />
-                        <InputRightElement width='4.5rem'>
-                            <Button h='1.75rem' size='sm' type='button' onClick={handleShowPassword}>
-                                {showPassword ? 'Hide' : 'Show'}
-                            </Button>
-                        </InputRightElement>
-                    </InputGroup>
-                    <FormErrorMessage>{errors.password?.message as string}</FormErrorMessage>
-                </Stack>
+                    <InputRightElement width='4.5rem'>
+                        <Button h='1.75rem' size='sm' type='button' onClick={handleShowPassword}>
+                            {showPassword ? 'Hide' : 'Show'}
+                        </Button>
+                    </InputRightElement>
+                </InputGroup>
+                {errors.password ? <FormErrorMessage>{errors.password?.message as string}</FormErrorMessage> : null}
             </FormControl>
-            <Button w='full' type='submit' mt={6} isLoading={isSubmitting}>
+            <Button w='full' type='submit' colorScheme='green' isLoading={isSubmitting}>
                 Login
             </Button>
-        </form>
+        </VStack>
     );
 }

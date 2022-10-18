@@ -14,6 +14,7 @@ import {
     MenuList,
     Stack,
     Text,
+    Tooltip,
     useColorMode,
     useColorModeValue,
     useToast
@@ -41,7 +42,7 @@ export default function NavBar() {
     };
 
     return (
-        <Box bg={useColorModeValue('gray.100', 'gray.900')} px={4} position='fixed' top={0} width='100%'>
+        <Box bg={useColorModeValue('gray.200', 'gray.900')} px={4} position='fixed' top={0} width='100%'>
             <Flex h={16} alignItems='center' justifyContent='space-between'>
                 <Flex alignItems='center' gap={2}>
                     <Center>
@@ -55,11 +56,14 @@ export default function NavBar() {
                 </Flex>
                 <Flex alignItems='center'>
                     <Stack direction='row' spacing={4}>
-                        <IconButton
-                            aria-label='change theme'
-                            onClick={toggleColorMode}
-                            icon={colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
-                        />
+                        <Tooltip label='Change Theme'>
+                            <IconButton
+                                aria-label='change theme'
+                                onClick={toggleColorMode}
+                                colorScheme='gray'
+                                icon={colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
+                            />
+                        </Tooltip>
                         {auth ? (
                             <Menu>
                                 <MenuButton as={Button} rounded='full' variant='link' cursor='pointer' minW={0}>
@@ -85,9 +89,23 @@ export default function NavBar() {
                                 </MenuList>
                             </Menu>
                         ) : (
-                            <Button type='button' onClick={() => dispatch(showModal({ type: ModalTypes.AUTH_LOGIN }))}>
-                                Login
-                            </Button>
+                            <>
+                                <Button
+                                    colorScheme='twitter'
+                                    type='button'
+                                    onClick={() => dispatch(showModal({ type: ModalTypes.AUTH_LOGIN }))}
+                                >
+                                    Login
+                                </Button>
+                                <Button
+                                    colorScheme='twitter'
+                                    type='button'
+                                    variant='outline'
+                                    onClick={() => dispatch(showModal({ type: ModalTypes.AUTH_SIGNUP }))}
+                                >
+                                    Signup
+                                </Button>
+                            </>
                         )}
                     </Stack>
                 </Flex>
