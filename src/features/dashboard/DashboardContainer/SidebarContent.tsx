@@ -36,7 +36,12 @@ export default function SidebarContent({ onClose, ...rest }: SidebarProps) {
                 </Flex>
                 <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
             </Flex>
-            <Link href='#' textDecoration='none' _focus={{ boxShadow: 'none' }} _hover={{ textDecoration: 'none' }}>
+            <Link
+                href='#'
+                textDecoration='none'
+                _focus={{ boxShadow: 'none', textDecoration: 'none' }}
+                _hover={{ textDecoration: 'none' }}
+            >
                 <Flex
                     align='center'
                     p='3'
@@ -44,10 +49,9 @@ export default function SidebarContent({ onClose, ...rest }: SidebarProps) {
                     borderRadius='lg'
                     role='group'
                     cursor='pointer'
-                    bg={!hash ? 'cyan.400' : undefined}
+                    bg={!hash ? useColorModeValue('blackAlpha.300', 'whiteAlpha.300') : undefined}
                     _hover={{
-                        bg: 'cyan.400',
-                        color: 'white'
+                        bg: useColorModeValue('blackAlpha.300', 'whiteAlpha.300')
                     }}
                     gap={1}
                 >
@@ -55,7 +59,12 @@ export default function SidebarContent({ onClose, ...rest }: SidebarProps) {
                     <Text fontSize='xl'>Lists</Text>
                 </Flex>
             </Link>
-            <Link href='#owned' textDecoration='none' _focus={{ boxShadow: 'none' }}>
+            <Link
+                href='#owned'
+                textDecoration='none'
+                _focus={{ boxShadow: 'none', textDecoration: 'none' }}
+                _hover={{ textDecoration: 'none' }}
+            >
                 <Flex
                     align='center'
                     p='3'
@@ -64,10 +73,9 @@ export default function SidebarContent({ onClose, ...rest }: SidebarProps) {
                     borderRadius='lg'
                     role='group'
                     cursor='pointer'
-                    bg={hash === '#owned' ? 'cyan.400' : undefined}
+                    bg={hash === '#owned' ? useColorModeValue('blackAlpha.300', 'whiteAlpha.300') : undefined}
                     _hover={{
-                        bg: 'cyan.400',
-                        color: 'white'
+                        bg: useColorModeValue('blackAlpha.300', 'whiteAlpha.300')
                     }}
                     gap={1}
                 >
@@ -75,7 +83,12 @@ export default function SidebarContent({ onClose, ...rest }: SidebarProps) {
                     <Text fontSize='sm'>Owned</Text>
                 </Flex>
             </Link>
-            <Link href='#member' textDecoration='none' _focus={{ boxShadow: 'none' }}>
+            <Link
+                href='#member'
+                textDecoration='none'
+                _focus={{ boxShadow: 'none', textDecoration: 'none' }}
+                _hover={{ textDecoration: 'none' }}
+            >
                 <Flex
                     align='center'
                     p='3'
@@ -84,10 +97,9 @@ export default function SidebarContent({ onClose, ...rest }: SidebarProps) {
                     borderRadius='lg'
                     role='group'
                     cursor='pointer'
-                    bg={hash === '#member' ? 'cyan.400' : undefined}
+                    bg={hash === '#member' ? useColorModeValue('blackAlpha.300', 'whiteAlpha.300') : undefined}
                     _hover={{
-                        bg: 'cyan.400',
-                        color: 'white'
+                        bg: useColorModeValue('blackAlpha.300', 'whiteAlpha.300')
                     }}
                     gap={1}
                 >
@@ -95,7 +107,12 @@ export default function SidebarContent({ onClose, ...rest }: SidebarProps) {
                     <Text fontSize='sm'>Member</Text>
                 </Flex>
             </Link>
-            <Link href='#history' textDecoration='none' _focus={{ boxShadow: 'none' }}>
+            <Link
+                href='#history'
+                textDecoration='none'
+                _focus={{ boxShadow: 'none', textDecoration: 'none' }}
+                _hover={{ textDecoration: 'none' }}
+            >
                 <Flex
                     align='center'
                     p='3'
@@ -103,11 +120,10 @@ export default function SidebarContent({ onClose, ...rest }: SidebarProps) {
                     mx='4'
                     borderRadius='lg'
                     role='group'
-                    bg={hash === '#history' ? 'cyan.400' : undefined}
+                    bg={hash === '#history' ? useColorModeValue('blackAlpha.300', 'whiteAlpha.300') : undefined}
                     cursor='pointer'
                     _hover={{
-                        bg: 'cyan.400',
-                        color: 'white'
+                        bg: useColorModeValue('blackAlpha.300', 'whiteAlpha.300')
                     }}
                     gap={1}
                 >

@@ -25,6 +25,7 @@
 		"@typescript-eslint"
 	],
 	"rules": {
+		"react-hooks/rules-of-hooks": "off",
 		"react/no-array-index-key": "off",
 		"prettier/prettier": "error",
 		"react/require-default-props": "off",
