@@ -27,7 +27,8 @@ import { HiOutlineUsers } from 'react-icons/hi';
 import { useDebounce } from 'usehooks-ts';
 import { usePostListMembersMutation } from '../../../../../api/list';
 import { useLazyGetUsersQuery } from '../../../../../api/user';
-import { IList } from '../../../../../types';
+import useAuth from '../../../../../hooks/useAuth';
+import { IList, IUser } from '../../../../../types';
 
 const TextInput = forwardRef((props: InputProps, ref) => {
     return <Input ref={ref as unknown as any} {...props} />;
@@ -48,14 +49,15 @@ export default function AddMemberPopover({
     const [search, setSearch] = useState<string>('');
     const debouncedSearch = useDebounce<string>(search, 300);
     const [postListMembers] = usePostListMembersMutation();
+    const auth = useAuth() as IUser;
 
     useEffect(() => {
         (async () => {
             if (debouncedSearch.length > 0) {
-                await trigger({ search: debouncedSearch, exclude_ids: members.map((m) => m.user.id) });
+                await trigger({ search: debouncedSearch, exclude_ids: [...members.map((m) => m.user.id), auth.id] });
             }
         })();
-    }, [debouncedSearch, trigger, members]);
+    }, [debouncedSearch, trigger, members, auth]);
 
     const handleAddMember = async (id: number) => {
         await postListMembers({ list_id: listId, user_ids: [id] }).unwrap();

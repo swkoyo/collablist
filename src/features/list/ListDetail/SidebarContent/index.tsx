@@ -54,17 +54,16 @@ export default function SidebarContent({ list }: { list: IList }) {
                                     {m.user.first_name} {m.user.last_name}
                                 </Text>
                                 <Box flex='1' />
-                                {m.user.id === auth.id ||
-                                    (list.is_complete && (
-                                        <IconButton
-                                            aria-label='Remove member'
-                                            type='button'
-                                            size='2xs'
-                                            variant='ghost'
-                                            icon={<BiTrash />}
-                                            onClick={() => handleDeleteMember(m.user.id)}
-                                        />
-                                    ))}
+                                {list.user.id === auth.id && !list.is_complete ? (
+                                    <IconButton
+                                        aria-label='Remove member'
+                                        type='button'
+                                        size='2xs'
+                                        variant='ghost'
+                                        icon={<BiTrash />}
+                                        onClick={() => handleDeleteMember(m.user.id)}
+                                    />
+                                ) : null}
                             </HStack>
                         ))}
                     </VStack>
