@@ -2,7 +2,7 @@ import { Box, HStack, IconButton, StackDivider, Text, VStack } from '@chakra-ui/
 import { BiTrash } from 'react-icons/bi';
 import { useDeleteListMemberMutation } from '../../../../api/list';
 import useAuth from '../../../../hooks/useAuth';
-import { IList, IUser } from '../../../../types';
+import { IList, IUser, UserRole } from '../../../../types';
 import { formatDate } from '../../../../utils/dayjs';
 import AddMemberPopover from './AddMemberPopover';
 
@@ -54,7 +54,7 @@ export default function SidebarContent({ list }: { list: IList }) {
                                     {m.user.first_name} {m.user.last_name}
                                 </Text>
                                 <Box flex='1' />
-                                {list.user.id === auth.id && !list.is_complete ? (
+                                {(auth.role === UserRole.ADMIN || list.user.id === auth.id) && !list.is_complete ? (
                                     <IconButton
                                         aria-label='Remove member'
                                         type='button'

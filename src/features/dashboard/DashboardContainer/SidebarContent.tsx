@@ -4,6 +4,8 @@ import { FiUser, FiUsers } from 'react-icons/fi';
 import { HiOutlineDocumentDuplicate } from 'react-icons/hi';
 import { RiFileHistoryLine } from 'react-icons/ri';
 import { useLocation } from 'react-router-dom';
+import useAuth from '../../../hooks/useAuth';
+import { IUser, UserRole } from '../../../types';
 
 interface SidebarProps extends BoxProps {
     onClose: () => void;
@@ -11,6 +13,7 @@ interface SidebarProps extends BoxProps {
 
 export default function SidebarContent({ onClose, ...rest }: SidebarProps) {
     const { hash } = useLocation();
+    const auth = useAuth() as IUser;
 
     return (
         <Box
@@ -59,54 +62,58 @@ export default function SidebarContent({ onClose, ...rest }: SidebarProps) {
                     <Text fontSize='xl'>Lists</Text>
                 </Flex>
             </Link>
-            <Link
-                href='#owned'
-                textDecoration='none'
-                _focus={{ boxShadow: 'none', textDecoration: 'none' }}
-                _hover={{ textDecoration: 'none' }}
-            >
-                <Flex
-                    align='center'
-                    p='3'
-                    pl={8}
-                    mx='4'
-                    borderRadius='lg'
-                    role='group'
-                    cursor='pointer'
-                    bg={hash === '#owned' ? useColorModeValue('blackAlpha.300', 'whiteAlpha.300') : undefined}
-                    _hover={{
-                        bg: useColorModeValue('blackAlpha.300', 'whiteAlpha.300')
-                    }}
-                    gap={1}
-                >
-                    <Icon as={FiUser} />
-                    <Text fontSize='sm'>Owned</Text>
-                </Flex>
-            </Link>
-            <Link
-                href='#member'
-                textDecoration='none'
-                _focus={{ boxShadow: 'none', textDecoration: 'none' }}
-                _hover={{ textDecoration: 'none' }}
-            >
-                <Flex
-                    align='center'
-                    p='3'
-                    pl={8}
-                    mx='4'
-                    borderRadius='lg'
-                    role='group'
-                    cursor='pointer'
-                    bg={hash === '#member' ? useColorModeValue('blackAlpha.300', 'whiteAlpha.300') : undefined}
-                    _hover={{
-                        bg: useColorModeValue('blackAlpha.300', 'whiteAlpha.300')
-                    }}
-                    gap={1}
-                >
-                    <Icon as={FiUsers} />
-                    <Text fontSize='sm'>Member</Text>
-                </Flex>
-            </Link>
+            {auth.role === UserRole.USER && (
+                <>
+                    <Link
+                        href='#owned'
+                        textDecoration='none'
+                        _focus={{ boxShadow: 'none', textDecoration: 'none' }}
+                        _hover={{ textDecoration: 'none' }}
+                    >
+                        <Flex
+                            align='center'
+                            p='3'
+                            pl={8}
+                            mx='4'
+                            borderRadius='lg'
+                            role='group'
+                            cursor='pointer'
+                            bg={hash === '#owned' ? useColorModeValue('blackAlpha.300', 'whiteAlpha.300') : undefined}
+                            _hover={{
+                                bg: useColorModeValue('blackAlpha.300', 'whiteAlpha.300')
+                            }}
+                            gap={1}
+                        >
+                            <Icon as={FiUser} />
+                            <Text fontSize='sm'>Owned</Text>
+                        </Flex>
+                    </Link>
+                    <Link
+                        href='#member'
+                        textDecoration='none'
+                        _focus={{ boxShadow: 'none', textDecoration: 'none' }}
+                        _hover={{ textDecoration: 'none' }}
+                    >
+                        <Flex
+                            align='center'
+                            p='3'
+                            pl={8}
+                            mx='4'
+                            borderRadius='lg'
+                            role='group'
+                            cursor='pointer'
+                            bg={hash === '#member' ? useColorModeValue('blackAlpha.300', 'whiteAlpha.300') : undefined}
+                            _hover={{
+                                bg: useColorModeValue('blackAlpha.300', 'whiteAlpha.300')
+                            }}
+                            gap={1}
+                        >
+                            <Icon as={FiUsers} />
+                            <Text fontSize='sm'>Member</Text>
+                        </Flex>
+                    </Link>
+                </>
+            )}
             <Link
                 href='#history'
                 textDecoration='none'

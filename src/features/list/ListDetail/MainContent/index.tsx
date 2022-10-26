@@ -19,7 +19,7 @@ import { BsTextLeft } from 'react-icons/bs';
 import { getErrorMessage } from '../../../../api/helpers';
 import { usePutListMutation } from '../../../../api/list';
 import useAuth from '../../../../hooks/useAuth';
-import { IList, IUser } from '../../../../types';
+import { IList, IUser, UserRole } from '../../../../types';
 import DeleteListButton from './DeleteListButton';
 import ListItemAccordion from './ListItemAccordion';
 import { editListSchema, EditListSchema } from './ListItemAccordion/schema';
@@ -95,15 +95,21 @@ export default function MainContent({ list }: { list: IList }) {
                             fontWeight='bold'
                             fontSize='2xl'
                             variant='unstyled'
-                            disabled={list.user.id !== auth.id || list.is_complete}
+                            disabled={(auth.role !== UserRole.ADMIN && list.user.id !== auth.id) || list.is_complete}
                             _disabled={{ cursor: 'text' }}
                             isInvalid={!isDirty && !!errors.title}
                             cursor='text'
                             mb={4}
-                            onClick={() => (list.user.id === auth.id && !list.is_complete && !isOpen ? onOpen() : null)}
+                            onClick={() =>
+                                (auth.role === UserRole.ADMIN || list.user.id === auth.id) &&
+                                !list.is_complete &&
+                                !isOpen
+                                    ? onOpen()
+                                    : null
+                            }
                             {...register('title', { required: true })}
                         />
-                        {list.user.id === auth.id && !list.is_complete && !isOpen ? (
+                        {(auth.role === UserRole.ADMIN || list.user.id === auth.id) && !list.is_complete && !isOpen ? (
                             <>
                                 <MarkAsCompleteButton list={list} />
                                 <DeleteListButton list={list} />
@@ -115,9 +121,15 @@ export default function MainContent({ list }: { list: IList }) {
                             <BsTextLeft />
                         </InputLeftAddon>
                         <Input
-                            onClick={() => (list.user.id === auth.id && !list.is_complete && !isOpen ? onOpen() : null)}
+                            onClick={() =>
+                                (auth.role === UserRole.ADMIN || list.user.id === auth.id) &&
+                                !list.is_complete &&
+                                !isOpen
+                                    ? onOpen()
+                                    : null
+                            }
                             isInvalid={!isDirty && !!errors.description}
-                            disabled={list.user.id !== auth.id || list.is_complete}
+                            disabled={(auth.role !== UserRole.ADMIN && list.user.id !== auth.id) || list.is_complete}
                             _disabled={{ cursor: 'text' }}
                             {...register('description', { required: true })}
                             cursor='text'
