@@ -1,11 +1,18 @@
 import {
+    Alert,
+    AlertDescription,
+    AlertIcon,
+    AlertTitle,
+    Box,
     Button,
+    CloseButton,
     FormControl,
     FormErrorMessage,
     FormLabel,
     Input,
     InputGroup,
     InputRightElement,
+    useDisclosure,
     useToast,
     VStack
 } from '@chakra-ui/react';
@@ -23,6 +30,7 @@ export default function LoginForm() {
     const [showPassword, setShowPassword] = useState(false);
     const dispatch = useAppDispatch();
     const [postLogin] = useLoginMutation();
+    const { isOpen, onClose } = useDisclosure({ defaultIsOpen: true });
     const toast = useToast();
     const {
         handleSubmit,
@@ -59,6 +67,22 @@ export default function LoginForm() {
 
     return (
         <VStack as='form' onSubmit={handleSubmit(onSubmit)} gap={2}>
+            {isOpen && (
+                <Alert status='info'>
+                    <AlertIcon />
+                    <Box>
+                        <AlertTitle>Test account for login</AlertTitle>
+                        <AlertDescription>
+                            Use the following credentials to login and view the application.
+                            <br />
+                            Email: user@example.com
+                            <br />
+                            Password: ASDFasdf1234!
+                        </AlertDescription>
+                    </Box>
+                    <CloseButton alignSelf='flex-start' position='relative' right={-1} top={-1} onClick={onClose} />
+                </Alert>
+            )}
             <FormControl isInvalid={!!errors.email}>
                 <FormLabel fontSize='sm'>Email</FormLabel>
                 <Input

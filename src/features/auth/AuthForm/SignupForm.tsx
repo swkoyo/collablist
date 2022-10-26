@@ -1,5 +1,11 @@
 import {
+    Alert,
+    AlertDescription,
+    AlertIcon,
+    AlertTitle,
+    Box,
     Button,
+    CloseButton,
     FormControl,
     FormErrorMessage,
     FormLabel,
@@ -7,6 +13,7 @@ import {
     Input,
     InputGroup,
     InputRightElement,
+    useDisclosure,
     useToast,
     VStack
 } from '@chakra-ui/react';
@@ -22,6 +29,7 @@ export default function SignupForm({ handleTabChange }: { handleTabChange: (inde
     const [showPassword, setShowPassword] = useState(false);
     const [postSignup] = useSignupMutation();
     const toast = useToast();
+    const { isOpen, onClose } = useDisclosure({ defaultIsOpen: true });
     const {
         handleSubmit,
         register,
@@ -39,7 +47,7 @@ export default function SignupForm({ handleTabChange }: { handleTabChange: (inde
             touchedFields.email &&
             touchedFields.first_name &&
             touchedFields.last_name &&
-            touchedFields.password &&
+            passwordWatch &&
             !errors.email &&
             !errors.first_name &&
             !errors.last_name &&
@@ -72,6 +80,19 @@ export default function SignupForm({ handleTabChange }: { handleTabChange: (inde
 
     return (
         <VStack as='form' onSubmit={handleSubmit(onSubmit)} spacing={4}>
+            {isOpen && (
+                <Alert status='warning'>
+                    <AlertIcon />
+                    <Box>
+                        <AlertTitle>Signup is disabled</AlertTitle>
+                        <AlertDescription>
+                            You may complete the form to demo the signup process. However, signup is disabled at this
+                            time.
+                        </AlertDescription>
+                    </Box>
+                    <CloseButton alignSelf='flex-start' position='relative' right={-1} top={-1} onClick={onClose} />
+                </Alert>
+            )}
             <FormControl isInvalid={!!errors.email}>
                 <FormLabel fontSize='sm'>Email</FormLabel>
                 <Input
