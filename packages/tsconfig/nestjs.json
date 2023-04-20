@@ -12,8 +12,6 @@
 		"noImplicitAny": false,
 		"strictBindCallApply": false,
 		"noFallthroughCasesInSwitch": false,
-		"outDir": "./dist",
-		"baseUrl": "./",
 		"module": "commonjs"
   }
 }

@@ -4,13 +4,14 @@
   "scripts": {
     "build": "turbo run build",
     "clean": "turbo run clean",
-    "dev": "turbo run dev --no-cache  --continue",
+    "dev": "dotenv -- turbo run dev",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "lint": "turbo run lint",
     "test": "turbo run test"
   },
   "packageManager": "pnpm@8.3.0",
   "devDependencies": {
+    "dotenv-cli": "^7.2.1",
     "prettier": "^2.8.7",
     "turbo": "^1.9.3"
   }

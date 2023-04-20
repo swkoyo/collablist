@@ -1,4 +1,4 @@
-import { PASSWORD_REGEX as FULL_PASSWORD_REGEX } from '@collablist/shared/constants';
+import { PASSWORD_REGEX as FULL_PASSWORD_REGEX } from '@collablist/shared';
 
 export const API_URL =
     import.meta.env.VITE_API_URL || 'http://localhost:3000/v1';

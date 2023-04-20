@@ -3,12 +3,23 @@
   "version": "1.0.0",
   "private": true,
   "license": "MIT",
-  "main": "index.js",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": ["dist/**"],
+  "module": "./dist/index.mjs",
+  "scripts": {
+    "build": "tsup",
+    "clean": "rimraf .turbo node_modules dist",
+    "dev": "tsup --watch"
+  },
   "publishConfig": {
     "access": "public"
   },
   "devDependencies": {
     "@collablist/eslint-config-custom": "workspace:*",
-    "@collablist/tsconfig": "workspace:*"
+    "@collablist/tsconfig": "workspace:*",
+    "@types/node": "^16.0.0",
+    "rimraf": "^3.0.2",
+    "tsup": "^6.7.0"
   }
 }

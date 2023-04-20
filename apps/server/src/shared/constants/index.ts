@@ -1,4 +1,4 @@
-export * from '@collablist/shared/constants';
+export { PASSWORD_REGEX } from '@collablist/shared';
 
 export const USER_ROLE = {
     ADMIN: 'ADMIN',
