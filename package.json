@@ -1,0 +1,20 @@
+{
+  "name": "collablist",
+  "version": "1.1.0",
+  "scripts": {
+    "build": "turbo run build",
+    "clean": "turbo run clean",
+    "dev": "dotenv -c development -- turbo run dev",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "lint": "turbo run lint",
+    "test": "turbo run test",
+    "db:seed": "dotenv -c development -- turbo run db:seed",
+    "db:seed:dummy": "dotenv -c development -- turbo run db:seed:dummy"
+  },
+  "packageManager": "pnpm@8.3.0",
+  "devDependencies": {
+    "dotenv-cli": "^7.2.1",
+    "prettier": "^2.8.7",
+    "turbo": "^1.9.3"
+  }
+}

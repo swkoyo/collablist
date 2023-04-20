@@ -1,0 +1,29 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "pipeline": {
+    "build": {
+      "outputs": ["dist/**"],
+      "dependsOn": ["^build"]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true,
+      "dependsOn": ["^predev"]
+    },
+    "predev": {
+      "cache": false
+    },
+    "db:migrate:dev": {
+      "cache": false
+    },
+    "db:seed": {
+      "cache": false
+    },
+    "db:seed:dummy": {
+      "cache": false
+    },
+    "db:studio": {
+      "cache": false
+    }
+  }
+}
