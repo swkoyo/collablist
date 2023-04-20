@@ -1,5 +1,4 @@
-export const PASSWORD_REGEX =
-    /^(?=.*[A-Z])(?=.*[a-z])(?=.*([!@#$%^&*]))(?=.*(\d))[A-Za-z\d!@#$%^&*]{8,20}$/;
+export * from '@collablist/shared/constants';
 
 export const USER_ROLE = {
     ADMIN: 'ADMIN',

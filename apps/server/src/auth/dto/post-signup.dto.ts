@@ -6,7 +6,7 @@ import {
     IsString,
     Matches
 } from 'class-validator';
-import { PASSWORD_REGEX } from 'src/shared/constants';
+import { PASSWORD_REGEX } from '../../shared/constants';
 import { IsEqualTo } from 'src/shared/decorators/equal-to.decorator';
 
 export class PostSignupDTO {

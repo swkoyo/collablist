@@ -1,0 +1,14 @@
+{
+  "name": "@collablist/shared",
+  "version": "1.0.0",
+  "private": true,
+  "license": "MIT",
+  "main": "index.js",
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@collablist/eslint-config-custom": "workspace:^",
+    "@collablist/tsconfig": "workspace:^"
+  }
+}

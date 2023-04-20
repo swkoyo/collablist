@@ -1,6 +1,6 @@
 import { Transform } from 'class-transformer';
 import { IsEmail, Matches } from 'class-validator';
-import { PASSWORD_REGEX } from 'src/shared/constants';
+import { PASSWORD_REGEX } from '../../shared/constants';
 
 export class PostLoginDTO {
     @IsEmail()

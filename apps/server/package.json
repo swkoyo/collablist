@@ -54,6 +54,7 @@
 	"devDependencies": {
 		"@collablist/database": "workspace:*",
 		"@collablist/eslint-config-custom": "workspace:*",
+		"@collablist/shared": "workspace:^",
 		"@collablist/tsconfig": "workspace:*",
 		"@faker-js/faker": "^7.5.0",
 		"@nestjs/cli": "^9.0.0",
