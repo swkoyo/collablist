@@ -11,6 +11,7 @@ const prisma = new PrismaClient();
         const password = process.env.ADMIN_PASSWORD as string;
         const first_name = process.env.ADMIN_FIRST_NAME as string;
         const last_name = process.env.ADMIN_LAST_NAME as string;
+
         const username = email.split('@')[0];
 
         await prisma.user.upsert({
@@ -32,7 +33,9 @@ const prisma = new PrismaClient();
         });
 
         console.log('Seeder finsihed');
+        process.exit(0);
     } catch (err) {
         console.error(err);
+        process.exit(1);
     }
 })();

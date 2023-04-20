@@ -1,7 +1,5 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalDependencies": ["**/.env.*local"],
-  "globalEnv": ["NODE_ENV"],
   "pipeline": {
     "build": {
       "outputs": ["dist/**"],
@@ -19,6 +17,12 @@
       "cache": false
     },
     "db:seed": {
+      "cache": false
+    },
+    "db:seed:dummy": {
+      "cache": false
+    },
+    "db:studio": {
       "cache": false
     }
   }

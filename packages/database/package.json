@@ -16,7 +16,9 @@
     "db:push": "prisma db push --skip-generate",
     "db:migrate:dev": "prisma migrate dev",
     "db:migrate": "prisma migrate deploy",
-    "db:seed": "prisma db seed && ts-node prisma/seeders/dummy.ts"
+    "db:seed": "prisma db seed",
+    "db:seed:dummy": "ts-node prisma/seeders/dummy.ts",
+    "db:studio": "prisma studio"
   },
   "dependencies": {
     "@faker-js/faker": "^7.5.0",
