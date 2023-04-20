@@ -11,9 +11,10 @@
     "build": "tsup",
     "clean": "rimraf .turbo node_modules dist",
     "dev": "tsup --watch",
-    "predev": "npm run db:generate",
+    "predev": "pnpm db:generate && pnpm db:push",
     "db:generate": "prisma generate",
     "db:push": "prisma db push --skip-generate",
+    "db:migrate:dev": "prisma migrate dev",
     "db:migrate": "prisma migrate deploy",
     "db:seed": "prisma db seed && ts-node prisma/seeders/dummy.ts"
   },

@@ -10,16 +10,13 @@
     "dev": {
       "cache": false,
       "persistent": true,
-      "dependsOn": ["^db:generate"]
+      "dependsOn": ["^predev"]
     },
-    "db:generate": {
+    "predev": {
       "cache": false
     },
-    "db:push": {
+    "db:migrate:dev": {
       "cache": false
-    },
-    "generate": {
-      "dependsOn": ["^db:generate"]
     }
   }
 }
