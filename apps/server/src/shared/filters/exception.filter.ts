@@ -6,7 +6,7 @@ import {
     HttpStatus
 } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
-import { Prisma } from '@prisma/client';
+import { Prisma } from '@collablist/database';
 import { isArray } from 'lodash';
 
 @Catch()

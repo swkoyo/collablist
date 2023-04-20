@@ -1,0 +1,29 @@
+{
+  "name": "@collablist/database",
+  "version": "1.0.0",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "scripts": {
+    "db:migrate": "prisma migrate deploy",
+		"db:seed": "prisma db seed && ts-node prisma/seeders/dummy.ts"
+  },
+  "dependencies": {
+    "@faker-js/faker": "^7.5.0",
+    "@prisma/client": "^4.3.1",
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.0.2"
+  },
+  "prisma": {
+		"seed": "ts-node src/seed/index.ts"
+	},
+  "devDependencies": {
+    "@collablist/eslint-config-custom": "*",
+    "@collablist/tsconfig": "*",
+    "@types/bcryptjs": "^2.4.2",
+    "@types/node": "^16.0.0",
+    "eslint": "^8.0.1",
+    "prisma": "^4.3.1",
+    "ts-node": "^10.0.0",
+    "typescript": "^5.0.4"
+  }
+}

@@ -1,10 +1,10 @@
 import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { INVALID_CREDENTIALS } from 'src/shared/messages';
+import { PrismaService } from '../prisma/prisma.service';
+import { INVALID_CREDENTIALS } from '../shared/messages';
 import bcrypt from 'bcryptjs';
 import { omit } from 'lodash';
 import { JwtService } from '@nestjs/jwt';
-import { SerializedUser } from 'src/shared/types/user.type';
+import { SerializedUser } from '../shared/types/user.type';
 
 @Injectable()
 export class AuthService {

@@ -1,3 +1,3 @@
-import { User } from '@prisma/client';
+import { User } from '@collablist/database';
 
 export type SerializedUser = Omit<User, 'password'>;
