@@ -17,8 +17,8 @@
 		"seed": "ts-node src/seed/index.ts"
 	},
   "devDependencies": {
-    "@collablist/eslint-config-custom": "*",
-    "@collablist/tsconfig": "*",
+    "@collablist/eslint-config-custom": "workspace:*",
+    "@collablist/tsconfig": "workspace:*",
     "@types/bcryptjs": "^2.4.2",
     "@types/node": "^16.0.0",
     "eslint": "^8.0.1",

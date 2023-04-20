@@ -81,7 +81,7 @@ importers:
         specifier: workspace:*
         version: link:../../packages/eslint-config-custom-react
       '@collablist/shared':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/shared
       '@collablist/tsconfig':
         specifier: workspace:*
@@ -196,7 +196,7 @@ importers:
         specifier: workspace:*
         version: link:../../packages/eslint-config-custom
       '@collablist/shared':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/shared
       '@collablist/tsconfig':
         specifier: workspace:*
@@ -275,10 +275,10 @@ importers:
         version: 16.0.2
     devDependencies:
       '@collablist/eslint-config-custom':
-        specifier: '*'
+        specifier: workspace:*
         version: link:../eslint-config-custom
       '@collablist/tsconfig':
-        specifier: '*'
+        specifier: workspace:*
         version: link:../tsconfig
       '@types/bcryptjs':
         specifier: ^2.4.2
@@ -341,10 +341,10 @@ importers:
   packages/shared:
     devDependencies:
       '@collablist/eslint-config-custom':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../eslint-config-custom
       '@collablist/tsconfig':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../tsconfig
 
   packages/tsconfig: {}

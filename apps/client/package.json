@@ -36,7 +36,7 @@
 	"devDependencies": {
 		"@collablist/eslint-config-custom": "workspace:*",
 		"@collablist/eslint-config-custom-react": "workspace:*",
-		"@collablist/shared": "workspace:^",
+		"@collablist/shared": "workspace:*",
 		"@collablist/tsconfig": "workspace:*",
 		"@types/bluebird": "^3.5.37",
 		"@types/lodash": "^4.14.186",
