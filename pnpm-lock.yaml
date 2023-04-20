@@ -146,9 +146,6 @@ importers:
       class-validator:
         specifier: ^0.13.2
         version: 0.13.2
-      dotenv:
-        specifier: ^16.0.2
-        version: 16.0.2
       helmet:
         specifier: ^6.0.0
         version: 6.0.0
@@ -204,9 +201,6 @@ importers:
       '@collablist/tsconfig':
         specifier: workspace:*
         version: link:../../packages/tsconfig
-      '@faker-js/faker':
-        specifier: ^7.5.0
-        version: 7.5.0
       '@nestjs/cli':
         specifier: ^9.0.0
         version: 9.0.0
@@ -273,9 +267,6 @@ importers:
       bcryptjs:
         specifier: ^2.4.3
         version: 2.4.3
-      dotenv:
-        specifier: ^16.0.2
-        version: 16.0.2
     devDependencies:
       '@collablist/eslint-config-custom':
         specifier: workspace:*
@@ -2323,6 +2314,7 @@ packages:
   /@faker-js/faker@7.5.0:
     resolution: {integrity: sha512-8wNUCCUHvfvI0gQpDUho/3gPzABffnCn5um65F8dzQ86zz6dlt4+nmAA7PQUc8L+eH+9RgR/qzy5N/8kN0Ozdw==}
     engines: {node: '>=14.0.0', npm: '>=6.0.0'}
+    dev: false
 
   /@gar/promisify@1.1.3:
     resolution: {integrity: sha512-k2Ty1JcVojjJFwrg/ThKi2ujJ7XNLYaFGNB/bWT9wGR+oSMJHMa5w+CUq6p/pVrKeNNgA7pCqEcjSnHVoqJQFw==}
@@ -4676,6 +4668,7 @@ packages:
   /dotenv@16.0.2:
     resolution: {integrity: sha512-JvpYKUmzQhYoIFgK2MOnF3bciIZoItIIoryihy0rIA+H4Jy0FmgyKYAHCTN98P5ybGSJcIFbh6QKeJdtZd1qhA==}
     engines: {node: '>=12'}
+    dev: true
 
   /ecdsa-sig-formatter@1.0.11:
     resolution: {integrity: sha512-nagl3RYrbNv6kQkeJIpt6NJZy8twLB/2vtz6yN9Z4vRKHN4/QZJIEbqohALSgwKdnksuY3k5Addp5lg8sVoVcQ==}

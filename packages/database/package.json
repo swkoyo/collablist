@@ -4,7 +4,9 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "module": "./dist/index.mjs",
-  "files": ["dist/**"],
+  "files": [
+    "dist/**"
+  ],
   "scripts": {
     "build": "tsup",
     "clean": "rimraf .turbo node_modules dist",
@@ -18,8 +20,7 @@
   "dependencies": {
     "@faker-js/faker": "^7.5.0",
     "@prisma/client": "^4.3.1",
-    "bcryptjs": "^2.4.3",
-    "dotenv": "^16.0.2"
+    "bcryptjs": "^2.4.3"
   },
   "prisma": {
     "seed": "ts-node src/seed/index.ts"
