@@ -17,6 +17,9 @@
     },
     "db:migrate:dev": {
       "cache": false
+    },
+    "db:seed": {
+      "cache": false
     }
   }
 }
