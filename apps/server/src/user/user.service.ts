@@ -1,9 +1,9 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { Prisma } from '@collablist/database';
 import { difference } from 'lodash';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { USER_ROLE } from 'src/shared/constants';
-import { USERS_NOT_FOUND } from 'src/shared/messages';
+import { PrismaService } from '../prisma/prisma.service';
+import { USER_ROLE } from '../shared/constants';
+import { USERS_NOT_FOUND } from '../shared/messages';
 import { GetUsersDTO, PutUsersIdDTO } from './dto';
 
 @Injectable()

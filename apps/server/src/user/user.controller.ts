@@ -9,10 +9,10 @@ import {
     UseGuards,
     UsePipes
 } from '@nestjs/common';
-import { JwtGuard } from 'src/auth/jwt/jwt.guard';
-import { USER_ROLE } from 'src/shared/constants';
-import { ReqUser } from 'src/shared/decorators/req-user.decorator';
-import { SerializedUser } from 'src/shared/types/user.type';
+import { JwtGuard } from '../auth/jwt/jwt.guard';
+import { USER_ROLE } from '../shared/constants';
+import { ReqUser } from '../shared/decorators/req-user.decorator';
+import { SerializedUser } from '../shared/types/user.type';
 import { GetUsersDTO, ParamUserIdDTO, PutUsersIdDTO } from './dto';
 import { UserIdParamPipe } from './pipes/user-id-param.pipe';
 import { UserService } from './user.service';

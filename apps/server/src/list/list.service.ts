@@ -6,10 +6,10 @@ import {
 } from '@nestjs/common';
 import { Prisma } from '@collablist/database';
 import { isBoolean } from 'lodash';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { USER_ROLE } from 'src/shared/constants';
-import { NOT_AUTHORIZED_FOR_LIST } from 'src/shared/messages';
-import { SerializedUser } from 'src/shared/types/user.type';
+import { PrismaService } from '../prisma/prisma.service';
+import { USER_ROLE } from '../shared/constants';
+import { NOT_AUTHORIZED_FOR_LIST } from '../shared/messages';
+import { SerializedUser } from '../shared/types/user.type';
 import {
     GetListsHistoryDTO,
     PostListsDTO,

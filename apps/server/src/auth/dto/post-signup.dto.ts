@@ -7,7 +7,7 @@ import {
     Matches
 } from 'class-validator';
 import { PASSWORD_REGEX } from '../../shared/constants';
-import { IsEqualTo } from 'src/shared/decorators/equal-to.decorator';
+import { IsEqualTo } from '../../shared/decorators/equal-to.decorator';
 
 export class PostSignupDTO {
     @IsEmail()

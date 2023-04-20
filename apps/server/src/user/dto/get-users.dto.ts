@@ -12,7 +12,7 @@ import {
     Min
 } from 'class-validator';
 import { isArray } from 'lodash';
-import Default from 'src/shared/decorators/default.decorator';
+import Default from '../../shared/decorators/default.decorator';
 
 export class GetUsersDTO {
     @Expose()

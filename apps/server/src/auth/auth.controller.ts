@@ -7,13 +7,10 @@ import {
     Post,
     UseGuards
 } from '@nestjs/common';
-import { ReqUser } from 'src/shared/decorators/req-user.decorator';
-import {
-    INVALID_PASSWORD_CONFIRMATION,
-    USER_EXISTS
-} from 'src/shared/messages';
-import { SerializedUser } from 'src/shared/types/user.type';
-import { UserService } from 'src/user/user.service';
+import { ReqUser } from '../shared/decorators/req-user.decorator';
+import { INVALID_PASSWORD_CONFIRMATION, USER_EXISTS } from '../shared/messages';
+import { SerializedUser } from '../shared/types/user.type';
+import { UserService } from '../user/user.service';
 import { AuthService } from './auth.service';
 import { PostSignupDTO } from './dto';
 import { JwtGuard } from './jwt/jwt.guard';

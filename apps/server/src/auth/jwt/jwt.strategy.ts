@@ -2,8 +2,8 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ConfigService } from '@nestjs/config';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { INVALID_JWT_TOKEN } from 'src/shared/messages';
+import { PrismaService } from '../../prisma/prisma.service';
+import { INVALID_JWT_TOKEN } from '../../shared/messages';
 import { omit } from 'lodash';
 
 @Injectable()

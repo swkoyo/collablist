@@ -12,11 +12,11 @@ import {
     UsePipes
 } from '@nestjs/common';
 import { isArray } from 'lodash';
-import { JwtGuard } from 'src/auth/jwt/jwt.guard';
-import { USER_ROLE } from 'src/shared/constants';
-import { ReqUser } from 'src/shared/decorators/req-user.decorator';
-import { SerializedUser } from 'src/shared/types/user.type';
-import { UserService } from 'src/user/user.service';
+import { JwtGuard } from '../auth/jwt/jwt.guard';
+import { USER_ROLE } from '../shared/constants';
+import { ReqUser } from '../shared/decorators/req-user.decorator';
+import { SerializedUser } from '../shared/types/user.type';
+import { UserService } from '../user/user.service';
 import {
     GetListsHistoryDTO,
     ParamListIdDTO,

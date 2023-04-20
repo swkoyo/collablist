@@ -1,6 +1,6 @@
 import { Expose, Transform, Type } from 'class-transformer';
 import { IsBoolean, IsInt, IsOptional, Max, Min } from 'class-validator';
-import Default from 'src/shared/decorators/default.decorator';
+import Default from '../../shared/decorators/default.decorator';
 
 export class GetListsHistoryDTO {
     @Expose()
