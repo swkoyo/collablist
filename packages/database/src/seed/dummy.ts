@@ -8,6 +8,8 @@ const prisma = new PrismaClient();
     try {
         const userIds: number[] = [];
 
+        console.log('Seeding dummy users...');
+
         for (let i = 0; i < 20; i++) {
             const email = i === 0 ? 'user@example.com' : faker.internet.email();
             const password = 'ASDFasdf1234!';
@@ -35,6 +37,10 @@ const prisma = new PrismaClient();
 
             userIds.push(user.id);
         }
+
+        console.log('User seed finished!');
+
+        console.log('Seeding dummy lists...');
 
         for (let i = 0; i < 5; i++) {
             const userId = userIds[0];
@@ -101,7 +107,12 @@ const prisma = new PrismaClient();
                 }
             });
         }
+
+        console.log('Listing seed finished!');
+
+        process.exit(0);
     } catch (err) {
         console.error(err);
+        process.exit(1);
     }
 })();
