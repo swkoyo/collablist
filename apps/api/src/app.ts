@@ -1,5 +1,6 @@
 import { createYoga, createSchema } from 'graphql-yoga';
 import fastify, { FastifyReply, FastifyRequest } from 'fastify';
+import prismaPlugin from 'plugins/prisma';
 
 export function buildApp(logging = true) {
     const app = fastify({
@@ -10,6 +11,8 @@ export function buildApp(logging = true) {
             level: 'debug'
         }
     });
+
+    app.register(prismaPlugin);
 
     const graphQLServer = createYoga<{
         req: FastifyRequest;
