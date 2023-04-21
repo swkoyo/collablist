@@ -21,6 +21,9 @@
     },
     "clean": {
       "cache": false
+    },
+    "db:studio": {
+      "cache": false
     }
   }
 }

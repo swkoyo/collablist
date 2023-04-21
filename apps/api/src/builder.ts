@@ -18,4 +18,6 @@ export const builder = new SchemaBuilder<{
         'Pothos may not work correctly when strict mode is not enabled in tsconfig.json'
 });
 
+builder.queryType({});
+
 builder.addScalarType('Date', DateResolver, {});
