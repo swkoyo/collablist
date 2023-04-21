@@ -1,0 +1,16 @@
+{
+  "extends": "@collablist/tsconfig/nestjs.json",
+  "compilerOptions": {
+    "baseUrl": "./",
+    "lib": ["es2016"],
+    "paths": {
+      "*": ["src/*"]
+    },
+    "target": "es2016",
+    "module": "commonjs",
+    "sourceMap": true,
+    "outDir": "./dist"
+  },
+  "include": ["./src/**/*.ts"],
+  "exclude": ["node_modules"]
+}

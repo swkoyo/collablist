@@ -1,0 +1,19 @@
+{
+  "name": "@collablist/api",
+  "version": "2.0.0",
+  "scripts": {
+    "dev": "tsx watch src/index.ts"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "fastify": "^4.15.0"
+  },
+  "devDependencies": {
+    "@collablist/eslint-config-custom": "workspace:^",
+    "@collablist/tsconfig": "workspace:^",
+    "@types/node": "^16.0.0",
+    "pino-pretty": "^8.1.0",
+    "tsx": "^3.12.6",
+    "typescript": "^5.0.4"
+  }
+}
