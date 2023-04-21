@@ -1,31 +1,18 @@
-import fastify, { FastifyInstance } from 'fastify';
-import { Server, IncomingMessage, ServerResponse } from 'http';
+import { buildApp } from './app';
 
-const server: FastifyInstance<Server, IncomingMessage, ServerResponse> =
-    fastify({
-        logger: {
-            transport: {
-                target: 'pino-pretty',
-                options: {
-                    translateTime: 'HH:MM:ss Z',
-                    ignore: 'pid,hostname'
-                }
-            }
-        }
-    });
-
-server.get('/health', async (req, res) => {
-    res.send({ message: 'ddddd' });
-});
-
-server.listen({ port: 8080 }, (err, address) => {
-    if (err) {
-        console.error(err);
-        process.exit(1);
-    }
-    console.log(`Server listing at ${address}`);
-});
+const app = buildApp(true);
 
 process.on('SIGTERM', async () => {
-    server.close();
+    app.close();
 });
+
+app.listen({
+    port: 4000
+})
+    .then((serverUrl) => {
+        app.log.info(`GraphQL API located at ${serverUrl}/graphql`);
+    })
+    .catch((err) => {
+        app.log.error(err);
+        process.exit(1);
+    });
