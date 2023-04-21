@@ -41,32 +41,32 @@ export class AuthController {
         return user;
     }
 
-    @Post('signup')
-    async postSignup(
-        @Body()
-        {
-            email,
-            password,
-            password_confirmation,
-            first_name,
-            last_name,
-            username
-        }: PostSignupDTO
-    ) {
-        throw new BadRequestException('Cannot signup at this time');
-        if (password !== password_confirmation)
-            throw new BadRequestException(INVALID_PASSWORD_CONFIRMATION);
-        const isTakenEmail = await this.userService.isExistingUserEmail(email);
-        if (isTakenEmail) throw new BadRequestException(USER_EXISTS(email));
-        await this.userService.createUser({
-            data: {
-                email,
-                password,
-                first_name,
-                last_name,
-                username: username || email.split('@')[0]
-            }
-        });
-        return { message: 'Success' };
-    }
+    // @Post('signup')
+    // async postSignup(
+    //     @Body()
+    //     {
+    //         email,
+    //         password,
+    //         password_confirmation,
+    //         first_name,
+    //         last_name,
+    //         username
+    //     }: PostSignupDTO
+    // ) {
+    //     throw new BadRequestException('Cannot signup at this time');
+    //     if (password !== password_confirmation)
+    //         throw new BadRequestException(INVALID_PASSWORD_CONFIRMATION);
+    //     const isTakenEmail = await this.userService.isExistingUserEmail(email);
+    //     if (isTakenEmail) throw new BadRequestException(USER_EXISTS(email));
+    //     await this.userService.createUser({
+    //         data: {
+    //             email,
+    //             password,
+    //             first_name,
+    //             last_name,
+    //             username: username || email.split('@')[0]
+    //         }
+    //     });
+    //     return { message: 'Success' };
+    // }
 }

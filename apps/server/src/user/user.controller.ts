@@ -21,29 +21,29 @@ import { UserService } from './user.service';
 export class UserController {
     constructor(private readonly userService: UserService) {}
 
-    @Get()
-    @UseGuards(JwtGuard)
-    async getUsers(
-        @ReqUser() reqUser: SerializedUser,
-        @Query() dto: GetUsersDTO
-    ) {
-        if (dto.exclude_ids) {
-            await this.userService.validateUserIds(dto.exclude_ids);
-        }
-        return this.userService.findUsers(dto);
-    }
+    // @Get()
+    // @UseGuards(JwtGuard)
+    // async getUsers(
+    //     @ReqUser() reqUser: SerializedUser,
+    //     @Query() dto: GetUsersDTO
+    // ) {
+    //     if (dto.exclude_ids) {
+    //         await this.userService.validateUserIds(dto.exclude_ids);
+    //     }
+    //     return this.userService.findUsers(dto);
+    // }
 
-    @Put(':user_id')
-    @UseGuards(JwtGuard)
-    @UsePipes(UserIdParamPipe)
-    async putUser(
-        @ReqUser() reqUser: SerializedUser,
-        @Param() { user_id }: ParamUserIdDTO,
-        @Body() dto: PutUsersIdDTO
-    ) {
-        if (reqUser.role !== USER_ROLE.ADMIN && user_id !== reqUser.id) {
-            throw new UnauthorizedException('Cannot update another user');
-        }
-        return this.userService.updateUser(user_id, dto);
-    }
+    // @Put(':user_id')
+    // @UseGuards(JwtGuard)
+    // @UsePipes(UserIdParamPipe)
+    // async putUser(
+    //     @ReqUser() reqUser: SerializedUser,
+    //     @Param() { user_id }: ParamUserIdDTO,
+    //     @Body() dto: PutUsersIdDTO
+    // ) {
+    //     if (reqUser.role !== USER_ROLE.ADMIN && user_id !== reqUser.id) {
+    //         throw new UnauthorizedException('Cannot update another user');
+    //     }
+    //     return this.userService.updateUser(user_id, dto);
+    // }
 }

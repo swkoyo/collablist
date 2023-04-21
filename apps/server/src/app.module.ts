@@ -78,10 +78,10 @@ import { UserModule } from './user/user.module';
             }),
             inject: [ConfigService]
         }),
-        PrismaModule,
-        UserModule,
-        AuthModule,
-        ListModule
+        PrismaModule
+        // UserModule,
+        // AuthModule,
+        // ListModule
     ],
     controllers: [AppController],
     providers: [AppService]

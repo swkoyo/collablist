@@ -8,6 +8,9 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "lint": "turbo run lint",
     "test": "turbo run test",
+    "predev": "dotenv -c development -- turbo predev",
+    "db:generate": "dotenv -c development -- turbo run db:generate",
+    "db:push": "dotenv -c development -- turbo run db:push",
     "db:seed": "dotenv -c development -- turbo run db:seed",
     "db:seed:dummy": "dotenv -c development -- turbo run db:seed:dummy"
   },

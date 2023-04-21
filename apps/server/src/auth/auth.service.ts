@@ -16,22 +16,22 @@ export class AuthService {
     ) {}
 
     async validateCredentials(email: string, password: string) {
-        this.logger.verbose('validateCredentials user', { email });
-        const user = await this.prismaService.user.findUnique({
-            where: { email }
-        });
-        if (!user) throw new UnauthorizedException(INVALID_CREDENTIALS);
-        const isValidPassword = await bcrypt.compare(password, user.password);
-        if (!isValidPassword)
-            throw new UnauthorizedException(INVALID_CREDENTIALS);
-        return omit(user, 'password');
+        // this.logger.verbose('validateCredentials user', { email });
+        // const user = await this.prismaService.user.findUnique({
+        //     where: { email }
+        // });
+        // if (!user) throw new UnauthorizedException(INVALID_CREDENTIALS);
+        // const isValidPassword = await bcrypt.compare(password, user.password);
+        // if (!isValidPassword)
+        //     throw new UnauthorizedException(INVALID_CREDENTIALS);
+        // return omit(user, 'password');
     }
 
     async createJwtToken(user: SerializedUser) {
         return this.jwtService.sign({
-            sub: user.id,
-            email: user.email,
-            role: user.role
+            sub: user.id
+            // email: user.email,
+            // role: user.role
         });
     }
 }

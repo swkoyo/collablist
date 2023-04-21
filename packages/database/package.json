@@ -3,14 +3,10 @@
   "version": "1.0.0",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "module": "./dist/index.mjs",
-  "files": [
-    "dist/**"
-  ],
   "scripts": {
     "build": "tsup",
-    "clean": "rimraf .turbo node_modules dist",
     "dev": "tsup --watch",
+    "clean": "rimraf .turbo node_modules dist",
     "predev": "pnpm db:generate && pnpm db:push",
     "db:generate": "prisma generate",
     "db:push": "prisma db push --skip-generate",

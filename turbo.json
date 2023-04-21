@@ -1,5 +1,8 @@
 {
   "$schema": "https://turbo.build/schema.json",
+  "globalDependencies": [
+    ".env.development.local"
+  ],
   "pipeline": {
     "build": {
       "outputs": ["dist/**"],
@@ -11,18 +14,12 @@
       "dependsOn": ["^predev"]
     },
     "predev": {
-      "cache": false
+      "cache": false,
+      "experimentalPassThroughEnv": [
+        "DB_URL"
+      ]
     },
-    "db:migrate:dev": {
-      "cache": false
-    },
-    "db:seed": {
-      "cache": false
-    },
-    "db:seed:dummy": {
-      "cache": false
-    },
-    "db:studio": {
+    "clean": {
       "cache": false
     }
   }
