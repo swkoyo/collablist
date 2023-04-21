@@ -14,10 +14,9 @@ datasource db {
 
 model User {
     id         String   @id @default(cuid())
-    email      String?  @unique @db.Text
     username   String   @unique @db.Text
-    first_name String?  @db.Text
     password   String   @db.Text
+    first_name String?  @db.Text
     last_name  String?  @db.Text
     avatar_url String?  @db.Text
     created_at DateTime @default(now())
