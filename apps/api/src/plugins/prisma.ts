@@ -1,6 +1,7 @@
 import fp from 'fastify-plugin';
 import { FastifyPluginAsync } from 'fastify';
-import { PrismaClient } from '@collablist/database';
+import { client } from '../db';
+import type { PrismaClient } from '@collablist/database';
 
 declare module 'fastify' {
     interface FastifyInstance {
@@ -9,7 +10,7 @@ declare module 'fastify' {
 }
 
 const prismaPlugin: FastifyPluginAsync = fp(async (server, options) => {
-    const prisma = new PrismaClient();
+    const prisma = client;
 
     await prisma.$connect();
 

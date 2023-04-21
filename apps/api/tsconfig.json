@@ -9,8 +9,8 @@
     "target": "es2016",
     "module": "commonjs",
     "sourceMap": true,
-    "outDir": "./dist"
+    "outDir": "./dist",
   },
-  "include": ["./src/**/*.ts"],
+  "include": ["src"],
   "exclude": ["node_modules"]
 }

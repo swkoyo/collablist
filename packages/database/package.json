@@ -27,6 +27,7 @@
   "devDependencies": {
     "@collablist/eslint-config-custom": "workspace:*",
     "@collablist/tsconfig": "workspace:*",
+    "@pothos/plugin-prisma": "^3.47.2",
     "@types/bcryptjs": "^2.4.2",
     "@types/node": "^16.0.0",
     "eslint": "^8.0.1",
