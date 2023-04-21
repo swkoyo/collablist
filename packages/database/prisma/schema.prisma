@@ -13,58 +13,25 @@ datasource db {
 }
 
 model User {
-    id          Int          @id @default(autoincrement())
-    email       String       @unique
-    username    String
-    role        String       @default("USER")
-    first_name  String
-    password    String
-    last_name   String
-    avatar_url  String?
-    created_at  DateTime     @default(now())
-    updated_at  DateTime     @updatedAt
-    lists       List[]
-    memberships Membership[]
-
-    @@map("users")
-}
-
-model List {
-    id          Int          @id @default(autoincrement())
-    title       String
-    description String
-    is_complete Boolean      @default(false)
-    created_at  DateTime     @default(now())
-    updated_at  DateTime     @updatedAt
-    user_id     Int
-    user        User         @relation(fields: [user_id], references: [id], onDelete: Cascade)
-    members     Membership[]
-    items       ListItem[]
-
-    @@map("lists")
-}
-
-model ListItem {
-    id         Int      @id @default(autoincrement())
-    title      String
-    status     Boolean  @default(false)
+    id         String   @id @default(cuid())
+    email      String?  @unique @db.Text
+    username   String   @unique @db.Text
+    first_name String?  @db.Text
+    password   String   @db.Text
+    last_name  String?  @db.Text
+    avatar_url String?  @db.Text
     created_at DateTime @default(now())
     updated_at DateTime @updatedAt
-    list_id    Int
-    list       List     @relation(fields: [list_id], references: [id], onDelete: Cascade)
-
-    @@map("list_items")
+    tasks      Task[]
 }
 
-model Membership {
-    user           User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
-    user_id        Int
-    list           List     @relation(fields: [list_id], references: [id], onDelete: Cascade)
-    list_id        Int
-    is_contributor Boolean  @default(false)
-    created_at     DateTime @default(now())
-    updated_at     DateTime @updatedAt
-
-    @@id([user_id, list_id])
-    @@map("memberships")
+model Task {
+    id          String   @id @default(cuid())
+    title       String   @db.Text
+    description String?  @db.Text
+    is_done     Boolean  @default(false)
+    created_at  DateTime @default(now())
+    updated_at  DateTime @updatedAt
+    user_id     String   @db.Text
+    user        User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
 }
