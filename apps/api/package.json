@@ -8,18 +8,13 @@
   "dependencies": {
     "fastify": "^4.15.0",
     "fastify-plugin": "^4.5.0",
-    "graphql": "^16.6.0",
-    "graphql-yoga": "^3.9.1",
     "nanoid": "^3.3.1"
   },
   "devDependencies": {
     "@collablist/database": "workspace:^",
     "@collablist/eslint-config-custom": "workspace:^",
     "@collablist/tsconfig": "workspace:^",
-    "@pothos/core": "^3.29.0",
-    "@pothos/plugin-prisma": "^3.47.2",
     "@types/node": "^16.0.0",
-    "graphql-scalars": "^1.21.3",
     "pino-pretty": "^8.1.0",
     "tsx": "^3.12.6",
     "typescript": "^5.0.4"

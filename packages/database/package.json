@@ -13,7 +13,7 @@
     "db:migrate:dev": "prisma migrate dev",
     "db:migrate": "prisma migrate deploy",
     "db:seed": "prisma db seed",
-    "db:seed:dummy": "ts-node src/seed/dummy.ts",
+    "db:seed:dummy": "tsx src/seed/dummy.ts",
     "db:studio": "prisma studio"
   },
   "dependencies": {
@@ -22,19 +22,18 @@
     "bcryptjs": "^2.4.3"
   },
   "prisma": {
-    "seed": "ts-node src/seed/index.ts"
+    "seed": "tsx src/seed/index.ts"
   },
   "devDependencies": {
     "@collablist/eslint-config-custom": "workspace:*",
     "@collablist/tsconfig": "workspace:*",
-    "@pothos/plugin-prisma": "^3.47.2",
     "@types/bcryptjs": "^2.4.2",
     "@types/node": "^16.0.0",
     "eslint": "^8.0.1",
     "prisma": "^4.3.1",
     "rimraf": "^3.0.2",
-    "ts-node": "^10.0.0",
     "tsup": "^6.7.0",
+    "tsx": "^3.12.6",
     "typescript": "^5.0.4"
   }
 }

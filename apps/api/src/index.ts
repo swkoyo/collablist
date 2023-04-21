@@ -7,10 +7,10 @@ process.on('SIGTERM', async () => {
 });
 
 app.listen({
-    port: 4000
+    port: 3000
 })
     .then((serverUrl) => {
-        app.log.info(`GraphQL API located at ${serverUrl}/graphql`);
+        app.log.info(`API located at ${serverUrl}`);
     })
     .catch((err) => {
         app.log.error(err);
