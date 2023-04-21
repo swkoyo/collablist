@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  server:
+    build:
+      context: .
+      target: installer
+      dockerfile: ./apps/server/Dockerfile
+    command: sleep 50000
+    ports:
+      - ${SERVER_PORT}:${SERVER_PORT}
+    environment:
+      - NODE_ENV=development
+      - PORT=${SERVER_PORT}
+      - BCRYPT_SALT_ROUNDS=${BCRYPT_SALT_ROUNDS}
+      - JWT_SECRET=${JWT_SECRET}
+      - JWT_EXPIRES_IN=${JWT_EXPIRES_IN}
+    depends_on:
+      - db
+  db:
+    image: postgres:15-alpine
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+  client:
+    build:
+      context: .
+      target: development
+      dockerfile: ./apps/client/Dockerfile
+    command: turbo dev --filter=client...
+    ports:
+      - 5173:5173
+    environment:
+      - BROWSER=none
+      - VITE_API_URL=http://server:${SERVER_PORT}/v1

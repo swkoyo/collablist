@@ -1,33 +1,66 @@
-FROM node:18-slim AS development
-
-RUN apt-get update && apt-get install -y procps openssl
-
-WORKDIR /usr/src/app
-
-COPY package*.json ./
-COPY prisma ./prisma/
-
-RUN npm install glob rimraf
-RUN npm install --only=development
-
+FROM node:18-alpine3.17 AS builder
+RUN apk add --no-cache libc6-compat openssl1.1-compat
+RUN apk update
+# Set working directory
+WORKDIR /app
+RUN yarn global add turbo
 COPY . .
+RUN turbo prune --scope=@collablist/server --docker
 
-RUN npm run build
+# Add lockfile and package.json's of isolated subworkspace
+FROM node:18-alpine3.17 AS installer
+WORKDIR /app
 
-FROM node:18-slim AS production
+# First install the dependencies (as they change less often)
+COPY --from=builder /app/out/json/ .
+COPY --from=builder /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
+RUN yarn global add pnpm
+RUN pnpm i
 
-ARG NODE_ENV=production
-ENV NODE_ENV=${NODE_ENV}
+# Copy full repo
+FROM node:18-alpine3.17 AS development
+WORKDIR /app
+RUN yarn global add pnpm turbo
+COPY --from=builder /app/out/full/ .
 
-WORKDIR /usr/src/app
+# Build the project
+FROM node:18-alpine3.17 AS runner
+WORKDIR /app
+RUN pnpm turbo run build --filter=@collablist/server...
 
-COPY package*.json ./
-COPY prisma ./prisma/
 
-RUN npm install --only=production
+# FROM node:18-alpine AS development
 
-COPY . .
+# RUN apt-get update && apt-get install -y procps openssl
 
-COPY --from=development /usr/src/app/dist ./dist
+# WORKDIR /usr/src/app
 
-CMD ["node", "dist/main"]
+# COPY package*.json ./
+# COPY prisma ./prisma/
+
+# RUN npm install glob rimraf
+# RUN npm install --only=development
+
+# COPY . .
+
+# RUN npm run build
+
+# FROM node:18-slim AS production
+
+# ARG NODE_ENV=production
+# ENV NODE_ENV=${NODE_ENV}
+
+# WORKDIR /usr/src/app
+
+# COPY package*.json ./
+# COPY prisma ./prisma/
+
+# RUN npm install --only=production
+
+# COPY . .
+
+# COPY --from=development /usr/src/app/dist ./dist
+
+# CMD ["node", "dist/main"]
+
+# DEPS
