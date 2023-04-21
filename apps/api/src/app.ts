@@ -1,6 +1,7 @@
 import { createYoga } from 'graphql-yoga';
 import fastify, { FastifyReply, FastifyRequest } from 'fastify';
 import { schema } from 'schema';
+import { nanoid } from 'nanoid';
 
 export function buildApp(logging = true) {
     const app = fastify({
@@ -12,7 +13,8 @@ export function buildApp(logging = true) {
                 }
             },
             level: 'debug'
-        }
+        },
+        genReqId: () => nanoid()
     });
 
     const graphQLServer = createYoga<{
