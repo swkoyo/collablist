@@ -1,5 +1,6 @@
 {
   "name": "collablist",
+<<<<<<< Updated upstream
   "version": "1.1.0",
   "scripts": {
     "build": "turbo run build",
@@ -13,11 +14,34 @@
     "db:push": "dotenv -c development -- turbo run db:push",
     "db:seed": "dotenv -c development -- turbo run db:seed",
     "db:seed:dummy": "dotenv -c development -- turbo run db:seed:dummy"
+=======
+  "version": "2.0.0",
+  "engines": {
+    "node": ">=v18.16.0"
+>>>>>>> Stashed changes
   },
   "packageManager": "pnpm@8.3.0",
-  "devDependencies": {
-    "dotenv-cli": "^7.2.1",
+  "scripts": {
+    "build": "turbo build",
+    "clean": "git clean -xdf node_modules",
+    "clean:workspaces": "turbo clean",
+    "db:generate": "turbo db:generate",
+    "db:push": "turbo db:push db:generate",
+    "dev": "turbo dev --parallel",
+    "format": "prettier --write \"**/*.{js,cjs,mjs,ts,tsx,md,json}\" --ignore-path .gitignore",
+    "lint": "turbo lint && manypkg check",
+    "lint:fix": "turbo lint:fix && manypkg fix",
+    "type-check": "turbo type-check"
+  },
+  "dependencies": {
+    "@collablist/eslint-config": "^0.1.0",
+    "@ianvs/prettier-plugin-sort-imports": "^3.7.2",
+    "@manypkg/cli": "^0.20.0",
+    "@types/prettier": "^2.7.2",
+    "eslint": "^8.38.0",
     "prettier": "^2.8.7",
-    "turbo": "^1.9.3"
+    "prettier-plugin-tailwindcss": "^0.2.7",
+    "turbo": "^1.9.3",
+    "typescript": "^5.0.4"
   }
 }
