@@ -12,24 +12,24 @@ datasource db {
 }
 
 model User {
-    id         String   @id @default(cuid())
-    username   String   @unique @db.Text
-    password   String   @db.Text
-    first_name String?  @db.Text
-    last_name  String?  @db.Text
-    avatar_url String?  @db.Text
-    created_at DateTime @default(now())
-    updated_at DateTime @updatedAt
-    tasks      Task[]
+    id        String   @id @default(cuid())
+    username  String   @unique @db.Text
+    password  String   @db.Text
+    firstName String?  @db.Text
+    lastName  String?  @db.Text
+    avatarUrl String?  @db.Text
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    tasks     Task[]
 }
 
 model Task {
     id          String   @id @default(cuid())
     title       String   @db.Text
     description String?  @db.Text
-    is_done     Boolean  @default(false)
-    created_at  DateTime @default(now())
-    updated_at  DateTime @updatedAt
-    user_id     String   @db.Text
-    user        User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+    isDone      Boolean  @default(false)
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+    userId      String   @db.Text
+    user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

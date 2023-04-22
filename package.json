@@ -1,24 +1,8 @@
 {
   "name": "collablist",
-<<<<<<< Updated upstream
-  "version": "1.1.0",
-  "scripts": {
-    "build": "turbo run build",
-    "clean": "turbo run clean",
-    "dev": "dotenv -c development -- turbo run dev",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "lint": "turbo run lint",
-    "test": "turbo run test",
-    "predev": "dotenv -c development -- turbo predev",
-    "db:generate": "dotenv -c development -- turbo run db:generate",
-    "db:push": "dotenv -c development -- turbo run db:push",
-    "db:seed": "dotenv -c development -- turbo run db:seed",
-    "db:seed:dummy": "dotenv -c development -- turbo run db:seed:dummy"
-=======
   "version": "2.0.0",
   "engines": {
     "node": ">=v18.16.0"
->>>>>>> Stashed changes
   },
   "packageManager": "pnpm@8.3.0",
   "scripts": {
