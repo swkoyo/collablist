@@ -1,19 +1,19 @@
-import type { NextPage } from "next";
-import { signIn, signOut } from "next-auth/react";
-import Head from "next/head";
 import { useState } from "react";
+import type { NextPage } from "next";
+import Head from "next/head";
+import { signIn, signOut } from "next-auth/react";
 
 import { api, type RouterOutputs } from "~/utils/api";
 
 const PostCard: React.FC<{
-  post: RouterOutputs["post"]["all"][number];
+  post: RouterOutputs["task"]["all"][number];
   onPostDelete?: () => void;
 }> = ({ post, onPostDelete }) => {
   return (
     <div className="flex flex-row rounded-lg bg-white/10 p-4 transition-all hover:scale-[101%]">
       <div className="flex-grow">
         <h2 className="text-2xl font-bold text-pink-400">{post.title}</h2>
-        <p className="mt-2 text-sm">{post.content}</p>
+        <p className="mt-2 text-sm">{post.description}</p>
       </div>
       <div>
         <span
@@ -33,11 +33,11 @@ const CreatePostForm: React.FC = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
 
-  const { mutate, error } = api.post.create.useMutation({
+  const { mutate, error } = api.task.create.useMutation({
     async onSuccess() {
       setTitle("");
       setContent("");
-      await utils.post.all.invalidate();
+      await utils.task.all.invalidate();
     },
   });
 
@@ -70,7 +70,7 @@ const CreatePostForm: React.FC = () => {
         onClick={() => {
           mutate({
             title,
-            content,
+            description: content,
           });
         }}
       >
@@ -81,9 +81,9 @@ const CreatePostForm: React.FC = () => {
 };
 
 const Home: NextPage = () => {
-  const postQuery = api.post.all.useQuery();
+  const postQuery = api.task.all.useQuery();
 
-  const deletePostMutation = api.post.delete.useMutation({
+  const deletePostMutation = api.task.delete.useMutation({
     onSettled: () => postQuery.refetch(),
   });
 
