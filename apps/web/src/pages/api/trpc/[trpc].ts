@@ -1,6 +1,6 @@
 import { createNextApiHandler } from '@trpc/server/adapters/next';
 
-import { appRouter, createTRPCContext } from '@collablist/api';
+import { appRouter, createTRPCContext } from '@natodo/api';
 
 // export API handler
 export default createNextApiHandler({

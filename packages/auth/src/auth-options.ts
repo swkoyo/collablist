@@ -3,7 +3,7 @@ import { type DefaultSession, type NextAuthOptions } from 'next-auth';
 import DiscordProvider from 'next-auth/providers/discord';
 import GithubProvider from 'next-auth/providers/github';
 
-import { prisma } from '@collablist/db';
+import { prisma } from '@natodo/db';
 
 /**
  * Module augmentation for `next-auth` types

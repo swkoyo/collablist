@@ -1,5 +1,5 @@
 {
-  "name": "@collablist/eslint-config",
+  "name": "@natodo/eslint-config",
   "version": "0.1.0",
   "main": "index.js",
   "license": "MIT",

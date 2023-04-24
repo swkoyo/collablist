@@ -3,7 +3,7 @@
   "extends": ["config:base"],
   "packageRules": [
     {
-      "matchPackagePatterns": ["^@collablist/"],
+      "matchPackagePatterns": ["^@natodo/"],
       "enabled": false
     }
   ],
