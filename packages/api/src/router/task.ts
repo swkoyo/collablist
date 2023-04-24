@@ -14,7 +14,7 @@ export const taskRouter = createTRPCRouter({
     .input(
       z.object({
         title: z.string().nonempty(),
-        description: z.string().nonempty().nullish(),
+        description: z.string().nullish(),
       }),
     )
     .mutation(({ ctx, input }) => {
@@ -25,8 +25,23 @@ export const taskRouter = createTRPCRouter({
         },
       });
     }),
+  toggle: protectedProcedure
+    .input(z.string().nonempty())
+    .mutation(async ({ ctx, input }) => {
+      const task = await ctx.prisma.task.findFirst({
+        where: { id: input },
+        select: { id: true, userId: true, isDone: true },
+      });
+      if (!task) throw new TRPCError({ code: 'NOT_FOUND' });
+      if (task.userId !== ctx.session.user.id)
+        throw new TRPCError({ code: 'UNAUTHORIZED' });
+      return ctx.prisma.task.update({
+        where: { id: task.id },
+        data: { isDone: !task.isDone },
+      });
+    }),
   delete: protectedProcedure
-    .input(z.string())
+    .input(z.string().nonempty())
     .mutation(async ({ ctx, input }) => {
       const task = await ctx.prisma.task.findFirst({
         where: { id: input },

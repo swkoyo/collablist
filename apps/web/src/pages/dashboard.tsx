@@ -15,6 +15,9 @@ const Dashboard: NextPage = () => {
   const deleteTaskMutation = api.task.delete.useMutation({
     onSettled: () => taskQuery.refetch(),
   });
+  const toggleTaskMutation = api.task.toggle.useMutation({
+    onSettled: () => taskQuery.refetch(),
+  });
 
   useEffect(() => {
     if (isFetched) {
@@ -62,6 +65,9 @@ const Dashboard: NextPage = () => {
                               onTaskDelete={() =>
                                 deleteTaskMutation.mutate(t.id)
                               }
+                              onTaskToggle={() =>
+                                toggleTaskMutation.mutate(t.id)
+                              }
                             />
                           );
                         })}
@@ -87,14 +93,29 @@ export default Dashboard;
 const TaskCard: React.FC<{
   task: RouterOutputs['task']['all'][number];
   onTaskDelete?: () => void;
-}> = ({ task, onTaskDelete }) => {
+  onTaskToggle?: () => void;
+}> = ({ task, onTaskDelete, onTaskToggle }) => {
   return (
-    <div className="flex flex-row rounded-lg bg-white/10 p-4 transition-all hover:scale-[101%]">
-      <div className="flex-grow">
-        <h2 className="text-2xl font-bold text-pink-400">{task.title}</h2>
-        <p className="mt-2 text-sm">{task.description}</p>
+    <div className="relative flex items-start">
+      <div className="flex h-6 items-center">
+        <input
+          id={task.title}
+          name={task.title}
+          type="checkbox"
+          checked={task.isDone}
+          onClick={onTaskToggle}
+          className="h-4 w-4 rounded border-gray-300 text-pink-400 focus:ring-pink-500"
+        />
       </div>
-      <div>
+      <div className="ml-3 flex-1 text-sm leading-6">
+        <label htmlFor={task.title} className="font-medium text-pink-400">
+          {task.title}
+        </label>
+        <p id={`${task.title}-description`} className="text-pink-400">
+          {task.description}
+        </p>
+      </div>
+      <div className="flex h-6 items-center">
         <span
           className="cursor-pointer text-sm font-bold uppercase text-pink-400"
           onClick={onTaskDelete}
@@ -139,9 +160,9 @@ const CreateTaskForm: React.FC = () => {
         onChange={(e) => setDescription(e.target.value)}
         placeholder="Description"
       />
-      {error?.data?.zodError?.fieldErrors.content && (
+      {error?.data?.zodError?.fieldErrors.description && (
         <span className="mb-2 text-red-500">
-          {error.data.zodError.fieldErrors.content}
+          {error.data.zodError.fieldErrors.description}
         </span>
       )}
       <button
