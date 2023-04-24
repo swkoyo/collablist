@@ -6,20 +6,25 @@ import { signOut } from 'next-auth/react';
 import { api, type RouterOutputs } from '~/utils/api';
 
 const Dashboard: NextPage = () => {
-  const { data: session } = api.auth.getSession.useQuery();
+  const { data: session, isFetched } = api.auth.getSession.useQuery();
   const router = useRouter();
-  const taskQuery = api.task.all.useQuery(undefined, { enabled: false });
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const taskQuery = api.task.all.useQuery(undefined, {
+    enabled: isAuthenticated,
+  });
   const deleteTaskMutation = api.task.delete.useMutation({
     onSettled: () => taskQuery.refetch(),
   });
 
   useEffect(() => {
-    if (!session?.user) {
-      void router.push('/');
-    } else {
-      void taskQuery.refetch();
+    if (isFetched) {
+      if (!session || !session.user) {
+        void router.push('/');
+      } else {
+        setIsAuthenticated(true);
+      }
     }
-  }, [session, router, taskQuery]);
+  }, [isFetched, session, setIsAuthenticated, router]);
 
   return (
     <>
@@ -28,40 +33,48 @@ const Dashboard: NextPage = () => {
           <h1 className="text-5xl font-extrabold tracking-tight sm:text-[5rem]">
             Create <span className="text-pink-400">T3</span> Turbo
           </h1>
-          <div className="flex flex-col items-center justify-center gap-4">
-            <p className="text-center text-2xl text-white">
-              {session && <span>Logged in as {session?.user?.name}</span>}
-            </p>
-            <button
-              className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
-              onClick={() => void signOut({ callbackUrl: '/' })}
-            >
-              Sign out
-            </button>
-          </div>
-          <CreateTaskForm />
-          {taskQuery.data ? (
-            <div className="w-full max-w-2xl">
-              {taskQuery.data?.length === 0 ? (
-                <span>There are no posts!</span>
-              ) : (
-                <div className="flex h-[40vh] justify-center overflow-y-scroll px-4 text-2xl">
-                  <div className="flex w-full flex-col gap-4">
-                    {taskQuery.data?.map((t) => {
-                      return (
-                        <TaskCard
-                          key={t.id}
-                          task={t}
-                          onTaskDelete={() => deleteTaskMutation.mutate(t.id)}
-                        />
-                      );
-                    })}
-                  </div>
+          {isAuthenticated ? (
+            <>
+              <div className="flex flex-col items-center justify-center gap-4">
+                <p className="text-center text-2xl text-white">
+                  {session && <span>Logged in as {session?.user?.name}</span>}
+                </p>
+                <button
+                  className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
+                  onClick={() => void signOut({ callbackUrl: '/' })}
+                >
+                  Sign out
+                </button>
+              </div>
+              <CreateTaskForm />
+              {taskQuery.data ? (
+                <div className="w-full max-w-2xl">
+                  {taskQuery.data?.length === 0 ? (
+                    <span>There are no tasks!</span>
+                  ) : (
+                    <div className="flex h-[40vh] justify-center overflow-y-scroll px-4 text-2xl">
+                      <div className="flex w-full flex-col gap-4">
+                        {taskQuery.data?.map((t) => {
+                          return (
+                            <TaskCard
+                              key={t.id}
+                              task={t}
+                              onTaskDelete={() =>
+                                deleteTaskMutation.mutate(t.id)
+                              }
+                            />
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
                 </div>
+              ) : (
+                <p>Loading...</p>
               )}
-            </div>
+            </>
           ) : (
-            <p>Loading...</p>
+            <p>Loading</p>
           )}
         </div>
       </main>

@@ -13,8 +13,8 @@ export const taskRouter = createTRPCRouter({
   create: protectedProcedure
     .input(
       z.object({
-        title: z.string().min(2),
-        description: z.string().min(2).nullish(),
+        title: z.string().nonempty(),
+        description: z.string().nonempty().nullish(),
       }),
     )
     .mutation(({ ctx, input }) => {
