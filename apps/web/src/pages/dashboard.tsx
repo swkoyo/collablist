@@ -82,7 +82,7 @@ const TaskCard: React.FC<{
           name={task.title}
           type='checkbox'
           checked={task.isDone}
-          onClick={onTaskToggle}
+          onChange={onTaskToggle}
           className='h-4 w-4 rounded border-gray-300 text-pink-400 focus:ring-pink-500'
         />
       </div>
