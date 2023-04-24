@@ -55,7 +55,7 @@ const Dashboard: NextPage = () => {
                   {taskQuery.data?.length === 0 ? (
                     <span>There are no tasks!</span>
                   ) : (
-                    <div className="flex h-[40vh] justify-center overflow-y-scroll px-4 text-2xl">
+                    <div className="flex h-[40vh] justify-center px-4 text-2xl">
                       <div className="flex w-full flex-col gap-4">
                         {taskQuery.data?.map((t) => {
                           return (
