@@ -4,15 +4,15 @@ importers:
 
   .:
     dependencies:
-      '@collablist/eslint-config':
-        specifier: ^0.1.0
-        version: link:packages/config/eslint
       '@ianvs/prettier-plugin-sort-imports':
         specifier: ^3.7.2
         version: 3.7.2(prettier@2.8.7)
       '@manypkg/cli':
         specifier: ^0.20.0
         version: 0.20.0
+      '@natodo/eslint-config':
+        specifier: ^0.1.0
+        version: link:packages/config/eslint
       '@types/prettier':
         specifier: ^2.7.2
         version: 2.7.2
@@ -34,16 +34,16 @@ importers:
 
   apps/web:
     dependencies:
-      '@collablist/api':
+      '@natodo/api':
         specifier: ^0.1.0
         version: link:../../packages/api
-      '@collablist/auth':
+      '@natodo/auth':
         specifier: ^0.1.0
         version: link:../../packages/auth
-      '@collablist/db':
+      '@natodo/db':
         specifier: ^0.1.0
         version: link:../../packages/db
-      '@collablist/tailwind-config':
+      '@natodo/tailwind-config':
         specifier: ^0.1.0
         version: link:../../packages/config/tailwind
       '@tanstack/react-query':
@@ -80,7 +80,7 @@ importers:
         specifier: ^3.21.4
         version: 3.21.4
     devDependencies:
-      '@collablist/eslint-config':
+      '@natodo/eslint-config':
         specifier: ^0.1.0
         version: link:../../packages/config/eslint
       '@types/node':
@@ -113,10 +113,10 @@ importers:
 
   packages/api:
     dependencies:
-      '@collablist/auth':
+      '@natodo/auth':
         specifier: ^0.1.0
         version: link:../auth
-      '@collablist/db':
+      '@natodo/db':
         specifier: ^0.1.0
         version: link:../db
       '@trpc/client':
@@ -132,7 +132,7 @@ importers:
         specifier: ^3.21.4
         version: 3.21.4
     devDependencies:
-      '@collablist/eslint-config':
+      '@natodo/eslint-config':
         specifier: ^0.1.0
         version: link:../config/eslint
       eslint:
@@ -144,7 +144,7 @@ importers:
 
   packages/auth:
     dependencies:
-      '@collablist/db':
+      '@natodo/db':
         specifier: ^0.1.0
         version: link:../db
       '@next-auth/prisma-adapter':
@@ -163,7 +163,7 @@ importers:
         specifier: 18.2.0
         version: 18.2.0(react@18.2.0)
     devDependencies:
-      '@collablist/eslint-config':
+      '@natodo/eslint-config':
         specifier: ^0.1.0
         version: link:../config/eslint
       eslint:
