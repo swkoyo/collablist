@@ -32,18 +32,18 @@ const Dashboard: NextPage = () => {
   return (
     <>
       <Navbar />
-      <main className="flex h-screen flex-col items-center bg-black text-white">
-        <div className="container mt-12 flex flex-col items-center justify-center gap-4 px-4 py-8">
+      <main className='flex h-screen flex-col items-center bg-black text-white'>
+        <div className='container mt-12 flex flex-col items-center justify-center gap-4 px-4 py-8'>
           {isAuthenticated ? (
             <>
               <CreateTaskForm />
               {taskQuery.data ? (
-                <div className="w-full max-w-2xl">
+                <div className='w-full max-w-2xl'>
                   {taskQuery.data?.length === 0 ? (
                     <span>There are no tasks!</span>
                   ) : (
-                    <div className="flex h-[40vh] justify-center px-4 text-2xl">
-                      <div className="flex w-full flex-col gap-4">
+                    <div className='flex h-[40vh] justify-center px-4 text-2xl'>
+                      <div className='flex w-full flex-col gap-4'>
                         {taskQuery.data?.map((t) => {
                           return (
                             <TaskCard
@@ -83,28 +83,28 @@ const TaskCard: React.FC<{
   onTaskToggle?: () => void;
 }> = ({ task, onTaskDelete, onTaskToggle }) => {
   return (
-    <div className="relative flex items-start">
-      <div className="flex h-6 items-center">
+    <div className='relative flex items-start'>
+      <div className='flex h-6 items-center'>
         <input
           id={task.title}
           name={task.title}
-          type="checkbox"
+          type='checkbox'
           checked={task.isDone}
           onClick={onTaskToggle}
-          className="h-4 w-4 rounded border-gray-300 text-pink-400 focus:ring-pink-500"
+          className='h-4 w-4 rounded border-gray-300 text-pink-400 focus:ring-pink-500'
         />
       </div>
-      <div className="ml-3 flex-1 text-sm leading-6">
-        <label htmlFor={task.title} className="font-medium text-pink-400">
+      <div className='ml-3 flex-1 text-sm leading-6'>
+        <label htmlFor={task.title} className='font-medium text-pink-400'>
           {task.title}
         </label>
-        <p id={`${task.title}-description`} className="text-pink-400">
+        <p id={`${task.title}-description`} className='text-pink-400'>
           {task.description}
         </p>
       </div>
-      <div className="flex h-6 items-center">
+      <div className='flex h-6 items-center'>
         <span
-          className="cursor-pointer text-sm font-bold uppercase text-pink-400"
+          className='cursor-pointer text-sm font-bold uppercase text-pink-400'
           onClick={onTaskDelete}
         >
           Delete
@@ -129,31 +129,31 @@ const CreateTaskForm: React.FC = () => {
   });
 
   return (
-    <div className="flex w-full max-w-2xl flex-col p-4">
+    <div className='flex w-full max-w-2xl flex-col p-4'>
       <input
-        className="mb-2 rounded bg-white/10 p-2 text-white"
+        className='mb-2 rounded bg-white/10 p-2 text-white'
         value={title}
         onChange={(e) => setTitle(e.target.value)}
-        placeholder="Title"
+        placeholder='Title'
       />
       {error?.data?.zodError?.fieldErrors.title && (
-        <span className="mb-2 text-red-500">
+        <span className='mb-2 text-red-500'>
           {error.data.zodError.fieldErrors.title}
         </span>
       )}
       <input
-        className="mb-2 rounded bg-white/10 p-2 text-white"
+        className='mb-2 rounded bg-white/10 p-2 text-white'
         value={description}
         onChange={(e) => setDescription(e.target.value)}
-        placeholder="Description"
+        placeholder='Description'
       />
       {error?.data?.zodError?.fieldErrors.description && (
-        <span className="mb-2 text-red-500">
+        <span className='mb-2 text-red-500'>
           {error.data.zodError.fieldErrors.description}
         </span>
       )}
       <button
-        className="rounded bg-pink-400 p-2 font-bold"
+        className='rounded bg-pink-400 p-2 font-bold'
         onClick={() => {
           mutate({
             title,
