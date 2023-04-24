@@ -1,13 +1,13 @@
-import { TRPCError } from "@trpc/server";
-import { z } from "zod";
+import { TRPCError } from '@trpc/server';
+import { z } from 'zod';
 
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { createTRPCRouter, protectedProcedure } from '../trpc';
 
 export const taskRouter = createTRPCRouter({
   all: protectedProcedure.query(({ ctx }) => {
     return ctx.prisma.task.findMany({
       where: { userId: ctx.session.user.id },
-      orderBy: { id: "desc" },
+      orderBy: { id: 'desc' },
     });
   }),
   create: protectedProcedure
@@ -35,9 +35,9 @@ export const taskRouter = createTRPCRouter({
           userId: true,
         },
       });
-      if (!task) throw new TRPCError({ code: "NOT_FOUND" });
+      if (!task) throw new TRPCError({ code: 'NOT_FOUND' });
       if (task.userId !== ctx.session.user.id)
-        throw new TRPCError({ code: "UNAUTHORIZED" });
+        throw new TRPCError({ code: 'UNAUTHORIZED' });
       return ctx.prisma.task.delete({ where: { id: task.id } });
     }),
 });

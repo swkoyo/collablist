@@ -1,12 +1,12 @@
-import { useState } from "react";
-import type { NextPage } from "next";
-import Head from "next/head";
-import { signIn, signOut } from "next-auth/react";
+import { useState } from 'react';
+import type { NextPage } from 'next';
+import Head from 'next/head';
+import { signIn, signOut } from 'next-auth/react';
 
-import { api, type RouterOutputs } from "~/utils/api";
+import { api, type RouterOutputs } from '~/utils/api';
 
 const PostCard: React.FC<{
-  post: RouterOutputs["task"]["all"][number];
+  post: RouterOutputs['task']['all'][number];
   onPostDelete?: () => void;
 }> = ({ post, onPostDelete }) => {
   return (
@@ -30,13 +30,13 @@ const PostCard: React.FC<{
 const CreatePostForm: React.FC = () => {
   const utils = api.useContext();
 
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
 
   const { mutate, error } = api.task.create.useMutation({
     async onSuccess() {
-      setTitle("");
-      setContent("");
+      setTitle('');
+      setContent('');
       await utils.task.all.invalidate();
     },
   });
@@ -154,7 +154,7 @@ const AuthShowcase: React.FC = () => {
         className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
         onClick={session ? () => void signOut() : () => void signIn()}
       >
-        {session ? "Sign out" : "Sign in"}
+        {session ? 'Sign out' : 'Sign in'}
       </button>
     </div>
   );

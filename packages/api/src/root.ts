@@ -1,6 +1,6 @@
-import { authRouter } from "./router/auth";
-import { taskRouter } from "./router/task";
-import { createTRPCRouter } from "./trpc";
+import { authRouter } from './router/auth';
+import { taskRouter } from './router/task';
+import { createTRPCRouter } from './trpc';
 
 export const appRouter = createTRPCRouter({
   auth: authRouter,

@@ -1,9 +1,9 @@
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import { type DefaultSession, type NextAuthOptions } from "next-auth";
-import DiscordProvider from "next-auth/providers/discord";
-import GithubProvider from "next-auth/providers/github";
+import { PrismaAdapter } from '@next-auth/prisma-adapter';
+import { type DefaultSession, type NextAuthOptions } from 'next-auth';
+import DiscordProvider from 'next-auth/providers/discord';
+import GithubProvider from 'next-auth/providers/github';
 
-import { prisma } from "@collablist/db";
+import { prisma } from '@collablist/db';
 
 /**
  * Module augmentation for `next-auth` types
@@ -11,13 +11,13 @@ import { prisma } from "@collablist/db";
  * and keep type safety
  * @see https://next-auth.js.org/getting-started/typescript#module-augmentation
  **/
-declare module "next-auth" {
+declare module 'next-auth' {
   interface Session extends DefaultSession {
     user: {
       id: string;
       // ...other properties
       // role: UserRole;
-    } & DefaultSession["user"];
+    } & DefaultSession['user'];
   }
 
   // interface User {
