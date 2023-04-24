@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { signOut } from 'next-auth/react';
 
 import { api, type RouterOutputs } from '~/utils/api';
+import Navbar from '~/components/Navbar';
 
 const Dashboard: NextPage = () => {
   const { data: session, isFetched } = api.auth.getSession.useQuery();
@@ -31,24 +31,11 @@ const Dashboard: NextPage = () => {
 
   return (
     <>
+      <Navbar />
       <main className="flex h-screen flex-col items-center bg-black text-white">
         <div className="container mt-12 flex flex-col items-center justify-center gap-4 px-4 py-8">
-          <h1 className="text-5xl font-extrabold tracking-tight sm:text-[5rem]">
-            Create <span className="text-pink-400">T3</span> Turbo
-          </h1>
           {isAuthenticated ? (
             <>
-              <div className="flex flex-col items-center justify-center gap-4">
-                <p className="text-center text-2xl text-white">
-                  {session && <span>Logged in as {session?.user?.name}</span>}
-                </p>
-                <button
-                  className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
-                  onClick={() => void signOut({ callbackUrl: '/' })}
-                >
-                  Sign out
-                </button>
-              </div>
               <CreateTaskForm />
               {taskQuery.data ? (
                 <div className="w-full max-w-2xl">

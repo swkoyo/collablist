@@ -13,6 +13,8 @@
     "with-env": "dotenv -e ../../.env --"
   },
   "dependencies": {
+    "@headlessui/react": "^1.7.14",
+    "@heroicons/react": "^2.0.17",
     "@natodo/api": "^0.1.0",
     "@natodo/auth": "^0.1.0",
     "@natodo/db": "^0.1.0",
