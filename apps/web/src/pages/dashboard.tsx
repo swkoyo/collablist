@@ -1,11 +1,12 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import { Disclosure } from '@headlessui/react';
+import { PlusCircleIcon } from '@heroicons/react/20/solid';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { Disclosure, Listbox, Transition } from '@headlessui/react';
-import { PlusCircleIcon, TagIcon } from '@heroicons/react/20/solid';
+import React, { useEffect, useState } from 'react';
 
-import { api, type RouterOutputs } from '~/utils/api';
+
 import Navbar from '~/components/Navbar';
+import { api, type RouterOutputs } from '~/utils/api';
 
 const classNames = (...classes: string[]) => {
   return classes.filter(Boolean).join(' ');
@@ -112,9 +113,10 @@ const TaskCard: React.FC<{
 
 const CreateTaskForm: React.FC = () => {
   const utils = api.useContext();
-  const labels = api.label.all.useQuery();
+  // const labels = api.label.all.useQuery();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  // const [selectedLabel, setSelectedLabel] = useState<Label | null>(null);
 
   const { mutate, error } = api.task.create.useMutation({
     async onSuccess() {
@@ -182,8 +184,13 @@ const CreateTaskForm: React.FC = () => {
               </div>
             </div>
             <div className='absolute inset-x-px bottom-0'>
-              <div className='flex flex-nowrap justify-end space-x-2 px-2 py-2 sm:px-3'>
-                <Listbox as='div' className='flex-shrink-0'>
+              {/* <div className='flex flex-nowrap justify-end space-x-2 px-2 py-2 sm:px-3'>
+                <Listbox
+                  as='div'
+                  className='flex-shrink-0'
+                  value={selectedLabel}
+                  onChange={setSelectedLabel}
+                >
                   {({ open }) => (
                     <>
                       <Listbox.Label className='sr-only'>
@@ -192,11 +199,21 @@ const CreateTaskForm: React.FC = () => {
                       <div className='relative'>
                         <Listbox.Button className='relative inline-flex items-center whitespace-nowrap rounded-full bg-gray-50 px-2 py-2 text-sm font-medium text-gray-500 hover:bg-gray-100 sm:px-3'>
                           <TagIcon
-                            className='h-5 w-5 flex-shrink-0 text-gray-300 sm:-ml-1'
+                            className={classNames(
+                              !selectedLabel
+                                ? 'text-gray-300'
+                                : 'text-gray-500',
+                              'h-5 w-5 flex-shrink-0 sm:-ml-1',
+                            )}
                             aria-hidden='true'
                           />
-                          <span className='hidden truncate text-gray-900 sm:ml-2 sm:block'>
-                            Label
+                          <span
+                            className={classNames(
+                              !selectedLabel ? '' : 'text-gray-900',
+                              'hidden truncate sm:ml-2 sm:block',
+                            )}
+                          >
+                            {selectedLabel ? selectedLabel.name : 'Label'}
                           </span>
                         </Listbox.Button>
                         <Transition
@@ -231,7 +248,7 @@ const CreateTaskForm: React.FC = () => {
                     </>
                   )}
                 </Listbox>
-              </div>
+              </div> */}
               <div className='flex items-center justify-end space-x-3 border-t border-gray-200 px-2 py-2 sm:px-3'>
                 <Disclosure.Button
                   as='button'
