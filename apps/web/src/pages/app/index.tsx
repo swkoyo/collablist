@@ -7,7 +7,7 @@ import { api, type RouterOutputs } from '~/utils/api';
 import Layout from '~/components/Layout';
 import { type NextPageWithLayout } from '../_app';
 
-const Dashboard: NextPageWithLayout = () => {
+const App: NextPageWithLayout = () => {
   const { data: session, isFetched } = api.auth.getSession.useQuery();
   const router = useRouter();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -62,9 +62,9 @@ const Dashboard: NextPageWithLayout = () => {
   );
 };
 
-export default Dashboard;
+export default App;
 
-Dashboard.getLayout = function getLayout(page: ReactElement) {
+App.getLayout = function getLayout(page: ReactElement) {
   return <Layout>{page}</Layout>;
 };
 

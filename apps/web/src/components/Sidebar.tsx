@@ -3,7 +3,7 @@ import { HomeIcon, TagIcon } from '@heroicons/react/24/outline';
 import { classNames } from '~/utils/tailwind';
 
 const navigation = [
-  { name: 'Tasks', href: '#', icon: HomeIcon, current: true },
+  { name: 'Home', href: '#', icon: HomeIcon, current: true },
   { name: 'Labels', href: '#', icon: TagIcon, current: false },
 ];
 

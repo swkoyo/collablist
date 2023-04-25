@@ -10,7 +10,7 @@ const Home: NextPage = () => {
   const { data: session } = api.auth.getSession.useQuery();
 
   if (session?.user) {
-    void router.push('/dashboard');
+    void router.push('/app');
   }
 
   return (
@@ -28,9 +28,7 @@ const Home: NextPage = () => {
           <div className='flex flex-col items-center justify-center gap-4'>
             <button
               className='rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20'
-              onClick={() =>
-                void signIn(undefined, { callbackUrl: '/dashboard' })
-              }
+              onClick={() => void signIn(undefined, { callbackUrl: '/app' })}
             >
               Sign in to get started
             </button>
