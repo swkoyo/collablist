@@ -1,11 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { Disclosure } from '@headlessui/react';
-import { PlusCircleIcon } from '@heroicons/react/20/solid';
+import { Disclosure, Listbox, Transition } from '@headlessui/react';
+import { PlusCircleIcon, TagIcon } from '@heroicons/react/20/solid';
 
 import { api, type RouterOutputs } from '~/utils/api';
 import Navbar from '~/components/Navbar';
+
+const classNames = (...classes: string[]) => {
+  return classes.filter(Boolean).join(' ');
+};
 
 const Dashboard: NextPage = () => {
   const { data: session, isFetched } = api.auth.getSession.useQuery();
@@ -108,7 +112,7 @@ const TaskCard: React.FC<{
 
 const CreateTaskForm: React.FC = () => {
   const utils = api.useContext();
-
+  const labels = api.label.all.useQuery();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
 
@@ -178,6 +182,56 @@ const CreateTaskForm: React.FC = () => {
               </div>
             </div>
             <div className='absolute inset-x-px bottom-0'>
+              <div className='flex flex-nowrap justify-end space-x-2 px-2 py-2 sm:px-3'>
+                <Listbox as='div' className='flex-shrink-0'>
+                  {({ open }) => (
+                    <>
+                      <Listbox.Label className='sr-only'>
+                        Add a label
+                      </Listbox.Label>
+                      <div className='relative'>
+                        <Listbox.Button className='relative inline-flex items-center whitespace-nowrap rounded-full bg-gray-50 px-2 py-2 text-sm font-medium text-gray-500 hover:bg-gray-100 sm:px-3'>
+                          <TagIcon
+                            className='h-5 w-5 flex-shrink-0 text-gray-300 sm:-ml-1'
+                            aria-hidden='true'
+                          />
+                          <span className='hidden truncate text-gray-900 sm:ml-2 sm:block'>
+                            Label
+                          </span>
+                        </Listbox.Button>
+                        <Transition
+                          show={open}
+                          as={Fragment}
+                          leave='transition ease-in duration-100'
+                          leaveFrom='opacity-100'
+                          leaveTo='opacity-0'
+                        >
+                          <Listbox.Options className='absolute right-0 z-10 mt-1 max-h-56 w-52 overflow-auto rounded-lg bg-white py-3 text-black shadow ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm'>
+                            {labels.data?.map((label) => (
+                              <Listbox.Option
+                                key={label.name}
+                                className={({ active }) =>
+                                  classNames(
+                                    active ? 'bg-gray-100' : 'bg-white',
+                                    'relative cursor-default select-none px-3 py-2',
+                                  )
+                                }
+                                value={label}
+                              >
+                                <div className='flex items-center'>
+                                  <span className='block truncate font-medium'>
+                                    {label.name}
+                                  </span>
+                                </div>
+                              </Listbox.Option>
+                            ))}
+                          </Listbox.Options>
+                        </Transition>
+                      </div>
+                    </>
+                  )}
+                </Listbox>
+              </div>
               <div className='flex items-center justify-end space-x-3 border-t border-gray-200 px-2 py-2 sm:px-3'>
                 <Disclosure.Button
                   as='button'
