@@ -1,18 +1,13 @@
+import React, { useEffect, useState, type ReactElement } from 'react';
+import { useRouter } from 'next/router';
 import { Disclosure } from '@headlessui/react';
 import { PlusCircleIcon } from '@heroicons/react/20/solid';
-import type { NextPage } from 'next';
-import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
 
-
-import Navbar from '~/components/Navbar';
 import { api, type RouterOutputs } from '~/utils/api';
+import Layout from '~/components/Layout';
+import { type NextPageWithLayout } from '../_app';
 
-const classNames = (...classes: string[]) => {
-  return classes.filter(Boolean).join(' ');
-};
-
-const Dashboard: NextPage = () => {
+const Dashboard: NextPageWithLayout = () => {
   const { data: session, isFetched } = api.auth.getSession.useQuery();
   const router = useRouter();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -37,42 +32,43 @@ const Dashboard: NextPage = () => {
   }, [isFetched, session, setIsAuthenticated, router]);
 
   return (
-    <>
-      <Navbar />
-      <main className='flex h-screen flex-col items-center bg-gray-800 text-white'>
-        <div className='container mt-12 flex flex-col items-center justify-center gap-4 px-4 py-8'>
-          {isAuthenticated && taskQuery.data ? (
-            <div className='w-full max-w-2xl'>
-              {taskQuery.data?.length === 0 ? (
-                <span>There are no tasks!</span>
-              ) : (
-                <div className='flex h-[40vh] justify-center px-4 text-2xl'>
-                  <div className='flex w-full flex-col gap-4'>
-                    {taskQuery.data?.map((t) => {
-                      return (
-                        <TaskCard
-                          key={t.id}
-                          task={t}
-                          onTaskDelete={() => deleteTaskMutation.mutate(t.id)}
-                          onTaskToggle={() => toggleTaskMutation.mutate(t.id)}
-                        />
-                      );
-                    })}
-                    <CreateTaskForm />
-                  </div>
+    <div className='flex flex-col items-center bg-gray-800 text-white'>
+      <div className='container mt-12 flex flex-col items-center justify-center gap-4 px-4 py-8'>
+        {isAuthenticated && taskQuery.data ? (
+          <div className='w-full max-w-2xl'>
+            {taskQuery.data?.length === 0 ? (
+              <span>There are no tasks!</span>
+            ) : (
+              <div className='flex justify-center px-4 text-2xl'>
+                <div className='flex w-full flex-col gap-4'>
+                  {taskQuery.data?.map((t) => {
+                    return (
+                      <TaskCard
+                        key={t.id}
+                        task={t}
+                        onTaskDelete={() => deleteTaskMutation.mutate(t.id)}
+                        onTaskToggle={() => toggleTaskMutation.mutate(t.id)}
+                      />
+                    );
+                  })}
+                  <CreateTaskForm />
                 </div>
-              )}
-            </div>
-          ) : (
-            <p>Loading...</p>
-          )}
-        </div>
-      </main>
-    </>
+              </div>
+            )}
+          </div>
+        ) : (
+          <p>Loading...</p>
+        )}
+      </div>
+    </div>
   );
 };
 
 export default Dashboard;
+
+Dashboard.getLayout = function getLayout(page: ReactElement) {
+  return <Layout>{page}</Layout>;
+};
 
 const TaskCard: React.FC<{
   task: RouterOutputs['task']['all'][number];
