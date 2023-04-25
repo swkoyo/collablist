@@ -81,7 +81,9 @@ const Layout: React.FC<{ children: ReactNode }> = ({ children }) => {
         <Navbar openSidebar={openSidebar} />
 
         <main className='py-10'>
-          <div className='px-4 sm:px-6 lg:px-8'>{children}</div>
+          <div className='container flex flex-col items-center px-4 sm:px-6 lg:px-8'>
+            {children}
+          </div>
         </main>
       </div>
     </div>

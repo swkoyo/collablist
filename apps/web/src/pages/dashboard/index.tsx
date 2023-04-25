@@ -32,35 +32,33 @@ const Dashboard: NextPageWithLayout = () => {
   }, [isFetched, session, setIsAuthenticated, router]);
 
   return (
-    <div className='flex flex-col items-center bg-gray-800 text-white'>
-      <div className='container mt-12 flex flex-col items-center justify-center gap-4 px-4 py-8'>
-        {isAuthenticated && taskQuery.data ? (
-          <div className='w-full max-w-2xl'>
-            {taskQuery.data?.length === 0 ? (
-              <span>There are no tasks!</span>
-            ) : (
-              <div className='flex justify-center px-4 text-2xl'>
-                <div className='flex w-full flex-col gap-4'>
-                  {taskQuery.data?.map((t) => {
-                    return (
-                      <TaskCard
-                        key={t.id}
-                        task={t}
-                        onTaskDelete={() => deleteTaskMutation.mutate(t.id)}
-                        onTaskToggle={() => toggleTaskMutation.mutate(t.id)}
-                      />
-                    );
-                  })}
-                  <CreateTaskForm />
-                </div>
+    <>
+      {isAuthenticated && taskQuery.data ? (
+        <div className='w-full max-w-2xl'>
+          {taskQuery.data?.length === 0 ? (
+            <span>There are no tasks!</span>
+          ) : (
+            <div className='flex justify-center px-4 text-2xl'>
+              <div className='flex w-full flex-col gap-4'>
+                {taskQuery.data?.map((t) => {
+                  return (
+                    <TaskCard
+                      key={t.id}
+                      task={t}
+                      onTaskDelete={() => deleteTaskMutation.mutate(t.id)}
+                      onTaskToggle={() => toggleTaskMutation.mutate(t.id)}
+                    />
+                  );
+                })}
+                <CreateTaskForm />
               </div>
-            )}
-          </div>
-        ) : (
-          <p>Loading...</p>
-        )}
-      </div>
-    </div>
+            </div>
+          )}
+        </div>
+      ) : (
+        <p>Loading...</p>
+      )}
+    </>
   );
 };
 
