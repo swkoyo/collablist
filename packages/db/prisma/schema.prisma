@@ -21,6 +21,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
   tasks         Task[]
+  tags          Tag[]
 }
 
 model VerificationToken {
@@ -59,12 +60,32 @@ model Session {
 }
 
 model Task {
-  id          String   @id @default(cuid())
+  id          String        @id @default(cuid())
   title       String
-  description String?  @db.Text
-  isDone      Boolean  @default(false)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  description String?       @db.Text
+  isDone      Boolean       @default(false)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
   userId      String
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tags        TagsOnTasks[]
+}
+
+model Tag {
+  id     String        @id @default(cuid())
+  name   String
+  color  String?
+  userId String
+  user   User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tasks  TagsOnTasks[]
+}
+
+model TagsOnTasks {
+  id     String @id @default(cuid())
+  taskId String
+  tagId  String
+  task   Task   @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  tag    Tag    @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@unique([taskId, tagId])
 }
