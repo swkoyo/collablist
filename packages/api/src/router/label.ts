@@ -3,9 +3,9 @@ import { z } from 'zod';
 
 import { createTRPCRouter, protectedProcedure } from '../trpc';
 
-export const tagRouter = createTRPCRouter({
+export const labelRouter = createTRPCRouter({
   all: protectedProcedure.query(({ ctx }) => {
-    return ctx.prisma.tag.findMany({
+    return ctx.prisma.label.findMany({
       where: { userId: ctx.session.user.id },
       orderBy: { id: 'desc' },
     });
@@ -18,7 +18,7 @@ export const tagRouter = createTRPCRouter({
       }),
     )
     .mutation(({ ctx, input }) => {
-      return ctx.prisma.tag.create({
+      return ctx.prisma.label.create({
         data: {
           ...input,
           userId: ctx.session.user.id,
@@ -34,31 +34,31 @@ export const tagRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input: { id, name, color } }) => {
-      const tag = await ctx.prisma.tag.findFirst({
+      const label = await ctx.prisma.label.findFirst({
         where: { id },
         select: { id: true, userId: true },
       });
-      if (!tag) throw new TRPCError({ code: 'NOT_FOUND' });
-      if (tag.userId !== ctx.session.user.id)
+      if (!label) throw new TRPCError({ code: 'NOT_FOUND' });
+      if (label.userId !== ctx.session.user.id)
         throw new TRPCError({ code: 'UNAUTHORIZED' });
-      return ctx.prisma.tag.update({
-        where: { id: tag.id },
+      return ctx.prisma.label.update({
+        where: { id: label.id },
         data: { name, color },
       });
     }),
   delete: protectedProcedure
     .input(z.string().nonempty())
     .mutation(async ({ ctx, input }) => {
-      const tag = await ctx.prisma.tag.findFirst({
+      const label = await ctx.prisma.label.findFirst({
         where: { id: input },
         select: {
           id: true,
           userId: true,
         },
       });
-      if (!tag) throw new TRPCError({ code: 'NOT_FOUND' });
-      if (tag.userId !== ctx.session.user.id)
+      if (!label) throw new TRPCError({ code: 'NOT_FOUND' });
+      if (label.userId !== ctx.session.user.id)
         throw new TRPCError({ code: 'UNAUTHORIZED' });
-      return ctx.prisma.tag.delete({ where: { id: tag.id } });
+      return ctx.prisma.label.delete({ where: { id: label.id } });
     }),
 });
