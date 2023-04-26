@@ -5,7 +5,7 @@ import { TagIcon } from '@heroicons/react/24/outline';
 import { type RouterOutputs } from '@natodo/api';
 
 import { api } from '~/utils/api';
-import { classNames } from '~/utils/tailwind';
+import { classNames, getColorCode } from '~/utils/tailwind';
 
 const TaskForm: React.FC<{
   task?: RouterOutputs['task']['all'][number];
@@ -117,7 +117,9 @@ const TaskForm: React.FC<{
                   <Listbox.Button className='relative inline-flex items-center whitespace-nowrap rounded-full bg-gray-50 px-2 py-2 text-sm font-medium text-gray-500 hover:bg-gray-100 sm:px-3'>
                     <TagIcon
                       className={classNames(
-                        !selectedLabel ? 'text-gray-300' : 'text-gray-500',
+                        !selectedLabel
+                          ? 'text-gray-300'
+                          : `text-${getColorCode(selectedLabel.color)}`,
                         'h-5 w-5 flex-shrink-0 sm:-ml-1',
                       )}
                       aria-hidden='true'
