@@ -1,6 +1,8 @@
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 
+import { type Prisma } from '@natodo/db';
+
 import { createTRPCRouter, protectedProcedure } from '../trpc';
 
 export const taskRouter = createTRPCRouter({
@@ -30,13 +32,43 @@ export const taskRouter = createTRPCRouter({
       z.object({
         title: z.string().nonempty(),
         description: z.string().nullish(),
+        labelIds: z.array(z.string().nonempty()),
       }),
     )
-    .mutation(({ ctx, input }) => {
+    .mutation(async ({ ctx, input: { labelIds, ...input } }) => {
+      if (labelIds.length > 0) {
+        const labels = await ctx.prisma.label.findMany({
+          where: {
+            id: {
+              in: labelIds,
+            },
+          },
+        });
+        if (labelIds.length !== labels.length)
+          throw new TRPCError({ code: 'NOT_FOUND' });
+        if (labels.some((label) => label.userId !== ctx.session.user.id))
+          throw new TRPCError({ code: 'UNAUTHORIZED' });
+      }
       return ctx.prisma.task.create({
         data: {
           ...input,
           userId: ctx.session.user.id,
+          labels: {
+            create: labelIds.map((id) => ({
+              label: {
+                connect: {
+                  id,
+                },
+              },
+            })),
+          },
+        },
+        include: {
+          labels: {
+            include: {
+              label: true,
+            },
+          },
         },
       });
     }),
@@ -46,18 +78,64 @@ export const taskRouter = createTRPCRouter({
         id: z.string().nonempty(),
         title: z.string().nonempty(),
         description: z.string().nullable(),
+        labelIds: z.array(z.string().nonempty()),
       }),
     )
-    .mutation(async ({ ctx, input: { id, title, description } }) => {
-      const task = await ctx.prisma.task.findUnique({ where: { id } });
+    .mutation(async ({ ctx, input: { id, title, description, labelIds } }) => {
+      const task = await ctx.prisma.task.findUnique({
+        where: { id },
+        include: { labels: true },
+      });
       if (!task) throw new TRPCError({ code: 'NOT_FOUND' });
       if (task.userId !== ctx.session.user.id)
         throw new TRPCError({ code: 'UNAUTHORIZED' });
+
+      if (labelIds.length > 0) {
+        const labels = await ctx.prisma.label.findMany({
+          where: {
+            id: {
+              in: labelIds,
+            },
+          },
+        });
+        if (labelIds.length !== labels.length)
+          throw new TRPCError({ code: 'NOT_FOUND' });
+        if (labels.some((label) => label.userId !== ctx.session.user.id))
+          throw new TRPCError({ code: 'UNAUTHORIZED' });
+      }
+
+      if (
+        task.labels.length > labelIds.length ||
+        (task.labels.length > 0 && task.labels[0]?.labelId !== labelIds[0])
+      ) {
+        await ctx.prisma.labelsOnTasks.delete({
+          where: {
+            id: task.labels[0]?.id,
+          },
+        });
+      }
+
       return ctx.prisma.task.update({
         where: { id: task.id },
         data: {
           title,
           description,
+          labels: {
+            create: labelIds.map((id) => ({
+              label: {
+                connect: {
+                  id,
+                },
+              },
+            })),
+          },
+        },
+        include: {
+          labels: {
+            include: {
+              label: true,
+            },
+          },
         },
       });
     }),
@@ -74,6 +152,13 @@ export const taskRouter = createTRPCRouter({
       return ctx.prisma.task.update({
         where: { id: task.id },
         data: { isDone: !task.isDone },
+        include: {
+          labels: {
+            include: {
+              label: true,
+            },
+          },
+        },
       });
     }),
   delete: protectedProcedure

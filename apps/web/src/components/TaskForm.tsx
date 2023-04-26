@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
+import React, { Fragment, useState } from 'react';
+import { Listbox, Transition } from '@headlessui/react';
+import { TagIcon } from '@heroicons/react/24/outline';
 
 import { type RouterOutputs } from '@natodo/api';
 
 import { api } from '~/utils/api';
+import { classNames } from '~/utils/tailwind';
 
 const TaskForm: React.FC<{
   task?: RouterOutputs['task']['all'][number];
@@ -12,6 +15,10 @@ const TaskForm: React.FC<{
   const utils = api.useContext();
   const [title, setTitle] = useState(task?.title || '');
   const [description, setDescription] = useState(task?.description || '');
+  const [selectedLabel, setSelectedLabel] = useState<
+    RouterOutputs['task']['all'][number]['labels'][number]['label'] | null
+  >(task?.labels[0]?.label || null);
+  const labelQuery = api.label.all.useQuery();
 
   const { mutate: createTask, error: createTaskError } =
     api.task.create.useMutation({
@@ -32,9 +39,18 @@ const TaskForm: React.FC<{
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (task) {
-      updateTask({ id: task.id, title, description });
+      updateTask({
+        id: task.id,
+        title,
+        description,
+        labelIds: selectedLabel ? [selectedLabel.id] : [],
+      });
     } else {
-      createTask({ title, description });
+      createTask({
+        title,
+        description,
+        labelIds: selectedLabel ? [selectedLabel.id] : [],
+      });
     }
     if (handleSubmit) {
       handleSubmit();
@@ -44,6 +60,7 @@ const TaskForm: React.FC<{
   const resetInput = () => {
     setTitle(task?.title || '');
     setDescription(task?.description || '');
+    setSelectedLabel(task?.labels[0]?.label || null);
   };
 
   return (
@@ -86,71 +103,82 @@ const TaskForm: React.FC<{
         </div>
       </div>
       <div className='absolute inset-x-px bottom-0'>
-        {/* <div className='flex flex-nowrap justify-end space-x-2 px-2 py-2 sm:px-3'>
-                <Listbox
-                  as='div'
-                  className='flex-shrink-0'
-                  value={selectedLabel}
-                  onChange={setSelectedLabel}
-                >
-                  {({ open }) => (
-                    <>
-                      <Listbox.Label className='sr-only'>
-                        Add a label
-                      </Listbox.Label>
-                      <div className='relative'>
-                        <Listbox.Button className='relative inline-flex items-center whitespace-nowrap rounded-full bg-gray-50 px-2 py-2 text-sm font-medium text-gray-500 hover:bg-gray-100 sm:px-3'>
-                          <TagIcon
-                            className={classNames(
-                              !selectedLabel
-                                ? 'text-gray-300'
-                                : 'text-gray-500',
-                              'h-5 w-5 flex-shrink-0 sm:-ml-1',
-                            )}
-                            aria-hidden='true'
-                          />
-                          <span
-                            className={classNames(
-                              !selectedLabel ? '' : 'text-gray-900',
-                              'hidden truncate sm:ml-2 sm:block',
-                            )}
-                          >
-                            {selectedLabel ? selectedLabel.name : 'Label'}
+        <div className='flex flex-nowrap justify-end space-x-2 px-2 py-2 sm:px-3'>
+          <Listbox
+            as='div'
+            className='flex-shrink-0'
+            value={selectedLabel}
+            onChange={setSelectedLabel}
+          >
+            {({ open }) => (
+              <>
+                <Listbox.Label className='sr-only'>Add a label</Listbox.Label>
+                <div className='relative'>
+                  <Listbox.Button className='relative inline-flex items-center whitespace-nowrap rounded-full bg-gray-50 px-2 py-2 text-sm font-medium text-gray-500 hover:bg-gray-100 sm:px-3'>
+                    <TagIcon
+                      className={classNames(
+                        !selectedLabel ? 'text-gray-300' : 'text-gray-500',
+                        'h-5 w-5 flex-shrink-0 sm:-ml-1',
+                      )}
+                      aria-hidden='true'
+                    />
+                    <span
+                      className={classNames(
+                        !selectedLabel ? '' : 'text-gray-900',
+                        'hidden truncate sm:ml-2 sm:block',
+                      )}
+                    >
+                      {selectedLabel ? selectedLabel.name : 'Label'}
+                    </span>
+                  </Listbox.Button>
+                  <Transition
+                    show={open}
+                    as={Fragment}
+                    leave='transition ease-in duration-100'
+                    leaveFrom='opacity-100'
+                    leaveTo='opacity-0'
+                  >
+                    <Listbox.Options className='absolute right-0 z-10 mt-1 max-h-56 w-52 overflow-auto rounded-lg bg-white py-3 text-black shadow ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm'>
+                      <Listbox.Option
+                        className={({ active }) =>
+                          classNames(
+                            active ? 'bg-gray-100' : 'bg-white',
+                            'relative cursor-default select-none px-3 py-2',
+                          )
+                        }
+                        value={null}
+                      >
+                        <div className='flex items-center'>
+                          <span className='block truncate font-medium'>
+                            None
                           </span>
-                        </Listbox.Button>
-                        <Transition
-                          show={open}
-                          as={Fragment}
-                          leave='transition ease-in duration-100'
-                          leaveFrom='opacity-100'
-                          leaveTo='opacity-0'
+                        </div>
+                      </Listbox.Option>
+                      {labelQuery.data?.map((label) => (
+                        <Listbox.Option
+                          key={label.name}
+                          className={({ active }) =>
+                            classNames(
+                              active ? 'bg-gray-100' : 'bg-white',
+                              'relative cursor-default select-none px-3 py-2',
+                            )
+                          }
+                          value={label}
                         >
-                          <Listbox.Options className='absolute right-0 z-10 mt-1 max-h-56 w-52 overflow-auto rounded-lg bg-white py-3 text-black shadow ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm'>
-                            {labels.data?.map((label) => (
-                              <Listbox.Option
-                                key={label.name}
-                                className={({ active }) =>
-                                  classNames(
-                                    active ? 'bg-gray-100' : 'bg-white',
-                                    'relative cursor-default select-none px-3 py-2',
-                                  )
-                                }
-                                value={label}
-                              >
-                                <div className='flex items-center'>
-                                  <span className='block truncate font-medium'>
-                                    {label.name}
-                                  </span>
-                                </div>
-                              </Listbox.Option>
-                            ))}
-                          </Listbox.Options>
-                        </Transition>
-                      </div>
-                    </>
-                  )}
-                </Listbox>
-              </div> */}
+                          <div className='flex items-center'>
+                            <span className='block truncate font-medium'>
+                              {label.name}
+                            </span>
+                          </div>
+                        </Listbox.Option>
+                      ))}
+                    </Listbox.Options>
+                  </Transition>
+                </div>
+              </>
+            )}
+          </Listbox>
+        </div>
         <div className='flex items-center justify-end space-x-3 border-t border-gray-200 px-2 py-2 sm:px-3'>
           <button
             onClick={() => {
