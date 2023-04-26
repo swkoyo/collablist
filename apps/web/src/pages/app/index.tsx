@@ -15,8 +15,7 @@ const AppPage: NextPageWithLayout = () => {
   const router = useRouter();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const taskQuery = api.task.all.useQuery(
-    // { isDone: false },
-    undefined,
+    { isDone: false },
     {
       enabled: isAuthenticated,
     },
