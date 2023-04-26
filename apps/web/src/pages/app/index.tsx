@@ -24,9 +24,6 @@ const AppPage: NextPageWithLayout = () => {
   const deleteTaskMutation = api.task.delete.useMutation({
     onSettled: () => taskQuery.refetch(),
   });
-  const toggleTaskMutation = api.task.toggle.useMutation({
-    onSettled: () => taskQuery.refetch(),
-  });
 
   useEffect(() => {
     if (isFetched) {
@@ -59,7 +56,7 @@ const AppPage: NextPageWithLayout = () => {
                           name={t.title}
                           type='checkbox'
                           checked={t.isDone}
-                          onChange={() => toggleTaskMutation.mutate(t.id)}
+                          onChange={() => deleteTaskMutation.mutate(t.id)}
                           className='h-4 w-4 rounded border-gray-300 text-pink-400 focus:ring-pink-500'
                         />
                       </div>
