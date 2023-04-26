@@ -56,7 +56,10 @@ const LabelForm: React.FC<{
   };
 
   return (
-    <form className='w-full space-y-4 rounded-lg border border-gray-300 px-4 py-4 shadow-sm'>
+    <form
+      onSubmit={handleFormSubmit}
+      className='w-full space-y-4 rounded-lg border border-gray-300 px-4 py-4 shadow-sm'
+    >
       <div>
         <label
           htmlFor='label'

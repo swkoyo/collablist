@@ -12,7 +12,7 @@ import { type NextPageWithLayout } from '../_app';
 const LabelsPage: NextPageWithLayout = () => {
   const labelsQuery = api.label.all.useQuery();
 
-  const deleteLableMutation = api.label.delete.useMutation({
+  const deleteLabelMutation = api.label.delete.useMutation({
     onSettled: () => labelsQuery.refetch(),
   });
 
@@ -86,7 +86,7 @@ const LabelsPage: NextPageWithLayout = () => {
                           <Menu.Item>
                             {({ active }) => (
                               <button
-                                onClick={() => deleteLableMutation.mutate(l.id)}
+                                onClick={() => deleteLabelMutation.mutate(l.id)}
                                 className={classNames(
                                   active ? 'bg-gray-50' : '',
                                   'block px-3 py-1 text-sm leading-6 text-gray-900',
