@@ -5,6 +5,7 @@ import type { Session } from 'next-auth';
 import { SessionProvider } from 'next-auth/react';
 
 import { api } from '~/utils/api';
+import PrivateRoute from '~/components/PrivateRoute';
 import '../styles/globals.css';
 
 interface AppPageProps {
@@ -25,8 +26,13 @@ const MyApp: AppType<AppPageProps> = ({
 }: AppPropsWithLayout) => {
   const getLayout = Component.getLayout ?? ((page) => page);
   const layout = getLayout(<Component {...pageProps} />);
+  const protectedRoutes = ['/app', '/app/labels'];
 
-  return <SessionProvider session={session}>{layout}</SessionProvider>;
+  return (
+    <SessionProvider session={session}>
+      <PrivateRoute protectedRoutes={protectedRoutes}>{layout}</PrivateRoute>
+    </SessionProvider>
+  );
 };
 
 export default api.withTRPC(MyApp);

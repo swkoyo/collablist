@@ -4,13 +4,22 @@ import { useRouter } from 'next/router';
 import { signIn } from 'next-auth/react';
 
 import { api } from '~/utils/api';
+import FullPageLoader from '~/components/FullPageLoader';
 
 const Home: NextPage = () => {
   const router = useRouter();
-  const { data: session } = api.auth.getSession.useQuery();
+  const {
+    data: session,
+    isLoading,
+    isFetched,
+  } = api.auth.getSession.useQuery();
 
   if (session?.user) {
     void router.push('/app');
+  }
+
+  if (isLoading || (isFetched && session?.user)) {
+    return <FullPageLoader />;
   }
 
   return (

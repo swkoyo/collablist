@@ -1,5 +1,4 @@
-import { Fragment, useEffect, useState, type ReactElement } from 'react';
-import { useRouter } from 'next/router';
+import { Fragment, type ReactElement } from 'react';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { PlusCircleIcon } from '@heroicons/react/20/solid';
 import { EllipsisVerticalIcon } from '@heroicons/react/24/outline';
@@ -11,32 +10,14 @@ import TaskForm from '~/components/TaskForm';
 import { type NextPageWithLayout } from '../_app';
 
 const AppPage: NextPageWithLayout = () => {
-  const { data: session, isFetched } = api.auth.getSession.useQuery();
-  const router = useRouter();
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const taskQuery = api.task.all.useQuery(
-    { isDone: false },
-    {
-      enabled: isAuthenticated,
-    },
-  );
+  const taskQuery = api.task.all.useQuery({ isDone: false });
   const deleteTaskMutation = api.task.delete.useMutation({
     onSettled: () => taskQuery.refetch(),
   });
 
-  useEffect(() => {
-    if (isFetched) {
-      if (!session || !session.user) {
-        void router.push('/');
-      } else {
-        setIsAuthenticated(true);
-      }
-    }
-  }, [isFetched, session, setIsAuthenticated, router]);
-
   return (
     <>
-      {isAuthenticated && taskQuery.data ? (
+      {taskQuery.data ? (
         <div className='w-full'>
           <ul role='list' className='divide-y divide-gray-100'>
             {taskQuery.data?.map((t) => (
