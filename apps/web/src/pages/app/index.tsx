@@ -1,19 +1,26 @@
-import React, { useEffect, useState, type ReactElement } from 'react';
+import { Fragment, useEffect, useState, type ReactElement } from 'react';
 import { useRouter } from 'next/router';
-import { Disclosure } from '@headlessui/react';
+import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { PlusCircleIcon } from '@heroicons/react/20/solid';
+import { EllipsisVerticalIcon } from '@heroicons/react/24/outline';
 
-import { api, type RouterOutputs } from '~/utils/api';
+import { api } from '~/utils/api';
+import { classNames, getColorCode } from '~/utils/tailwind';
 import Layout from '~/components/Layout';
+import TaskForm from '~/components/TaskForm';
 import { type NextPageWithLayout } from '../_app';
 
 const App: NextPageWithLayout = () => {
   const { data: session, isFetched } = api.auth.getSession.useQuery();
   const router = useRouter();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const taskQuery = api.task.all.useQuery(undefined, {
-    enabled: isAuthenticated,
-  });
+  const taskQuery = api.task.all.useQuery(
+    // { isDone: false },
+    undefined,
+    {
+      enabled: isAuthenticated,
+    },
+  );
   const deleteTaskMutation = api.task.delete.useMutation({
     onSettled: () => taskQuery.refetch(),
   });
@@ -38,21 +45,146 @@ const App: NextPageWithLayout = () => {
           {taskQuery.data?.length === 0 ? (
             <span>There are no tasks!</span>
           ) : (
-            <div className='flex justify-center px-4 text-2xl'>
-              <div className='flex w-full flex-col gap-4'>
-                {taskQuery.data?.map((t) => {
-                  return (
-                    <TaskCard
-                      key={t.id}
-                      task={t}
-                      onTaskDelete={() => deleteTaskMutation.mutate(t.id)}
-                      onTaskToggle={() => toggleTaskMutation.mutate(t.id)}
+            <ul role='list' className='divide-y divide-gray-100'>
+              {taskQuery.data?.map((t) => (
+                <li key={t.id} className='flex gap-x-6 py-5'>
+                  <Disclosure>
+                    {({ open }) => (
+                      <>
+                        <div
+                          className={classNames(
+                            open ? 'hidden' : '',
+                            'flex items-center',
+                          )}
+                        >
+                          <input
+                            id={t.title}
+                            name={t.title}
+                            type='checkbox'
+                            checked={t.isDone}
+                            onChange={() => toggleTaskMutation.mutate(t.id)}
+                            className='h-4 w-4 rounded border-gray-300 text-pink-400 focus:ring-pink-500'
+                          />
+                        </div>
+                        <div
+                          className={classNames(
+                            open ? 'hidden' : '',
+                            'min-w-0 flex-1',
+                          )}
+                        >
+                          <div className='flex items-start gap-x-3'>
+                            <p className='text-sm font-semibold leading-6 text-gray-900'>
+                              {t.title}
+                            </p>
+                            {t.labels.map((l) => (
+                              <p
+                                key={l.id}
+                                className={classNames(
+                                  `ring-${getColorCode(
+                                    l.label.color,
+                                  )} text-${getColorCode(l.label.color)}`,
+                                  'mt-0.5 whitespace-nowrap rounded-md px-1.5 py-0.5 text-xs font-medium ring-1 ring-inset',
+                                )}
+                              >
+                                {l.label.name}
+                              </p>
+                            ))}
+                          </div>
+                          <div className='mt-1 flex items-center gap-x-2 text-xs leading-5 text-gray-500'>
+                            <p className='whitespace-nowrap'>{t.description}</p>
+                          </div>
+                        </div>
+                        <div
+                          className={classNames(
+                            open ? 'hidden' : '',
+                            'flex flex-none items-center gap-x-4 ui-open:hidden',
+                          )}
+                        >
+                          <Menu as='div' className='relative flex-none'>
+                            <Menu.Button className='-m-2.5 block p-2.5 text-gray-500 hover:text-gray-900'>
+                              <span className='sr-only'>Open options</span>
+                              <EllipsisVerticalIcon
+                                className='h-5 w-5'
+                                aria-hidden='true'
+                              />
+                            </Menu.Button>
+                            <Transition
+                              as={Fragment}
+                              enter='transition ease-out duration-100'
+                              enterFrom='transform opacity-0 scale-95'
+                              enterTo='transform opacity-100 scale-100'
+                              leave='transition ease-in duration-75'
+                              leaveFrom='transform opacity-100 scale-100'
+                              leaveTo='transform opacity-0 scale-95'
+                            >
+                              <Menu.Items className='absolute right-0 z-10 mt-2 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none'>
+                                <Menu.Item>
+                                  {({ active }) => (
+                                    <Disclosure.Button
+                                      as='button'
+                                      className={classNames(
+                                        active ? 'bg-gray-50' : '',
+                                        'block px-3 py-1 text-sm leading-6 text-gray-900',
+                                      )}
+                                    >
+                                      Edit
+                                      <span className='sr-only'>
+                                        , {t.title}
+                                      </span>
+                                    </Disclosure.Button>
+                                  )}
+                                </Menu.Item>
+                                <Menu.Item>
+                                  {({ active }) => (
+                                    <button
+                                      onClick={() =>
+                                        deleteTaskMutation.mutate(t.id)
+                                      }
+                                      className={classNames(
+                                        active ? 'bg-gray-50' : '',
+                                        'block px-3 py-1 text-sm leading-6 text-gray-900',
+                                      )}
+                                    >
+                                      Delete
+                                      <span className='sr-only'>
+                                        , {t.title}
+                                      </span>
+                                    </button>
+                                  )}
+                                </Menu.Item>
+                              </Menu.Items>
+                            </Transition>
+                          </Menu>
+                        </div>
+                        <Disclosure.Panel className='w-full'>
+                          {({ close }) => (
+                            <TaskForm
+                              handleSubmit={close}
+                              handleCancel={close}
+                              task={t}
+                            />
+                          )}
+                        </Disclosure.Panel>
+                      </>
+                    )}
+                  </Disclosure>
+                </li>
+              ))}
+              <li className='flex gap-x-6 py-5'>
+                <Disclosure>
+                  <Disclosure.Button className='inline-flex items-center justify-center gap-x-1.5 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 ui-open:hidden'>
+                    <PlusCircleIcon
+                      className='-ml-0.5 h-5 w-5'
+                      aria-hidden='true'
                     />
-                  );
-                })}
-                <CreateTaskForm />
-              </div>
-            </div>
+                    Add task
+                  </Disclosure.Button>
+                  <Disclosure.Panel className='w-full'>
+                    {({ close }) => <TaskForm handleCancel={close} />}
+                  </Disclosure.Panel>
+                </Disclosure>
+              </li>
+            </ul>
           )}
         </div>
       ) : (
@@ -66,210 +198,4 @@ export default App;
 
 App.getLayout = function getLayout(page: ReactElement) {
   return <Layout>{page}</Layout>;
-};
-
-const TaskCard: React.FC<{
-  task: RouterOutputs['task']['all'][number];
-  onTaskDelete?: () => void;
-  onTaskToggle?: () => void;
-}> = ({ task, onTaskDelete, onTaskToggle }) => {
-  return (
-    <div className='relative flex items-start'>
-      <div className='flex h-6 items-center'>
-        <input
-          id={task.title}
-          name={task.title}
-          type='checkbox'
-          checked={task.isDone}
-          onChange={onTaskToggle}
-          className='h-4 w-4 rounded border-gray-300 text-pink-400 focus:ring-pink-500'
-        />
-      </div>
-      <div className='ml-3 flex-1 text-sm leading-6'>
-        <label htmlFor={task.title} className='font-medium text-pink-400'>
-          {task.title}
-        </label>
-        <p id={`${task.title}-description`} className='text-pink-400'>
-          {task.description}
-        </p>
-      </div>
-      <div className='flex h-6 items-center'>
-        <span
-          className='cursor-pointer text-sm font-bold uppercase text-pink-400'
-          onClick={onTaskDelete}
-        >
-          Delete
-        </span>
-      </div>
-    </div>
-  );
-};
-
-const CreateTaskForm: React.FC = () => {
-  const utils = api.useContext();
-  // const labels = api.label.all.useQuery();
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  // const [selectedLabel, setSelectedLabel] = useState<Label | null>(null);
-
-  const { mutate, error } = api.task.create.useMutation({
-    async onSuccess() {
-      resetInput();
-      await utils.task.all.invalidate();
-    },
-  });
-
-  const resetInput = () => {
-    setTitle('');
-    setDescription('');
-  };
-
-  return (
-    <Disclosure>
-      <Disclosure.Button className='inline-flex items-center justify-center gap-x-1.5 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 ui-open:hidden'>
-        <PlusCircleIcon className='-ml-0.5 h-5 w-5' aria-hidden='true' />
-        Add task
-      </Disclosure.Button>
-      <Disclosure.Panel
-        as='form'
-        className='relative'
-        onSubmit={(e) => {
-          e.preventDefault();
-          mutate({ title, description });
-        }}
-      >
-        {({ close }) => (
-          <>
-            <div className='overflow-hidden rounded-lg border border-gray-300 shadow-sm focus-within:border-indigo-500 focus-within:ring-1 focus-within:ring-indigo-500'>
-              <label htmlFor='title' className='sr-only'>
-                Task
-              </label>
-              <input
-                type='text'
-                name='task'
-                id='task'
-                className='block w-full border-0 pt-2.5 text-lg font-medium text-gray-900 placeholder:text-gray-400 focus:ring-0'
-                placeholder='Task'
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-              />
-              <label htmlFor='description' className='sr-only'>
-                Description
-              </label>
-              <textarea
-                rows={2}
-                name='description'
-                id='description'
-                className='block w-full resize-none border-0 py-0 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6'
-                placeholder='Description'
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-              />
-              <div aria-hidden='true' className='bg-white'>
-                <div className='py-2'>
-                  <div className='h-9' />
-                </div>
-                <div className='h-px' />
-                <div className='py-2'>
-                  <div className='py-px'>
-                    <div className='h-9' />
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className='absolute inset-x-px bottom-0'>
-              {/* <div className='flex flex-nowrap justify-end space-x-2 px-2 py-2 sm:px-3'>
-                <Listbox
-                  as='div'
-                  className='flex-shrink-0'
-                  value={selectedLabel}
-                  onChange={setSelectedLabel}
-                >
-                  {({ open }) => (
-                    <>
-                      <Listbox.Label className='sr-only'>
-                        Add a label
-                      </Listbox.Label>
-                      <div className='relative'>
-                        <Listbox.Button className='relative inline-flex items-center whitespace-nowrap rounded-full bg-gray-50 px-2 py-2 text-sm font-medium text-gray-500 hover:bg-gray-100 sm:px-3'>
-                          <TagIcon
-                            className={classNames(
-                              !selectedLabel
-                                ? 'text-gray-300'
-                                : 'text-gray-500',
-                              'h-5 w-5 flex-shrink-0 sm:-ml-1',
-                            )}
-                            aria-hidden='true'
-                          />
-                          <span
-                            className={classNames(
-                              !selectedLabel ? '' : 'text-gray-900',
-                              'hidden truncate sm:ml-2 sm:block',
-                            )}
-                          >
-                            {selectedLabel ? selectedLabel.name : 'Label'}
-                          </span>
-                        </Listbox.Button>
-                        <Transition
-                          show={open}
-                          as={Fragment}
-                          leave='transition ease-in duration-100'
-                          leaveFrom='opacity-100'
-                          leaveTo='opacity-0'
-                        >
-                          <Listbox.Options className='absolute right-0 z-10 mt-1 max-h-56 w-52 overflow-auto rounded-lg bg-white py-3 text-black shadow ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm'>
-                            {labels.data?.map((label) => (
-                              <Listbox.Option
-                                key={label.name}
-                                className={({ active }) =>
-                                  classNames(
-                                    active ? 'bg-gray-100' : 'bg-white',
-                                    'relative cursor-default select-none px-3 py-2',
-                                  )
-                                }
-                                value={label}
-                              >
-                                <div className='flex items-center'>
-                                  <span className='block truncate font-medium'>
-                                    {label.name}
-                                  </span>
-                                </div>
-                              </Listbox.Option>
-                            ))}
-                          </Listbox.Options>
-                        </Transition>
-                      </div>
-                    </>
-                  )}
-                </Listbox>
-              </div> */}
-              <div className='flex items-center justify-end space-x-3 border-t border-gray-200 px-2 py-2 sm:px-3'>
-                <Disclosure.Button
-                  as='button'
-                  onClick={() => {
-                    resetInput();
-                    close;
-                  }}
-                  className='inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
-                >
-                  Cancel
-                </Disclosure.Button>
-                <button
-                  disabled={!title}
-                  type='submit'
-                  className={`focus-visible:outline-offset-3 inline-flex items-center rounded-md px-3 py-2 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-600 ${
-                    !title
-                      ? 'cursor-not-allowed bg-indigo-300'
-                      : 'bg-indigo-600 hover:bg-indigo-500'
-                  }`}
-                >
-                  Create
-                </button>
-              </div>
-            </div>
-          </>
-        )}
-      </Disclosure.Panel>
-    </Disclosure>
-  );
 };

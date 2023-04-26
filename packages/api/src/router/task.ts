@@ -4,12 +4,27 @@ import { z } from 'zod';
 import { createTRPCRouter, protectedProcedure } from '../trpc';
 
 export const taskRouter = createTRPCRouter({
-  all: protectedProcedure.query(({ ctx }) => {
-    return ctx.prisma.task.findMany({
-      where: { userId: ctx.session.user.id },
-      orderBy: { id: 'desc' },
-    });
-  }),
+  all: protectedProcedure
+    .input(
+      z
+        .object({
+          isDone: z.boolean().optional(),
+        })
+        .optional(),
+    )
+    .query(({ ctx, input }) => {
+      return ctx.prisma.task.findMany({
+        where: { userId: ctx.session.user.id, isDone: input?.isDone },
+        include: {
+          labels: {
+            include: {
+              label: true,
+            },
+          },
+        },
+        orderBy: { id: 'asc' },
+      });
+    }),
   create: protectedProcedure
     .input(
       z.object({
@@ -25,10 +40,31 @@ export const taskRouter = createTRPCRouter({
         },
       });
     }),
+  update: protectedProcedure
+    .input(
+      z.object({
+        id: z.string().nonempty(),
+        title: z.string().nonempty(),
+        description: z.string().nullable(),
+      }),
+    )
+    .mutation(async ({ ctx, input: { id, title, description } }) => {
+      const task = await ctx.prisma.task.findUnique({ where: { id } });
+      if (!task) throw new TRPCError({ code: 'NOT_FOUND' });
+      if (task.userId !== ctx.session.user.id)
+        throw new TRPCError({ code: 'UNAUTHORIZED' });
+      return ctx.prisma.task.update({
+        where: { id: task.id },
+        data: {
+          title,
+          description,
+        },
+      });
+    }),
   toggle: protectedProcedure
     .input(z.string().nonempty())
     .mutation(async ({ ctx, input }) => {
-      const task = await ctx.prisma.task.findFirst({
+      const task = await ctx.prisma.task.findUnique({
         where: { id: input },
         select: { id: true, userId: true, isDone: true },
       });
@@ -43,7 +79,7 @@ export const taskRouter = createTRPCRouter({
   delete: protectedProcedure
     .input(z.string().nonempty())
     .mutation(async ({ ctx, input }) => {
-      const task = await ctx.prisma.task.findFirst({
+      const task = await ctx.prisma.task.findUnique({
         where: { id: input },
         select: {
           id: true,
