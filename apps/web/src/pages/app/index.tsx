@@ -10,7 +10,7 @@ import Layout from '~/components/Layout';
 import TaskForm from '~/components/TaskForm';
 import { type NextPageWithLayout } from '../_app';
 
-const App: NextPageWithLayout = () => {
+const AppPage: NextPageWithLayout = () => {
   const { data: session, isFetched } = api.auth.getSession.useQuery();
   const router = useRouter();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -194,8 +194,8 @@ const App: NextPageWithLayout = () => {
   );
 };
 
-export default App;
+export default AppPage;
 
-App.getLayout = function getLayout(page: ReactElement) {
+AppPage.getLayout = function getLayout(page: ReactElement) {
   return <Layout>{page}</Layout>;
 };
