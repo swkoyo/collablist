@@ -13,9 +13,9 @@ const Sidebar = () => {
   const router = useRouter();
 
   return (
-    <div className='flex grow flex-col gap-y-5 overflow-y-auto bg-indigo-600 px-6 pb-4'>
-      <div className='flex h-16 shrink-0 items-center text-2xl font-bold text-white'>
-        <span>na</span>todo
+    <div className='flex grow flex-col gap-y-5 overflow-y-auto bg-zinc-900 px-6 pb-4'>
+      <div className='flex h-16 shrink-0 items-center text-2xl font-bold'>
+        <span className='text-teal-200'>na</span>todo
       </div>
       <nav className='flex flex-1 flex-col'>
         <ul role='list' className='flex flex-1 flex-col gap-y-7'>
@@ -27,16 +27,16 @@ const Sidebar = () => {
                     href={item.href}
                     className={classNames(
                       router.pathname === item.href
-                        ? 'bg-indigo-700 text-white'
-                        : 'text-indigo-200 hover:bg-indigo-700 hover:text-white',
-                      'group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6',
+                        ? 'bg-teal-700'
+                        : 'hover:bg-teal-900/50',
+                      'group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-white',
                     )}
                   >
                     <item.icon
                       className={classNames(
                         router.pathname === item.href
                           ? 'text-white'
-                          : 'text-indigo-200 group-hover:text-white',
+                          : 'text-teal-200 group-hover:text-white',
                         'h-6 w-6 shrink-0',
                       )}
                       aria-hidden='true'

@@ -69,13 +69,13 @@ const LabelsPage: NextPageWithLayout = () => {
                         leaveFrom='transform opacity-100 scale-100'
                         leaveTo='transform opacity-0 scale-95'
                       >
-                        <Menu.Items className='absolute right-0 z-10 mt-2 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none'>
+                        <Menu.Items className='absolute right-0 z-10 mt-2 w-32 origin-top-right rounded-md bg-zinc-950 py-2 shadow-lg ring-1 ring-gray-300/5 focus:outline-none'>
                           <Menu.Item>
                             {({ active }) => (
                               <Disclosure.Button
                                 className={classNames(
-                                  active ? 'bg-gray-50' : '',
-                                  'block px-3 py-1 text-sm leading-6 text-gray-900',
+                                  active ? 'bg-zinc-500' : '',
+                                  'block w-full px-3 py-1 text-start text-sm leading-6',
                                 )}
                               >
                                 Edit
@@ -88,8 +88,8 @@ const LabelsPage: NextPageWithLayout = () => {
                               <button
                                 onClick={() => deleteLabelMutation.mutate(l.id)}
                                 className={classNames(
-                                  active ? 'bg-gray-50' : '',
-                                  'block px-3 py-1 text-sm leading-6 text-gray-900',
+                                  active ? 'bg-zinc-500' : '',
+                                  'block w-full px-3 py-1 text-start text-sm leading-6',
                                 )}
                               >
                                 Delete
@@ -117,7 +117,7 @@ const LabelsPage: NextPageWithLayout = () => {
         ))}
         <li className='flex gap-x-6 py-5'>
           <Disclosure>
-            <Disclosure.Button className='inline-flex items-center justify-center gap-x-1.5 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 ui-open:hidden'>
+            <Disclosure.Button className='inline-flex items-center justify-center gap-x-1.5 rounded-md bg-teal-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600 ui-open:hidden'>
               <PlusCircleIcon className='-ml-0.5 h-5 w-5' aria-hidden='true' />
               Add task
             </Disclosure.Button>

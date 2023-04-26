@@ -61,17 +61,14 @@ const LabelForm: React.FC<{
       className='w-full space-y-4 rounded-lg border border-gray-300 px-4 py-4 shadow-sm'
     >
       <div>
-        <label
-          htmlFor='label'
-          className='block text-sm font-medium leading-6 text-gray-900'
-        >
+        <label htmlFor='label' className='block text-sm font-medium leading-6'>
           Label
         </label>
         <div className='mt-2'>
           <input
             type='text'
             name='label'
-            className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
+            className='block w-full rounded-md border-0 bg-zinc-950 py-1.5  shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-teal-600 sm:text-sm sm:leading-6'
             placeholder='Label'
             value={labelName}
             onChange={(e) => setLabelName(e.target.value)}
@@ -81,11 +78,11 @@ const LabelForm: React.FC<{
       <Listbox value={labelColor} onChange={setLabelColor}>
         {({ open }) => (
           <>
-            <Listbox.Label className='block text-sm font-medium leading-6 text-gray-900'>
+            <Listbox.Label className='block text-sm font-medium leading-6'>
               Color
             </Listbox.Label>
             <div className='relative mt-2'>
-              <Listbox.Button className='relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6'>
+              <Listbox.Button className='relative w-full cursor-default rounded-md bg-zinc-950 py-1.5 pl-3 pr-10 text-left text-white shadow-sm ring-1 ring-inset ring-zinc-300 focus:outline-none focus:ring-2 focus:ring-teal-600 sm:text-sm sm:leading-6'>
                 <span className='flex items-center'>
                   <span
                     aria-label={labelColor}
@@ -111,13 +108,13 @@ const LabelForm: React.FC<{
                 leaveFrom='opacity-100'
                 leaveTo='opacity-0'
               >
-                <Listbox.Options className='absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm'>
+                <Listbox.Options className='absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-zinc-950 py-1 text-base shadow-lg ring-1 ring-zinc-300 ring-opacity-5 focus:outline-none sm:text-sm'>
                   {Object.keys(LABEL_COLORS).map((color) => (
                     <Listbox.Option
                       key={color}
                       className={({ active }) =>
                         classNames(
-                          active ? 'bg-gray-400' : '',
+                          active ? 'bg-zinc-600' : '',
                           'relative cursor-default select-none py-2 pl-3 pr-9',
                         )
                       }
@@ -146,7 +143,7 @@ const LabelForm: React.FC<{
                           {selected ? (
                             <span
                               className={classNames(
-                                active ? 'text-white' : 'text-indigo-600',
+                                active ? 'text-white' : 'text-teal-600',
                                 'absolute inset-y-0 right-0 flex items-center pr-4',
                               )}
                             >
@@ -173,17 +170,17 @@ const LabelForm: React.FC<{
             resetInput();
             handleCancel();
           }}
-          className='inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
+          className='inline-flex items-center rounded-md bg-zinc-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-zinc-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-600'
         >
           Cancel
         </button>
         <button
           disabled={!labelName}
           type='submit'
-          className={`focus-visible:outline-offset-3 inline-flex items-center rounded-md px-3 py-2 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-600 ${
+          className={`focus-visible:outline-offset-3 inline-flex items-center rounded-md px-3 py-2 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-teal-600 ${
             !labelName
-              ? 'cursor-not-allowed bg-indigo-300'
-              : 'bg-indigo-600 hover:bg-indigo-500'
+              ? 'cursor-not-allowed bg-zinc-200'
+              : 'bg-teal-600 hover:bg-teal-500'
           }`}
         >
           {label ? 'Update' : 'Create'}

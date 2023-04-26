@@ -65,7 +65,7 @@ const TaskForm: React.FC<{
 
   return (
     <form className='relative' onSubmit={handleFormSubmit}>
-      <div className='overflow-hidden rounded-lg border border-gray-300 shadow-sm focus-within:border-indigo-500 focus-within:ring-1 focus-within:ring-indigo-500'>
+      <div className='overflow-hidden rounded-lg border border-zinc-300 shadow-sm focus-within:border-teal-500 focus-within:ring-1 focus-within:ring-teal-500'>
         <label htmlFor='title' className='sr-only'>
           Task
         </label>
@@ -73,7 +73,7 @@ const TaskForm: React.FC<{
           type='text'
           name='task'
           id='task'
-          className='block w-full border-0 pt-2.5 text-lg font-medium text-gray-900 placeholder:text-gray-400 focus:ring-0'
+          className='block w-full border-0 bg-zinc-950 pt-2.5 text-lg font-medium text-white placeholder:text-gray-400 focus:ring-0'
           placeholder='Task'
           value={title}
           onChange={(e) => setTitle(e.target.value)}
@@ -85,12 +85,12 @@ const TaskForm: React.FC<{
           rows={2}
           name='description'
           id='description'
-          className='block w-full resize-none border-0 py-0 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6'
+          className='block w-full resize-none border-0 bg-zinc-950 py-0 text-white placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6'
           placeholder='Description'
           value={description}
           onChange={(e) => setDescription(e.target.value)}
         />
-        <div aria-hidden='true' className='bg-white'>
+        <div aria-hidden='true' className='bg-zinc-950'>
           <div className='py-2'>
             <div className='h-9' />
           </div>
@@ -114,7 +114,7 @@ const TaskForm: React.FC<{
               <>
                 <Listbox.Label className='sr-only'>Add a label</Listbox.Label>
                 <div className='relative'>
-                  <Listbox.Button className='relative inline-flex items-center whitespace-nowrap rounded-full bg-gray-50 px-2 py-2 text-sm font-medium text-gray-500 hover:bg-gray-100 sm:px-3'>
+                  <Listbox.Button className='relative inline-flex items-center whitespace-nowrap rounded-full bg-zinc-600 px-2 py-2 text-sm font-medium text-zinc-200 hover:bg-zinc-500 sm:px-3'>
                     <TagIcon
                       className={classNames(
                         !selectedLabel
@@ -126,7 +126,7 @@ const TaskForm: React.FC<{
                     />
                     <span
                       className={classNames(
-                        !selectedLabel ? '' : 'text-gray-900',
+                        !selectedLabel ? 'text-zinc-300' : 'text-white',
                         'hidden truncate sm:ml-2 sm:block',
                       )}
                     >
@@ -140,12 +140,12 @@ const TaskForm: React.FC<{
                     leaveFrom='opacity-100'
                     leaveTo='opacity-0'
                   >
-                    <Listbox.Options className='absolute right-0 z-10 mt-1 max-h-56 w-52 overflow-auto rounded-lg bg-white py-3 text-black shadow ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm'>
+                    <Listbox.Options className='absolute right-0 z-10 mt-1 max-h-56 w-52 overflow-auto rounded-lg bg-zinc-950 py-3 shadow ring-1 ring-zinc-100 ring-opacity-5 focus:outline-none sm:text-sm'>
                       <Listbox.Option
                         className={({ active }) =>
                           classNames(
-                            active ? 'bg-gray-100' : 'bg-white',
-                            'relative cursor-default select-none px-3 py-2 text-gray-300',
+                            active ? 'bg-zinc-800' : 'bg-zinc-950',
+                            'relative cursor-default select-none px-3 py-2 text-zinc-300',
                           )
                         }
                         value={null}
@@ -161,7 +161,7 @@ const TaskForm: React.FC<{
                           key={label.name}
                           className={({ active }) =>
                             classNames(
-                              active ? 'bg-gray-100' : 'bg-white',
+                              active ? 'bg-zinc-800' : 'bg-zinc-950',
                               'relative cursor-default select-none px-3 py-2',
                             )
                           }
@@ -193,17 +193,17 @@ const TaskForm: React.FC<{
               resetInput();
               handleCancel();
             }}
-            className='inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
+            className='inline-flex items-center rounded-md bg-zinc-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-zinc-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-600'
           >
             Cancel
           </button>
           <button
             disabled={!title}
             type='submit'
-            className={`focus-visible:outline-offset-3 inline-flex items-center rounded-md px-3 py-2 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-600 ${
+            className={`focus-visible:outline-offset-3 inline-flex items-center rounded-md px-3 py-2 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-teal-600 ${
               !title
-                ? 'cursor-not-allowed bg-indigo-300'
-                : 'bg-indigo-600 hover:bg-indigo-500'
+                ? 'cursor-not-allowed bg-zinc-200'
+                : 'bg-teal-600 hover:bg-teal-500'
             }`}
           >
             {task ? 'Update' : 'Create'}

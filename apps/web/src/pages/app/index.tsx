@@ -19,7 +19,7 @@ const AppPage: NextPageWithLayout = () => {
     <>
       {taskQuery.data ? (
         <div className='w-full'>
-          <ul role='list' className='divide-y divide-gray-100'>
+          <ul role='list' className='divide-y divide-gray-500'>
             {taskQuery.data?.map((t) => (
               <li key={t.id} className='flex gap-x-6 py-5'>
                 <Disclosure>
@@ -37,7 +37,7 @@ const AppPage: NextPageWithLayout = () => {
                           type='checkbox'
                           checked={t.isDone}
                           onChange={() => deleteTaskMutation.mutate(t.id)}
-                          className='h-4 w-4 rounded border-gray-300 text-pink-400 focus:ring-pink-500'
+                          className='h-4 w-4 rounded border-gray-300 text-teal-400 focus:ring-teal-500'
                         />
                       </div>
                       <div
@@ -47,7 +47,7 @@ const AppPage: NextPageWithLayout = () => {
                         )}
                       >
                         <div className='flex items-start gap-x-3'>
-                          <p className='text-sm font-semibold leading-6 text-gray-900'>
+                          <p className='text-sm font-semibold leading-6'>
                             {t.title}
                           </p>
                           {t.labels.map((l) => (
@@ -75,7 +75,7 @@ const AppPage: NextPageWithLayout = () => {
                         )}
                       >
                         <Menu as='div' className='relative flex-none'>
-                          <Menu.Button className='-m-2.5 block p-2.5 text-gray-500 hover:text-gray-900'>
+                          <Menu.Button className='-m-2.5 block p-2.5 text-gray-500 hover:text-gray-400'>
                             <span className='sr-only'>Open options</span>
                             <EllipsisVerticalIcon
                               className='h-5 w-5'
@@ -91,14 +91,14 @@ const AppPage: NextPageWithLayout = () => {
                             leaveFrom='transform opacity-100 scale-100'
                             leaveTo='transform opacity-0 scale-95'
                           >
-                            <Menu.Items className='absolute right-0 z-10 mt-2 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none'>
+                            <Menu.Items className='absolute right-0 z-10 mt-2 w-32 origin-top-right rounded-md bg-zinc-950 py-2 shadow-lg ring-1 ring-zinc-50/5 focus:outline-none'>
                               <Menu.Item>
                                 {({ active }) => (
                                   <Disclosure.Button
                                     as='button'
                                     className={classNames(
-                                      active ? 'bg-gray-50' : '',
-                                      'block px-3 py-1 text-sm leading-6 text-gray-900',
+                                      active ? 'bg-zinc-500' : '',
+                                      'block w-full px-3 py-1 text-start text-sm leading-6',
                                     )}
                                   >
                                     Edit
@@ -113,8 +113,8 @@ const AppPage: NextPageWithLayout = () => {
                                       deleteTaskMutation.mutate(t.id)
                                     }
                                     className={classNames(
-                                      active ? 'bg-gray-50' : '',
-                                      'block px-3 py-1 text-sm leading-6 text-gray-900',
+                                      active ? 'bg-zinc-500' : '',
+                                      'block w-full px-3 py-1 text-start text-sm leading-6',
                                     )}
                                   >
                                     Delete
@@ -142,7 +142,7 @@ const AppPage: NextPageWithLayout = () => {
             ))}
             <li className='flex gap-x-6 py-5'>
               <Disclosure>
-                <Disclosure.Button className='inline-flex items-center justify-center gap-x-1.5 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 ui-open:hidden'>
+                <Disclosure.Button className='inline-flex items-center justify-center gap-x-1.5 rounded-md bg-teal-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600 ui-open:hidden'>
                   <PlusCircleIcon
                     className='-ml-0.5 h-5 w-5'
                     aria-hidden='true'
