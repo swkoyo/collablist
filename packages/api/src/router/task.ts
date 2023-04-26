@@ -78,7 +78,7 @@ export const taskRouter = createTRPCRouter({
         id: z.string().nonempty(),
         title: z.string().nonempty(),
         description: z.string().nullable(),
-        labelIds: z.array(z.string().nonempty()),
+        labelIds: z.array(z.string().nonempty()).max(1),
       }),
     )
     .mutation(async ({ ctx, input: { id, title, description, labelIds } }) => {
@@ -89,6 +89,11 @@ export const taskRouter = createTRPCRouter({
       if (!task) throw new TRPCError({ code: 'NOT_FOUND' });
       if (task.userId !== ctx.session.user.id)
         throw new TRPCError({ code: 'UNAUTHORIZED' });
+
+      const updateData: Prisma.TaskUpdateInput = {
+        title,
+        description,
+      };
 
       if (labelIds.length > 0) {
         const labels = await ctx.prisma.label.findMany({
@@ -104,32 +109,47 @@ export const taskRouter = createTRPCRouter({
           throw new TRPCError({ code: 'UNAUTHORIZED' });
       }
 
-      if (
-        task.labels.length > labelIds.length ||
-        (task.labels.length > 0 && task.labels[0]?.labelId !== labelIds[0])
-      ) {
-        await ctx.prisma.labelsOnTasks.delete({
-          where: {
-            id: task.labels[0]?.id,
-          },
-        });
+      if (task.labels.length > 0) {
+        if (labelIds.length === 0) {
+          await ctx.prisma.labelsOnTasks.deleteMany({
+            where: {
+              taskId: task.id,
+            },
+          });
+        } else {
+          if (task.labels[0]?.labelId !== labelIds[0]) {
+            await ctx.prisma.labelsOnTasks.delete({
+              where: {
+                id: task.labels[0]?.id,
+              },
+            });
+
+            updateData.labels = {
+              create: labelIds.map((id) => ({
+                label: {
+                  connect: {
+                    id,
+                  },
+                },
+              })),
+            };
+          }
+        }
+      } else {
+        updateData.labels = {
+          create: labelIds.map((id) => ({
+            label: {
+              connect: {
+                id,
+              },
+            },
+          })),
+        };
       }
 
       return ctx.prisma.task.update({
         where: { id: task.id },
-        data: {
-          title,
-          description,
-          labels: {
-            create: labelIds.map((id) => ({
-              label: {
-                connect: {
-                  id,
-                },
-              },
-            })),
-          },
-        },
+        data: updateData,
         include: {
           labels: {
             include: {

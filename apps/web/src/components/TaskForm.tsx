@@ -145,7 +145,7 @@ const TaskForm: React.FC<{
                         className={({ active }) =>
                           classNames(
                             active ? 'bg-gray-100' : 'bg-white',
-                            'relative cursor-default select-none px-3 py-2',
+                            'relative cursor-default select-none px-3 py-2 text-gray-300',
                           )
                         }
                         value={null}
@@ -168,7 +168,12 @@ const TaskForm: React.FC<{
                           value={label}
                         >
                           <div className='flex items-center'>
-                            <span className='block truncate font-medium'>
+                            <span
+                              className={classNames(
+                                `text-${getColorCode(label.color)}`,
+                                'block truncate font-medium',
+                              )}
+                            >
                               {label.name}
                             </span>
                           </div>
@@ -183,6 +188,7 @@ const TaskForm: React.FC<{
         </div>
         <div className='flex items-center justify-end space-x-3 border-t border-gray-200 px-2 py-2 sm:px-3'>
           <button
+            type='button'
             onClick={() => {
               resetInput();
               handleCancel();

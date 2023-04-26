@@ -56,10 +56,7 @@ const LabelForm: React.FC<{
   };
 
   return (
-    <form
-      className='w-full space-y-4 rounded-lg border border-gray-300 px-4 py-4 shadow-sm'
-      onSubmit={handleFormSubmit}
-    >
+    <form className='w-full space-y-4 rounded-lg border border-gray-300 px-4 py-4 shadow-sm'>
       <div>
         <label
           htmlFor='label'
@@ -168,6 +165,7 @@ const LabelForm: React.FC<{
       </Listbox>
       <div className='flex items-center justify-end space-x-3'>
         <button
+          type='button'
           onClick={() => {
             resetInput();
             handleCancel();
